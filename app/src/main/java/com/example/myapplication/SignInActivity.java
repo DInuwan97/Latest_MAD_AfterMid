@@ -41,7 +41,19 @@ public class SignInActivity extends AppCompatActivity {
 
         if(isValidUser == true){
             Toast.makeText(SignInActivity.this,"Welcome to eCare!!!",Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(SignInActivity.this,MainActivity.class);
+            Intent intent;
+
+
+            if(myDb.getLoggedUserType().toString().equals("Patient")) {
+                intent = new Intent(SignInActivity.this, PatientBottomNavigationActivity.class);
+            }else if(myDb.getLoggedUserType().toString().equals("Administrator")){
+                intent = new Intent(SignInActivity.this, MainActivity.class);
+            }else{
+                intent = new Intent(SignInActivity.this, MainActivity.class);
+            }
+
+
+
             Log.i("TEST_Si",useremail.toString());
             intent.putExtra("A",useremail);
             startActivity(intent);

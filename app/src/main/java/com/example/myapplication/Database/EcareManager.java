@@ -18,6 +18,19 @@ public final class EcareManager {
 
     }
 
+    protected static class Doctors implements  BaseColumns{
+
+        public static final String TABLE_NAME = "doctors";
+        public static final String COL_NAME_DOCTORNAME = "doctorname";
+        public static final String COL_NAME_DOCTOREMAIL = "doctoremail";
+        public static final String COL_NAME_HOSPITAL = "hospital";
+        public static final String COL_NAME_DOCTORMOBILE = "doctormobile";
+        public static final String COL_NAME_SPECIALIZATION = "specialization";
+        public static final String COL_NAME_NIC = "nic";
+
+
+    }
+
 
 
 }

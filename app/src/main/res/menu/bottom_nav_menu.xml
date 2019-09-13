@@ -3,17 +3,27 @@
 
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:icon="@drawable/ic_doctor"
+        android:title="Doctors" />
 
     <item
         android:id="@+id/nav_favorites"
-        android:icon="@drawable/ic_add_box"
-        android:title="Favorites" />
+        android:icon="@drawable/ic_patients"
+        android:title="Patients" />
 
     <item
         android:id="@+id/nav_search"
-        android:icon="@drawable/ic_history"
+        android:icon="@drawable/ic_test"
+        android:title="Search" />
+
+    <item
+        android:id="@+id/nav_newdoctor"
+        android:icon="@drawable/ic_add_new_doctor"
+        android:title="Search" />
+
+    <item
+        android:id="@+id/nav_stat"
+        android:icon="@drawable/ic_stat"
         android:title="Search" />
 
 </menu>
