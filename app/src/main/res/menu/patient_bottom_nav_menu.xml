@@ -17,6 +17,10 @@
         android:title="Search" />
 
     <item
+        android:id="@+id/nav_pharmacy"
+        android:icon="@android:drawable/ic_menu_add"
+        android:title="Pharmacy" />
+    <item
         android:id="@+id/nav_search1"
         android:icon="@drawable/ic_history"
         android:title="Search" />

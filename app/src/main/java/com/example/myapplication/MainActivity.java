@@ -175,6 +175,9 @@ public class MainActivity extends AppCompatActivity
                         case R.id.nav_newdoctor:
                             selectedFragment = new AddNewDoctorFragment();
                             break;
+                        case R.id.nav_pharmacy:
+                            selectedFragment = new PharmacyPatient();
+                            break;
                     }
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

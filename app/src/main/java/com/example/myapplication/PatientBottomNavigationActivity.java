@@ -157,6 +157,9 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
                         case R.id.nav_search:
                             selectedFragment = new SearchFragment();
                             break;
+                        case R.id.nav_pharmacy:
+                            selectedFragment = new PharmacyPatient();
+                            break;
                     }
 
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,

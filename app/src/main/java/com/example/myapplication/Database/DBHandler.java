@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "EcareInfo.db";
@@ -36,7 +38,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //create doctors table
 
         SQL_CREATE_ENTRIES_DOCTORS = "CREATE TABLE " + EcareManager.Doctors.TABLE_NAME+ " ("
-                                    + EcareManager.Doctors._ID + "INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                    + EcareManager.Doctors._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                                     + EcareManager.Doctors.COL_NAME_DOCTORNAME + "TEXT,"
                                     + EcareManager.Doctors.COL_NAME_DOCTOREMAIL + "TEXT,"
                                     + EcareManager.Doctors.COL_NAME_HOSPITAL + "TEXT,"
@@ -44,9 +46,19 @@ public class DBHandler extends SQLiteOpenHelper {
                                     + EcareManager.Doctors.COL_NAME_SPECIALIZATION + "TEXT,"
                                     + EcareManager.Doctors.COL_NAME_NIC + "TEXT)";
 
+        String SQL_CREATE_ENTRIES_MEDICINE = "CREATE TABLE "+ EcareManager.Medicine.TABLE_NAME +"( "+
+                EcareManager.Medicine._ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " TEXT ,"+
+                EcareManager.Medicine.COLUMN_NAME_PRICE + " REAL,"+
+                EcareManager.Medicine.COLUMN_NAME_DESCRIPTION + " TEXT,"+
+                EcareManager.Medicine.COLUMN_NAME_USAGE + " TEXT,"+
+                EcareManager.Medicine.COLUMN_NAME_INGREDIENTS + " TEXT,"+
+                EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS + " TEXT,"+
+                EcareManager.Medicine.COLUMN_NAME_IMAGE + " BLOB)";
 
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
         db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
+        db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
 
     }
 
@@ -170,5 +182,25 @@ public class DBHandler extends SQLiteOpenHelper {
             return true;
 
 
+    }
+
+    public ArrayList selectAll(){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
+
+        Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
+
+        ArrayList<String> list = new ArrayList<>();
+        while (cursor.moveToNext()){
+            String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
+            list.add(MedicineName);
+        }
+        return list;
     }
 }
