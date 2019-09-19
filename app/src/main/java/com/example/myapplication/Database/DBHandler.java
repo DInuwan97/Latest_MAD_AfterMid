@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -203,14 +204,17 @@ public class DBHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
             list.add(MedicineName);
+
         }
+        cursor.close();
+        db.close();
         return list;
     }
 
     public boolean addMedicine(MedicineItemClass item){
         SQLiteDatabase db = getWritableDatabase();
 
-        if(checkImageCount(item.getNameMedicine())) {
+        if(!checkImageExist(item.getNameMedicine())) {
             ContentValues values = new ContentValues();
             values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
             values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
@@ -223,7 +227,7 @@ public class DBHandler extends SQLiteOpenHelper {
                     null,
                     values);
 
-
+            db.close();
             if (id > 0) {
                 return true;
             } else {
@@ -235,8 +239,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkImageCount(String name){
-        //return false if there is already a medicine with the same name
+    public boolean checkImageExist(String name){
+        //return true if there is already a medicine with the same name
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME };
         String Selection = EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " =? ";
@@ -252,10 +256,12 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
         int count = cursor.getCount();
+        cursor.close();
+        db.close();
         if(count > 0){
-            return false;
-        }else{
             return true;
+        }else{
+            return false;
         }
 
     }
@@ -295,12 +301,62 @@ public class DBHandler extends SQLiteOpenHelper {
             item.setPrice(price);
             item.setDescription(description);
             item.setUsage(usage);
-            item.setIngredients(ingredients);;
+            item.setIngredients(ingredients);
             item.setSideEffects(sideEffects);
             item.setImage(image);
         }
+        cursor.close();
+        db.close();
         return item;
     }
+
+    public boolean deleteMedicine(String name){
+
+        SQLiteDatabase db = getWritableDatabase();
+
+        db.delete(EcareManager.Medicine.TABLE_NAME,
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME +" =? ",
+                new String[]{name});
+
+        db.close();
+        if(checkImageExist(name)){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+
+    public boolean updateMedicine(MedicineItemClass item){
+
+        if(checkImageExist(item.getNameMedicine())){
+            SQLiteDatabase db = getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+            values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
+            values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
+            values.put(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION, item.getDescription());
+            values.put(EcareManager.Medicine.COLUMN_NAME_USAGE, item.getUsage());
+            values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
+            values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
+            values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
+
+
+            int count = db.update(EcareManager.Medicine.TABLE_NAME,
+                    values,
+                    EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + "= ?",
+                    new String[]{item.getNameMedicine()});
+
+            if(count>0){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
 
 
 

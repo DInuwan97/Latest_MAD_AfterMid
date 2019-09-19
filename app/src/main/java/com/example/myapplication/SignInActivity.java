@@ -44,6 +44,8 @@ public class SignInActivity extends AppCompatActivity {
             Intent intent;
 
 
+
+
             if(myDb.getLoggedUserType().toString().equals("Patient")) {
                 intent = new Intent(SignInActivity.this, PatientBottomNavigationActivity.class);
             }else if(myDb.getLoggedUserType().toString().equals("Administrator")){
