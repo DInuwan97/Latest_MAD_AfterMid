@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -39,14 +41,14 @@ public class DBHandler extends SQLiteOpenHelper {
 
         SQL_CREATE_ENTRIES_DOCTORS = "CREATE TABLE " + EcareManager.Doctors.TABLE_NAME+ " ("
                                     + EcareManager.Doctors._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                                    + EcareManager.Doctors.COL_NAME_DOCTORNAME + "TEXT,"
-                                    + EcareManager.Doctors.COL_NAME_DOCTOREMAIL + "TEXT,"
-                                    + EcareManager.Doctors.COL_NAME_HOSPITAL + "TEXT,"
-                                    + EcareManager.Doctors.COL_NAME_DOCTORMOBILE + "TEXT,"
-                                    + EcareManager.Doctors.COL_NAME_SPECIALIZATION + "TEXT,"
-                                    + EcareManager.Doctors.COL_NAME_NIC + "TEXT)";
+                                    + EcareManager.Doctors.COL_NAME_DOCTORNAME + " TEXT,"
+                                    + EcareManager.Doctors.COL_NAME_DOCTOREMAIL + " TEXT,"
+                                    + EcareManager.Doctors.COL_NAME_HOSPITAL + " TEXT,"
+                                    + EcareManager.Doctors.COL_NAME_DOCTORMOBILE + " TEXT,"
+                                    + EcareManager.Doctors.COL_NAME_SPECIALIZATION + " TEXT,"
+                                    + EcareManager.Doctors.COL_NAME_NIC + " TEXT)";
 
-        String SQL_CREATE_ENTRIES_MEDICINE = "CREATE TABLE "+ EcareManager.Medicine.TABLE_NAME +"( "+
+        String SQL_CREATE_ENTRIES_MEDICINE = "CREATE TABLE  "+ EcareManager.Medicine.TABLE_NAME +" ( "+
                 EcareManager.Medicine._ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " TEXT ,"+
                 EcareManager.Medicine.COLUMN_NAME_PRICE + " REAL,"+
@@ -57,8 +59,9 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Medicine.COLUMN_NAME_IMAGE + " BLOB)";
 
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
-        db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
         db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
+        db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
+
 
     }
 
@@ -203,4 +206,102 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         return list;
     }
+
+    public boolean addMedicine(MedicineItemClass item){
+        SQLiteDatabase db = getWritableDatabase();
+
+        if(checkImageCount(item.getNameMedicine())) {
+            ContentValues values = new ContentValues();
+            values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
+            values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
+            values.put(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION, item.getDescription());
+            values.put(EcareManager.Medicine.COLUMN_NAME_USAGE, item.getUsage());
+            values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
+            values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
+            values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
+            long id = db.insert(EcareManager.Medicine.TABLE_NAME,
+                    null,
+                    values);
+
+
+            if (id > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+    }
+
+    public boolean checkImageCount(String name){
+        //return false if there is already a medicine with the same name
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME };
+        String Selection = EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " =? ";
+        String[] selectionArgs= {name};
+
+        Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
+                projection,
+                Selection,
+                selectionArgs,
+                null,
+                null,
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
+
+
+        int count = cursor.getCount();
+        if(count > 0){
+            return false;
+        }else{
+            return true;
+        }
+
+    }
+    public MedicineItemClass selectMedicineItem(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME,
+                EcareManager.Medicine.COLUMN_NAME_PRICE,
+                EcareManager.Medicine.COLUMN_NAME_DESCRIPTION,
+                EcareManager.Medicine.COLUMN_NAME_USAGE,
+                EcareManager.Medicine.COLUMN_NAME_INGREDIENTS,
+                EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS,
+                EcareManager.Medicine.COLUMN_NAME_IMAGE
+        };
+        String Selection = EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " =? ";
+        String[] selectionArgs= {name};
+
+        Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
+                projection,
+                Selection,
+                selectionArgs,
+                null,
+                null,
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
+
+        MedicineItemClass item = new MedicineItemClass();
+        while (cursor.moveToNext()){
+            String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
+            float price = cursor.getFloat(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_PRICE));
+            String description=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION));
+            String usage=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_USAGE));
+            String ingredients=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS));
+            String sideEffects=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS));
+            byte[] image=cursor.getBlob(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_IMAGE));
+
+
+            item.setNameMedicine(MedicineName);
+            item.setPrice(price);
+            item.setDescription(description);
+            item.setUsage(usage);
+            item.setIngredients(ingredients);;
+            item.setSideEffects(sideEffects);
+            item.setImage(image);
+        }
+        return item;
+    }
+
+
+
 }

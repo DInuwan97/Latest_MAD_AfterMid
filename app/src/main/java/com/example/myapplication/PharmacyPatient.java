@@ -21,7 +21,7 @@ public class PharmacyPatient extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         getChildFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new FavoritesFragment()).commit();
+                new PharmacyMedicineList()).commit();
 
         View v = inflater.inflate(R.layout.fragment_pharmacy_patient, container, false);
         BottomNavigationView bottomNav = v.findViewById(R.id.bottom_nav_menu_pharmacy);
@@ -33,7 +33,7 @@ public class PharmacyPatient extends Fragment {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Fragment selectedFragment = null;
-                Log.i("test ds",  "11111");
+
 
                 switch (item.getItemId()) {
                     case R.id.nav_cart:
@@ -41,16 +41,12 @@ public class PharmacyPatient extends Fragment {
                         break;
 
                     case R.id.nav_medicine:
-                        selectedFragment = new SearchFragment();
+                        selectedFragment = new PharmacyMedicineList();
                         break;
 
 
                 }
-                if (selectedFragment == null) {
-                    Log.i("test ds", "111");
-                } else {
-                    Log.i("test ds", "222");
-                }
+
                 getChildFragmentManager().beginTransaction().replace(R.id.fragment_container,
                         selectedFragment).commit();
 
