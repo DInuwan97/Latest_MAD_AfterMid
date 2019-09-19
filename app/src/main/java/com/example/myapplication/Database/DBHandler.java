@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -211,11 +212,34 @@ public class DBHandler extends SQLiteOpenHelper {
         db.close();
         return list;
     }
+    public ArrayList selectSome(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
+
+        Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
+                projection,
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " LIKE ?",
+                new String[]{name},
+                null,
+                null,
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
+
+        ArrayList<String> list = new ArrayList<>();
+        while (cursor.moveToNext()){
+            String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
+            list.add(MedicineName);
+
+        }
+        cursor.close();
+        db.close();
+        return list;
+    }
 
     public boolean addMedicine(MedicineItemClass item){
-        SQLiteDatabase db = getWritableDatabase();
+
 
         if(!checkImageExist(item.getNameMedicine())) {
+            SQLiteDatabase db = getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
             values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
@@ -229,7 +253,7 @@ public class DBHandler extends SQLiteOpenHelper {
                    null,
                     values);
 
-
+            db.close();
             if (id > 0) {
                 return true;
             } else {
@@ -259,7 +283,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         int count = cursor.getCount();
         cursor.close();
-
+        db.close();
         if(count > 0){
             return true;
         }else{
