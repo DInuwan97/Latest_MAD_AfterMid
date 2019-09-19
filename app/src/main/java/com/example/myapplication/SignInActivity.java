@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
+import com.example.myapplication.Database.MedicineItemClass;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -30,6 +31,22 @@ public class SignInActivity extends AppCompatActivity {
 
         txtUserEmail = (EditText) findViewById(R.id.editText_email);
         txtPassword = (EditText) findViewById(R.id.editText_password);
+        MedicineItemClass item = new MedicineItemClass();
+        item.setNameMedicine("Panadol");
+        item.setPrice(100);
+        item.setPriceItemType("Per Tab");
+        item.setDescription("For everything");
+        item.setUsage("Drink");
+        item.setIngredients("medicine");
+        item.setSideEffects("None");
+        item.setImage(null);
+        Log.i("Medicine","DONT Added");
+        boolean a = myDb.addMedicine(item);
+        if(a){
+            Log.i("Medicine","Added");
+        }else{
+            Log.i("Medicine"," NOT Added");
+        }
     }
 
     public void signIn(View view){

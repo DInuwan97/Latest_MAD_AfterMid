@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -22,6 +19,11 @@ import java.util.ArrayList;
 
 public class PharmacyMedicineList extends Fragment {
 
+    DataPassListener mCallback;
+
+    public interface DataPassListener{
+        public void passData(String data);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,6 +44,15 @@ public class PharmacyMedicineList extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String pos = adapter.getItem(position).toString();
                 Log.i("testing",pos);
+
+                Fragment medicineDetails = new pharmacyMedicineItemDetails();
+                Bundle args = new Bundle();
+                args.putString(pharmacyMedicineItemDetails.DATA_RECIEVE, pos);
+                medicineDetails.setArguments(args);
+                getFragmentManager().beginTransaction().replace(R.id.fragment_container,medicineDetails).commit();
+
+
+
             }
         });
 

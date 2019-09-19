@@ -35,6 +35,7 @@ public final class EcareManager {
         public static final String TABLE_NAME = "medicine";
         public static final String COLUMN_NAME_MEDICINE_NAME = "medicinename";
         public static final String COLUMN_NAME_PRICE = "price";
+        public static final String COLUMN_NAME_PRICE_ITEM_TYPE = "itemtype";
         public static final String COLUMN_NAME_DESCRIPTION = "description";
         public static final String COLUMN_NAME_USAGE = "usage";
         public static final String COLUMN_NAME_INGREDIENTS = "ingredients";

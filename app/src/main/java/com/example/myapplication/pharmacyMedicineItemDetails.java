@@ -6,105 +6,71 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.myapplication.Database.DBHandler;
+import com.example.myapplication.Database.MedicineItemClass;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link pharmacyMedicineItemDetails.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link pharmacyMedicineItemDetails#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class pharmacyMedicineItemDetails extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private OnFragmentInteractionListener mListener;
-
-    public pharmacyMedicineItemDetails() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment pharmacyMedicineItemDetails.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static pharmacyMedicineItemDetails newInstance(String param1, String param2) {
-        pharmacyMedicineItemDetails fragment = new pharmacyMedicineItemDetails();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    final static String DATA_RECIEVE = "data_recieve";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_pharmacy_medicine_item_details, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_item_details, container, false);
+
+        TextView txtViewName = v.findViewById(R.id.Name_field);
+        TextView txtPrice = v.findViewById(R.id.Price_field);
+        TextView txtPriceType = v.findViewById(R.id.price_type);
+        TextView txtDescription = v.findViewById(R.id.description_feild);
+        TextView txtUsage = v.findViewById(R.id.Usage_field);
+        TextView txtIngredient = v.findViewById(R.id.Ingredient_field);
+        TextView txtSideEffect = v.findViewById(R.id.Side_Effects_field);
+        final EditText editTextAmount = v.findViewById(R.id.noOfItems);
+        final TextView txtPriceCalculated = v.findViewById(R.id.Price_calculated);
+
+        Bundle args = getArguments();
+        String medicineName = args.getString(DATA_RECIEVE);
+
+        DBHandler dh = new DBHandler(getActivity().getApplicationContext());
+        final MedicineItemClass item = dh.selectMedicineItem(medicineName);
+
+        String price = "Rs. "+ item.getPrice();
+        txtViewName.setText(item.getNameMedicine());
+        txtPrice .setText(price);
+        txtPriceType.setText(item.getPriceItemType());
+        txtDescription.setText(item.getDescription());
+        txtUsage.setText(item.getUsage());
+        txtIngredient.setText(item.getIngredients());
+        txtSideEffect.setText(item.getSideEffects());
+
+        editTextAmount.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                try{
+                    Float amount = Float.parseFloat(editTextAmount.getText().toString());
+                    amount = amount*item.getPrice();
+
+                    txtPriceCalculated.setText(amount.toString());
+                }catch (NumberFormatException e){
+
+                }
+
+
+
+                return false;
+            }
+        });
+
+        return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
 }

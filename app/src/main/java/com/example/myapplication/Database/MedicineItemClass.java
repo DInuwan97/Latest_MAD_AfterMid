@@ -7,6 +7,7 @@ public class MedicineItemClass {
 
     private String nameMedicine;
     private float price;
+    private String priceItemType;
     private String description;
     private String usage;
     private String ingredients;
@@ -69,5 +70,12 @@ public class MedicineItemClass {
         this.image = image;
     }
 
+    public String getPriceItemType() {
+        return priceItemType;
+    }
+
+    public void setPriceItemType(String priceItemType) {
+        this.priceItemType = priceItemType;
+    }
 }
 

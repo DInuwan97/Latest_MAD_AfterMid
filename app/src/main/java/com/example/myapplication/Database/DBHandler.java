@@ -53,6 +53,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Medicine._ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " TEXT ,"+
                 EcareManager.Medicine.COLUMN_NAME_PRICE + " REAL,"+
+                EcareManager.Medicine.COLUMN_NAME_PRICE_ITEM_TYPE + " TEXT,"+
                 EcareManager.Medicine.COLUMN_NAME_DESCRIPTION + " TEXT,"+
                 EcareManager.Medicine.COLUMN_NAME_USAGE + " TEXT,"+
                 EcareManager.Medicine.COLUMN_NAME_INGREDIENTS + " TEXT,"+
@@ -218,16 +219,17 @@ public class DBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
             values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
+            values.put(EcareManager.Medicine.COLUMN_NAME_PRICE_ITEM_TYPE, item.getPriceItemType());
             values.put(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION, item.getDescription());
             values.put(EcareManager.Medicine.COLUMN_NAME_USAGE, item.getUsage());
             values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
             values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
             values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
             long id = db.insert(EcareManager.Medicine.TABLE_NAME,
-                    null,
+                   null,
                     values);
 
-            db.close();
+
             if (id > 0) {
                 return true;
             } else {
@@ -257,7 +259,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         int count = cursor.getCount();
         cursor.close();
-        db.close();
+
         if(count > 0){
             return true;
         }else{
@@ -269,6 +271,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME,
                 EcareManager.Medicine.COLUMN_NAME_PRICE,
+                EcareManager.Medicine.COLUMN_NAME_PRICE_ITEM_TYPE,
                 EcareManager.Medicine.COLUMN_NAME_DESCRIPTION,
                 EcareManager.Medicine.COLUMN_NAME_USAGE,
                 EcareManager.Medicine.COLUMN_NAME_INGREDIENTS,
@@ -290,6 +293,7 @@ public class DBHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
             float price = cursor.getFloat(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_PRICE));
+            String priceType = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_PRICE_ITEM_TYPE));
             String description=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION));
             String usage=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_USAGE));
             String ingredients=cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS));
@@ -299,6 +303,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
             item.setNameMedicine(MedicineName);
             item.setPrice(price);
+            item.setPriceItemType(priceType);
             item.setDescription(description);
             item.setUsage(usage);
             item.setIngredients(ingredients);
@@ -335,6 +340,7 @@ public class DBHandler extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
             values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
+            values.put(EcareManager.Medicine.COLUMN_NAME_PRICE_ITEM_TYPE, item.getPriceItemType());
             values.put(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION, item.getDescription());
             values.put(EcareManager.Medicine.COLUMN_NAME_USAGE, item.getUsage());
             values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
