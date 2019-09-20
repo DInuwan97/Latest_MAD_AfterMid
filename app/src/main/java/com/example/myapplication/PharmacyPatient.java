@@ -34,7 +34,7 @@ public class PharmacyPatient extends Fragment {
 
                 switch (item.getItemId()) {
                     case R.id.nav_cart:
-                        selectedFragment = new FavoritesFragment();
+                        selectedFragment = new PharmacyMedicineCart();
                         break;
 
                     case R.id.nav_medicine:

@@ -1,10 +1,11 @@
 package com.example.myapplication;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,23 +14,19 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
 
-public class PharmacyMedicineList extends Fragment {
+public class pharmacyAdminMedicineList extends Fragment {
 
-    DataPassListener mCallback;
-
-    public interface DataPassListener{
-        public void passData(String data);
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
 
         final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_list, container, false);
 
@@ -48,9 +45,9 @@ public class PharmacyMedicineList extends Fragment {
                 String pos = adapter.getItem(position).toString();
 
 
-                Fragment medicineDetails = new pharmacyMedicineItemDetails();
+                Fragment medicineDetails = new PharmacyAdminAddMedicine();
                 Bundle args = new Bundle();
-                args.putString(pharmacyMedicineItemDetails.DATA_RECIEVE, pos);
+                args.putString(PharmacyAdminAddMedicine.DATA_RECIEVE, pos);
                 medicineDetails.setArguments(args);
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container,medicineDetails).commit();
 
@@ -68,10 +65,10 @@ public class PharmacyMedicineList extends Fragment {
 
                 if(searchTxt != "") {
 
-                        ArrayList<String> list = dh.selectSome(searchTxt);
-                        final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                                R.layout.list_medicine_item, list);
-                        listView.setAdapter(adapter);
+                    ArrayList<String> list = dh.selectSome(searchTxt);
+                    final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+                            R.layout.list_medicine_item, list);
+                    listView.setAdapter(adapter);
 
 
                 }
@@ -83,6 +80,5 @@ public class PharmacyMedicineList extends Fragment {
 
         return v;
     }
-
 
 }

@@ -1,15 +1,18 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,12 +22,12 @@ import com.example.myapplication.Database.MedicineItemClass;
 
 
 public class pharmacyMedicineItemDetails extends Fragment {
-    final static String DATA_RECIEVE = "data_recieve";
+    final static String DATA_RECIEVE = "data_receive";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_item_details, container, false);
+        final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_item_details, container, false);
 
         TextView txtViewName = v.findViewById(R.id.Name_field);
         TextView txtPrice = v.findViewById(R.id.Price_field);
@@ -36,10 +39,12 @@ public class pharmacyMedicineItemDetails extends Fragment {
         final EditText editTextAmount = v.findViewById(R.id.noOfItems);
         final TextView txtPriceCalculated = v.findViewById(R.id.Price_calculated);
 
+        Button addToCart = v.findViewById(R.id.Add_to_Cart);
+
         Bundle args = getArguments();
         String medicineName = args.getString(DATA_RECIEVE);
 
-        DBHandler dh = new DBHandler(getActivity().getApplicationContext());
+        final DBHandler dh = new DBHandler(getActivity().getApplicationContext());
         final MedicineItemClass item = dh.selectMedicineItem(medicineName);
 
         String price = "Rs. "+ item.getPrice();
@@ -51,6 +56,25 @@ public class pharmacyMedicineItemDetails extends Fragment {
         txtIngredient.setText(item.getIngredients());
         txtSideEffect.setText(item.getSideEffects());
 
+
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (editTextAmount.getText().toString() != "") {
+                    float amount = Float.parseFloat(editTextAmount.getText().toString());
+                    if(dh.cartAddItem(item,amount )){
+                        Toast.makeText(getActivity().getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getActivity().getApplicationContext(),"Not Added to Cart. Try Again",Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    Toast.makeText(getActivity().getApplicationContext(),"Enter a Valid Amount",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+
         editTextAmount.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View view, int i, KeyEvent keyEvent) {
@@ -58,7 +82,7 @@ public class pharmacyMedicineItemDetails extends Fragment {
                     Float amount = Float.parseFloat(editTextAmount.getText().toString());
                     amount = amount*item.getPrice();
 
-                    txtPriceCalculated.setText(amount.toString());
+                    txtPriceCalculated.setText("Rs. "+amount.toString());
                 }catch (NumberFormatException e){
 
                 }
@@ -69,8 +93,12 @@ public class pharmacyMedicineItemDetails extends Fragment {
             }
         });
 
+
+
         return v;
     }
+
+
 
 
 }

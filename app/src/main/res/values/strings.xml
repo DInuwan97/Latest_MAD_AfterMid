@@ -34,4 +34,8 @@
     <string name="PharmacyMedicineIngredients">Ingredients</string>
     <string name="PharmacyMedicineSideEffects">Side Effects</string>
     <string name="PharmacyMedicineHint">Enter Amount</string>
+    <string name="pharmacyCartPay">Order Items</string>
+    <string name="title_activity_pharmacy_admin">PharmacyAdmin</string>
+    <string name="PharmacyAdminBtnChooseGallery" translatable="false">Gallery</string>
+    <string name="PharmacyAdminCamera">Camera</string>
 </resources>

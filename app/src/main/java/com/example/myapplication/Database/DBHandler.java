@@ -61,10 +61,18 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS + " TEXT,"+
                 EcareManager.Medicine.COLUMN_NAME_IMAGE + " BLOB)";
 
+        String SQL_CREATE_ENTRIES_CART_PHARMACY = "CREATE TABLE "+ EcareManager.PharmacyCart.TABLE_NAME + "("+
+                EcareManager.PharmacyCart._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " TEXT,"+
+                EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT + " REAL,"+
+                EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM + " REAL,"+
+                EcareManager.PharmacyCart.COLUMN_NAME_PRICE_TYPE + " TEXT)";
+
+
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
         db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
         db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
-
+        db.execSQL(SQL_CREATE_ENTRIES_CART_PHARMACY);
 
     }
 
@@ -73,6 +81,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Users.TABLE_NAME);
         //db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Doctors.TABLE_NAME);
+
         onCreate(db);
     }
 
@@ -81,7 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        String designation = "Patient";
+        String designation = "PharmacyAdmin";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -219,7 +228,7 @@ public class DBHandler extends SQLiteOpenHelper {
         Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
                 projection,
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " LIKE ?",
-                new String[]{name},
+                new String[]{name+"%"},
                 null,
                 null,
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
@@ -385,6 +394,138 @@ public class DBHandler extends SQLiteOpenHelper {
         }else{
             return false;
         }
+    }
+
+    public ArrayList<MedicineItemClass> selectAllCart(){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME,
+                EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT,
+                EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM,
+                EcareManager.PharmacyCart.COLUMN_NAME_PRICE_TYPE};
+
+        Cursor cursor=db.query(EcareManager.PharmacyCart.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " ASC");
+        ArrayList<MedicineItemClass> CartListItem = new ArrayList<>();
+        while (cursor.moveToNext()){
+            MedicineItemClass item = new MedicineItemClass();
+            item.setNameMedicine(cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME)));
+            item.setPriceItemType(cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_TYPE)));
+            item.setPrice(cursor.getFloat(cursor.getColumnIndexOrThrow(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM)));
+            item.setAmount(cursor.getFloat(cursor.getColumnIndexOrThrow(EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT)));
+
+            CartListItem.add(item);
+        }
+
+        return CartListItem;
+    }
+
+
+    public boolean checkItemCart(String name){
+        //return true if item already exists in the cart
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.query(EcareManager.PharmacyCart.TABLE_NAME,
+                new String[]{EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME},
+                EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " = ?",
+                new String[]{name},
+                null,
+                null,
+                EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " ASC");
+        int count = cursor.getCount();
+
+        db.close();
+        cursor.close();
+        if(count > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+    public boolean cartAddItem(MedicineItemClass item, float Amount){
+
+
+        if(!checkItemCart(item.getNameMedicine())){
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME,item.getNameMedicine());
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT,Amount);
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM,item.getPrice());
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_TYPE,item.getPriceItemType());
+
+
+            long id = db.insert(EcareManager.PharmacyCart.TABLE_NAME,
+                    null,
+                    values);
+            db.close();
+            if(id>0){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues values = new ContentValues();
+            //values.put(EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME,item.getNameMedicine());
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT,Amount);
+            /*
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM,item.getPriceItemType());
+            values.put(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_TYPE,item.getPriceItemType());*/
+            db.update(EcareManager.PharmacyCart.TABLE_NAME,
+                    values,
+                    EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " = ?",
+                    new String[]{item.getNameMedicine()});
+            db.close();
+            return true;
+        }
+    }
+
+
+    public boolean cartDeleteItem(String name){
+        if (checkItemCart(name)){
+            SQLiteDatabase db = getWritableDatabase();
+            db.delete(EcareManager.PharmacyCart.TABLE_NAME,
+                    EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " =?",
+                    new String[]{name});
+            if(checkItemCart(name)){
+                return false;
+            }else{
+                return true;
+            }
+        }else{
+            return true;
+        }
+    }
+
+
+    public float calculateCartTotal(){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM,
+                EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT};
+        Cursor cursor = db.query(EcareManager.PharmacyCart.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                EcareManager.PharmacyCart.COLUMN_NAME_MEDICINE_NAME + " ASC");
+        float totalAmount = 0;
+        while (cursor.moveToNext()){
+            float priceForOne = cursor.getFloat(cursor.getColumnIndexOrThrow(EcareManager.PharmacyCart.COLUMN_NAME_PRICE_FOR_ONE_ITEM));
+            float amount = cursor.getFloat(cursor.getColumnIndexOrThrow(EcareManager.PharmacyCart.COLUMN_NAME_AMOUNT));
+
+            totalAmount = totalAmount + priceForOne*amount;
+        }
+        cursor.close();
+        db.close();
+        return totalAmount;
+
     }
 
 

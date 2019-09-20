@@ -14,6 +14,8 @@ public class MedicineItemClass {
     private String sideEffects;
     private byte[] image;
 
+    private float amount;
+
     public String getNameMedicine() {
         return nameMedicine;
     }
@@ -76,6 +78,15 @@ public class MedicineItemClass {
 
     public void setPriceItemType(String priceItemType) {
         this.priceItemType = priceItemType;
+    }
+
+
+    public float getAmount() {
+        return amount;
+    }
+
+    public void setAmount(float amount) {
+        this.amount = amount;
     }
 }
 

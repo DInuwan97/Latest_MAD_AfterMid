@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,10 +28,13 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+
         myDb = new DBHandler(this);
 
         txtUserEmail = (EditText) findViewById(R.id.editText_email);
         txtPassword = (EditText) findViewById(R.id.editText_password);
+
+
         MedicineItemClass item = new MedicineItemClass();
         item.setNameMedicine("Panadol");
         item.setPrice(100);
@@ -40,13 +44,14 @@ public class SignInActivity extends AppCompatActivity {
         item.setIngredients("medicine");
         item.setSideEffects("None");
         item.setImage(null);
-        Log.i("Medicine","DONT Added");
         boolean a = myDb.addMedicine(item);
         if(a){
             Log.i("Medicine","Added");
         }else{
             Log.i("Medicine"," NOT Added");
         }
+
+
     }
 
     public void signIn(View view){
@@ -63,13 +68,17 @@ public class SignInActivity extends AppCompatActivity {
 
 
 
+
             if(myDb.getLoggedUserType().toString().equals("Patient")) {
                 intent = new Intent(SignInActivity.this, PatientBottomNavigationActivity.class);
             }else if(myDb.getLoggedUserType().toString().equals("Administrator")){
                 intent = new Intent(SignInActivity.this, MainActivity.class);
+            }else if(myDb.getLoggedUserType().toString().equals("PharmacyAdmin")){
+                intent = new Intent(SignInActivity.this, PharmacyAdmin.class);
             }else{
                 intent = new Intent(SignInActivity.this, MainActivity.class);
             }
+
 
 
 
