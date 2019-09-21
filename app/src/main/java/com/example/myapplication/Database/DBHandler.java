@@ -171,4 +171,11 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     }
+
+
+    public Cursor getListContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.Users.TABLE_NAME ,null);
+        return data;
+    }
 }

@@ -93,7 +93,7 @@
                                 app:layout_constraintVertical_bias="0.283" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/txtEmail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -112,7 +112,7 @@
                                 app:layout_constraintVertical_bias="0.477" />
 
                             <TextView
-                                android:id="@+id/textView10"
+                                android:id="@+id/txtDesignation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="21dp"
                                 android:layout_marginLeft="50dp"
@@ -131,7 +131,7 @@
                                 app:layout_constraintVertical_bias="0.841" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/txtName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -150,7 +150,7 @@
                                 app:layout_constraintVertical_bias="0.092" />
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/buttonView"
                                 android:layout_width="92dp"
                                 android:layout_height="38dp"
                                 android:layout_marginStart="8dp"
@@ -239,7 +239,7 @@
                                 app:layout_constraintVertical_bias="0.283" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/txtEmail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -258,7 +258,7 @@
                                 app:layout_constraintVertical_bias="0.477" />
 
                             <TextView
-                                android:id="@+id/textView10"
+                                android:id="@+id/txtDesignation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="21dp"
                                 android:layout_marginLeft="50dp"
@@ -277,7 +277,7 @@
                                 app:layout_constraintVertical_bias="0.841" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/txtName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -296,7 +296,7 @@
                                 app:layout_constraintVertical_bias="0.092" />
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/buttonView"
                                 android:layout_width="92dp"
                                 android:layout_height="38dp"
                                 android:layout_marginStart="8dp"
@@ -385,7 +385,7 @@
                                 app:layout_constraintVertical_bias="0.283" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/txtEmail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -404,7 +404,7 @@
                                 app:layout_constraintVertical_bias="0.477" />
 
                             <TextView
-                                android:id="@+id/textView10"
+                                android:id="@+id/txtDesignation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="21dp"
                                 android:layout_marginLeft="50dp"
@@ -423,7 +423,7 @@
                                 app:layout_constraintVertical_bias="0.841" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/txtName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -442,7 +442,7 @@
                                 app:layout_constraintVertical_bias="0.092" />
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/buttonView"
                                 android:layout_width="92dp"
                                 android:layout_height="38dp"
                                 android:layout_marginStart="8dp"
@@ -531,7 +531,7 @@
                                 app:layout_constraintVertical_bias="0.283" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/txtEmail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -550,7 +550,7 @@
                                 app:layout_constraintVertical_bias="0.477" />
 
                             <TextView
-                                android:id="@+id/textView10"
+                                android:id="@+id/txtDesignation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="21dp"
                                 android:layout_marginLeft="50dp"
@@ -569,7 +569,7 @@
                                 app:layout_constraintVertical_bias="0.841" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/txtName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -588,7 +588,7 @@
                                 app:layout_constraintVertical_bias="0.092" />
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/buttonView"
                                 android:layout_width="92dp"
                                 android:layout_height="38dp"
                                 android:layout_marginStart="8dp"
@@ -677,7 +677,7 @@
                                 app:layout_constraintVertical_bias="0.283" />
 
                             <TextView
-                                android:id="@+id/textView6"
+                                android:id="@+id/txtEmail"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -696,7 +696,7 @@
                                 app:layout_constraintVertical_bias="0.477" />
 
                             <TextView
-                                android:id="@+id/textView10"
+                                android:id="@+id/txtDesignation"
                                 android:layout_width="wrap_content"
                                 android:layout_height="21dp"
                                 android:layout_marginLeft="50dp"
@@ -715,7 +715,7 @@
                                 app:layout_constraintVertical_bias="0.841" />
 
                             <TextView
-                                android:id="@+id/textView5"
+                                android:id="@+id/txtName"
                                 android:layout_width="wrap_content"
                                 android:layout_height="26dp"
                                 android:layout_marginLeft="50dp"
@@ -734,7 +734,7 @@
                                 app:layout_constraintVertical_bias="0.092" />
 
                             <Button
-                                android:id="@+id/button3"
+                                android:id="@+id/buttonView"
                                 android:layout_width="92dp"
                                 android:layout_height="38dp"
                                 android:layout_marginStart="8dp"
