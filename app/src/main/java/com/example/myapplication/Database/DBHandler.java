@@ -90,6 +90,8 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        //Patient
+        //PharmacyAdmin
         String designation = "PharmacyAdmin";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
@@ -244,8 +246,11 @@ public class DBHandler extends SQLiteOpenHelper {
         return list;
     }
 
-    public boolean addMedicine(MedicineItemClass item){
+    public int addMedicine(MedicineItemClass item){
 
+        //1 = inserted
+        //2 = updated
+        //3 = not inserted nor updated
 
         if(!checkImageExist(item.getNameMedicine())) {
             SQLiteDatabase db = getWritableDatabase();
@@ -264,12 +269,31 @@ public class DBHandler extends SQLiteOpenHelper {
 
             db.close();
             if (id > 0) {
-                return true;
+                return 1;
             } else {
-                return false;
+                return 3;
             }
         }else{
-            return false;
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues values = new ContentValues();
+
+            values.put(EcareManager.Medicine.COLUMN_NAME_PRICE, item.getPrice());
+            values.put(EcareManager.Medicine.COLUMN_NAME_PRICE_ITEM_TYPE, item.getPriceItemType());
+            values.put(EcareManager.Medicine.COLUMN_NAME_DESCRIPTION, item.getDescription());
+            values.put(EcareManager.Medicine.COLUMN_NAME_USAGE, item.getUsage());
+            values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
+            values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
+            values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
+
+            int count = db.update(EcareManager.Medicine.TABLE_NAME,values,
+                    EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME +"=?",
+                    new String[]{item.getNameMedicine()});
+
+            if(count > 0){
+                return 2;
+            }else{
+                return 3;
+            }
         }
 
     }

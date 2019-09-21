@@ -57,7 +57,9 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
             public void onClick(View view) {
 
                 float amount = Float.parseFloat(viewHolder.Amount.getText().toString());
-                amount = amount+1;
+
+                amount = amount + 1;
+
                 String amountStr = amount+"";
                 viewHolder.Amount.setText(amountStr);
                 DBHandler dh = new DBHandler(getContext());
@@ -67,7 +69,11 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
 
 
                 }else{
-                    amount = amount-1;
+                    if(amount >0) {
+                        amount = amount - 1;
+                    }else{
+                        amount=0;
+                    }
                     amountStr = amount+"";
                     viewHolder.Amount.setText(amountStr);
                 }
@@ -78,7 +84,11 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
             public void onClick(View view) {
 
                 float amount = Float.parseFloat(viewHolder.Amount.getText().toString());
-                amount = amount-1;
+                if(amount > 0) {
+                    amount = amount - 1;
+                }else{
+                    amount = 0;
+                }
                 String amountStr = amount+"";
                 viewHolder.Amount.setText(amountStr);
                 DBHandler dh = new DBHandler(getContext());
@@ -88,7 +98,9 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
 
 
                 }else{
-                    amount = amount+1;
+
+                    amount = amount + 1;
+
                     amountStr = amount+"";
                     viewHolder.Amount.setText(amountStr);
                 }

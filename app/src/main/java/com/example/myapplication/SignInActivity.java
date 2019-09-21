@@ -35,21 +35,7 @@ public class SignInActivity extends AppCompatActivity {
         txtPassword = (EditText) findViewById(R.id.editText_password);
 
 
-        MedicineItemClass item = new MedicineItemClass();
-        item.setNameMedicine("Panadol");
-        item.setPrice(100);
-        item.setPriceItemType("Per Tab");
-        item.setDescription("For everything");
-        item.setUsage("Drink");
-        item.setIngredients("medicine");
-        item.setSideEffects("None");
-        item.setImage(null);
-        boolean a = myDb.addMedicine(item);
-        if(a){
-            Log.i("Medicine","Added");
-        }else{
-            Log.i("Medicine"," NOT Added");
-        }
+
 
 
     }

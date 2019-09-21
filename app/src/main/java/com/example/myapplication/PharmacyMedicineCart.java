@@ -141,6 +141,7 @@ public class PharmacyMedicineCart extends Fragment{
                     }
                 });
 
+
                 alert.show();
 
 

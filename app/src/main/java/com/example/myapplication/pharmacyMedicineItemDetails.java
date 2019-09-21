@@ -2,6 +2,9 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -14,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +40,9 @@ public class pharmacyMedicineItemDetails extends Fragment {
         TextView txtUsage = v.findViewById(R.id.Usage_field);
         TextView txtIngredient = v.findViewById(R.id.Ingredient_field);
         TextView txtSideEffect = v.findViewById(R.id.Side_Effects_field);
+
+        ImageView imageView = v.findViewById(R.id.MedicineImageImageView);
+
         final EditText editTextAmount = v.findViewById(R.id.noOfItems);
         final TextView txtPriceCalculated = v.findViewById(R.id.Price_calculated);
 
@@ -55,7 +62,12 @@ public class pharmacyMedicineItemDetails extends Fragment {
         txtUsage.setText(item.getUsage());
         txtIngredient.setText(item.getIngredients());
         txtSideEffect.setText(item.getSideEffects());
+        if(item.getImage() == null){
 
+        }else {
+            Bitmap image = BitmapFactory.decodeByteArray(item.getImage(), 0, item.getImage().length);
+            imageView.setImageBitmap(image);
+        }
 
         addToCart.setOnClickListener(new View.OnClickListener() {
             @Override

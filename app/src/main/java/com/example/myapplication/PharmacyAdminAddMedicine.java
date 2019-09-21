@@ -4,14 +4,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +27,14 @@ import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.MedicineItemClass;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
@@ -46,6 +57,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
     Button      btnClear            ;
     Button      btnAdd              ;
 
+    DatabaseReference DBRef;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -56,7 +68,12 @@ public class PharmacyAdminAddMedicine extends Fragment {
             try {
                 Uri target =data.getData();
                 bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(target));
-                imageView.setImageBitmap(bitmap);
+               // imageView.setImageBitmap(bitmap);
+                int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+                imageView.setImageBitmap(scaled);
+
+
 
             }catch (FileNotFoundException e){
                 Log.i("testing file","Filenot found exception");
@@ -70,8 +87,13 @@ public class PharmacyAdminAddMedicine extends Fragment {
 
             Bitmap bitmap;
             try {
-                //Uri target =data.getData();
-                //bitmap =BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(target));
+                /*Uri target =data.getData();
+                bitmap =BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(target));
+                int nh = (int) ( bitmap.getHeight() * (512.0 / bitmap.getWidth()) );
+                Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
+                imageView.setImageBitmap(scaled);*/
+
+
                 Bundle extras = data.getExtras();
                 bitmap = (Bitmap)extras.get("data");
                 imageView.setImageBitmap(bitmap);
@@ -81,7 +103,6 @@ public class PharmacyAdminAddMedicine extends Fragment {
                 e.printStackTrace();
             }
         }
-
     }
 
     @Override
@@ -119,6 +140,27 @@ public class PharmacyAdminAddMedicine extends Fragment {
             }
         });
 
+        Bundle args = getArguments();
+        if(args!=null) {
+            String medicineName = args.getString(DATA_RECIEVE);
+
+
+            DBHandler db = new DBHandler(getContext());
+            MedicineItemClass item  = db.selectMedicineItem(medicineName);
+            imageView.setImageResource(0);
+            editTextName.setText(item.getNameMedicine());
+            editPricePerItem.setText(item.getPrice()+"");
+            editItemType.setText(item.getPriceItemType());
+            editDescription.setText(item.getDescription());
+            editUsage.setText(item.getUsage());
+            editIngredients.setText(item.getIngredients());
+            editSideEffects.setText(item.getSideEffects());
+
+            if(item.getImage()!=null) {
+                Bitmap image = BitmapFactory.decodeByteArray(item.getImage(), 0, item.getImage().length);
+                imageView.setImageBitmap(image);
+            }
+        }
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -131,11 +173,17 @@ public class PharmacyAdminAddMedicine extends Fragment {
                     String Usage         =editUsage       .getText().toString().trim();
                     String Ingredients   =editIngredients.getText().toString() .trim();
                     String SideEffects   =editSideEffects .getText().toString().trim();
+
                     if(TextUtils.isEmpty(Name)|| TextUtils.isEmpty(Description)||TextUtils.isEmpty(Usage)
                     ||TextUtils.isEmpty(Ingredients)||TextUtils.isEmpty(SideEffects)||TextUtils.isEmpty(ItemType)){
                         Toast.makeText(getContext(),"Fill All the Details", Toast.LENGTH_SHORT).show();
+                    }else if(imageView.getDrawable() == null ){
+                        Toast.makeText(getContext(),"Attach an Image", Toast.LENGTH_SHORT).show();
                     }else{
-                        MedicineItemClass item = new MedicineItemClass();
+
+
+
+                        final MedicineItemClass item = new MedicineItemClass();
                         item.setNameMedicine(Name);
                         item.setPrice(pricePerItem);
                         item.setPriceItemType(ItemType);
@@ -144,10 +192,55 @@ public class PharmacyAdminAddMedicine extends Fragment {
                         item.setIngredients(Ingredients);
                         item.setSideEffects(SideEffects);
 
+                        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
+                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
+                        item.setImage(outputStream.toByteArray());
+
+
+                        final String imgStr = Base64.encodeToString(outputStream.toByteArray(),Base64.DEFAULT);
+                        item.setImageBase64(imgStr);
+
                         DBHandler db = new DBHandler(getContext());
-                        if(db.addMedicine(item)){
+                        if(db.addMedicine(item)==1 ){
                             Toast.makeText(getContext(),"Medicine Added", Toast.LENGTH_SHORT).show();
+
+                            DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+
+                            item.setImage(null);
+                            DBRef.push().setValue(item);
                             clearAll(v);
+
+                        }else if(db.addMedicine(item)==2 ) {
+
+                            Toast.makeText(getContext(), "Medicine Updated", Toast.LENGTH_SHORT).show();
+
+                            DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+                            Query query = DBRef.orderByChild("nameMedicine").equalTo(item.getNameMedicine());
+
+
+                            ValueEventListener valueEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+
+                                        DBRef.child(postSnapshot.getKey()).removeValue();
+                                    }
+                                    DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+
+                                    item.setImage(null);
+                                    DBRef.push().setValue(item);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+                            query.addListenerForSingleValueEvent(valueEventListener);
+
+                            clearAll(v);
+
                         }else{
                             Toast.makeText(getContext(),"Medicine Not Added", Toast.LENGTH_SHORT).show();
                         }
