@@ -90,6 +90,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        //Administrator
         //Patient
         //PharmacyAdmin
         String designation = "PharmacyAdmin";

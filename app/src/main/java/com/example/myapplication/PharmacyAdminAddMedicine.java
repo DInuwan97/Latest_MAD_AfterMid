@@ -206,9 +206,28 @@ public class PharmacyAdminAddMedicine extends Fragment {
                             Toast.makeText(getContext(),"Medicine Added", Toast.LENGTH_SHORT).show();
 
                             DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+                            Query query = DBRef.orderByChild("nameMedicine").equalTo(item.getNameMedicine());
 
-                            item.setImage(null);
-                            DBRef.push().setValue(item);
+
+                            ValueEventListener valueEventListener = new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+
+                                        DBRef.child(postSnapshot.getKey()).removeValue();
+                                    }
+                                    DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+
+                                    item.setImage(null);
+                                    DBRef.push().setValue(item);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            };
+                            query.addListenerForSingleValueEvent(valueEventListener);
                             clearAll(v);
 
                         }else if(db.addMedicine(item)==2 ) {
