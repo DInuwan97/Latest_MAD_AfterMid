@@ -91,8 +91,11 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else {
-            super.onBackPressed();
+
+            //remove the comment to make the back button work
+            //super.onBackPressed();
         }
     }
 
@@ -156,6 +159,9 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
                             break;
                         case R.id.nav_search:
                             selectedFragment = new SearchFragment();
+                            break;
+                        case R.id.nav_pharmacy:
+                            selectedFragment = new PharmacyPatient();
                             break;
                     }
 

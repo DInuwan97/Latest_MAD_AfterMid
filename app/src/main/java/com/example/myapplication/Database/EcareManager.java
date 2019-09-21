@@ -31,6 +31,28 @@ public final class EcareManager {
 
     }
 
+    protected static class Medicine implements BaseColumns{
+        public static final String TABLE_NAME = "medicine";
+        public static final String COLUMN_NAME_MEDICINE_NAME = "medicinename";
+        public static final String COLUMN_NAME_PRICE = "price";
+        public static final String COLUMN_NAME_PRICE_ITEM_TYPE = "itemtype";
+        public static final String COLUMN_NAME_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_USAGE = "usage";
+        public static final String COLUMN_NAME_INGREDIENTS = "ingredients";
+        public static final String COLUMN_NAME_SIDE_EFFECTS = "sideeffects";
+        public static final String COLUMN_NAME_IMAGE= "image";
+
+    }
+
+
+    protected static class PharmacyCart implements BaseColumns{
+        public static final String TABLE_NAME = "pharmacycart";
+        public static final String COLUMN_NAME_MEDICINE_NAME = "medicinename";
+        public static final String COLUMN_NAME_AMOUNT = "amount";
+        public static final String COLUMN_NAME_PRICE_FOR_ONE_ITEM = "priceforone";
+        public static final String COLUMN_NAME_PRICE_TYPE = "pricetype";
+
+    }
 
 
 }

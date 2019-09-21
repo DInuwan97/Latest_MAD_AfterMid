@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.Database.DBHandler;
-import com.example.myapplication.Database.MedicineItemClass;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -21,37 +20,32 @@ import android.view.MenuItem;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.drawerlayout.widget.DrawerLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
 import android.view.Menu;
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
+public class PharmacyAdmin extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     Intent intent;
     TextView txtViewUserEmail,txtViewUserName;
     String LoggedUserEmail,LoggedUserType;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_pharmacy_medicine);
 
         DBHandler myDB = new DBHandler(this);
-
 
         intent = getIntent();
         LoggedUserEmail = intent.getStringExtra("A");
         Log.i("TEST_main",LoggedUserEmail.toString());
-
-
 
         NavigationView navigationView1 = findViewById(R.id.nav_view);
         View header1 = navigationView1.getHeaderView(0);
@@ -69,23 +63,17 @@ public class MainActivity extends AppCompatActivity
         if(savedInstanceState == null) {
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.fragment_container, new HomeFragment());
+            transaction.replace(R.id.fragment_container, new pharmacyAdminMedicineList());
             transaction.commit();
         }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav_menu);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton fab = findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -93,8 +81,6 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
-
-
     }
 
     @Override
@@ -110,7 +96,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.pharmacy_admin, menu);
         return true;
     }
 
@@ -153,8 +139,6 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -162,23 +146,23 @@ public class MainActivity extends AppCompatActivity
                     Fragment selectedFragment = null;
 
                     switch (item.getItemId()) {
-                        case R.id.nav_home:
-                            selectedFragment = new HomeFragment();
+                        case R.id.nav_all_medicine:
+                            selectedFragment = new pharmacyAdminMedicineList();
                             break;
 
-                        case R.id.nav_favorites:
+                        case R.id.nav_add_medicine:
+                            selectedFragment = new PharmacyAdminAddMedicine();
+                            break;
+
+                        case R.id.nav_add_pharmacy_admin:
                             selectedFragment = new FavoritesFragment();
                             break;
 
-                        case R.id.nav_search:
-                            selectedFragment = new SearchFragment();
+                        case R.id.nav_pending_delivery_tasks:
+                            selectedFragment = new FavoritesFragment();
                             break;
-
-                        case R.id.nav_newdoctor:
-                            selectedFragment = new AddNewDoctorFragment();
-                            break;
-                        case R.id.nav_pharmacy:
-                            selectedFragment = new PharmacyPatient();
+                        case R.id.nav_completed_delivery_tasks:
+                            selectedFragment = new FavoritesFragment();
                             break;
                     }
 
@@ -189,3 +173,4 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 }
+

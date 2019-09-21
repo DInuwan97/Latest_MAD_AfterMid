@@ -27,4 +27,15 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="PharmacyMedicineName">Name</string>
+    <string name="PharmacyMedicinePrice">Price</string>
+    <string name="PharmacyMedicineDescription">Description</string>
+    <string name="PharmacyMedicineUsage">Usage</string>
+    <string name="PharmacyMedicineIngredients">Ingredients</string>
+    <string name="PharmacyMedicineSideEffects">Side Effects</string>
+    <string name="PharmacyMedicineHint">Enter Amount</string>
+    <string name="pharmacyCartPay">Order Items</string>
+    <string name="title_activity_pharmacy_admin">PharmacyAdmin</string>
+    <string name="PharmacyAdminBtnChooseGallery" translatable="false">Gallery</string>
+    <string name="PharmacyAdminCamera">Camera</string>
 </resources>

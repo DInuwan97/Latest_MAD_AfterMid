@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_all_medicine"
+        android:icon="@drawable/ic_home"
+        android:title="Medicine" />
+    <item
+        android:id="@+id/nav_add_medicine"
+        android:icon="@drawable/ic_home"
+        android:title="Add Medicine" />
+
+    <item
+        android:id="@+id/nav_add_pharmacy_admin"
+        android:icon="@drawable/ic_add_box"
+        android:title="Add Admin" />
+    <item
+        android:id="@+id/nav_pending_delivery_tasks"
+        android:icon="@drawable/ic_add_box"
+        android:title="Pending Deliveries" />
+    <item
+        android:id="@+id/nav_completed_delivery_tasks"
+        android:icon="@drawable/ic_add_box"
+        android:title="Completed Deliveries" />
+
+</menu>
