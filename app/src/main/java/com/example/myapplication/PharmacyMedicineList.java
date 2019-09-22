@@ -43,6 +43,8 @@ public class PharmacyMedicineList extends Fragment {
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
 
+
+
         listView.setOnItemClickListener (new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

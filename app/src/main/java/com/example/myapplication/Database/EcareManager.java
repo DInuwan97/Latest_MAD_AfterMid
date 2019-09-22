@@ -2,6 +2,8 @@ package com.example.myapplication.Database;
 
 import android.provider.BaseColumns;
 
+import java.nio.file.attribute.BasicFileAttributes;
+
 public final class EcareManager {
 
     private EcareManager(){
@@ -41,6 +43,7 @@ public final class EcareManager {
         public static final String COLUMN_NAME_INGREDIENTS = "ingredients";
         public static final String COLUMN_NAME_SIDE_EFFECTS = "sideeffects";
         public static final String COLUMN_NAME_IMAGE= "image";
+        public static final String COLUMN_NAME_DELETE= "deleteMedicine";
 
     }
 
@@ -52,7 +55,19 @@ public final class EcareManager {
         public static final String COLUMN_NAME_PRICE_FOR_ONE_ITEM = "priceforone";
         public static final String COLUMN_NAME_PRICE_TYPE = "pricetype";
 
+
     }
 
+    protected static class Deliver implements BaseColumns{
+
+        public static final String TABLE_NAME = "deliverytable";
+        public static final String COLUMN_NAME_USER_NAME = "username";
+        public static final String COLUMN_NAME_ADDRESS = "address";
+        public static final String COLUMN_NAME_EMAIL = "email";
+        public static final String COLUMN_NAME_STATUS = "status";
+        public static final String COLUMN_NAME_PHONE_NUMBER = "phonenumber";
+
+
+    }
 
 }

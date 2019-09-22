@@ -60,6 +60,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
     EditText    editSideEffects     ;
     Button      btnClear            ;
     Button      btnAdd              ;
+    Button      btnDelete           ;
     MedicineItemClass item;
     MedicineItemClass item2;
     byte[] imageByte;
@@ -134,6 +135,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
         editSideEffects     =v.findViewById(R.id.Side_Effects_field);
         btnAdd              =v.findViewById(R.id.btnAdd);
         btnClear            =v.findViewById(R.id.btnClear);
+        btnDelete           =v.findViewById(R.id.btnDelete);
 
 
         btnGallery.setOnClickListener(new View.OnClickListener() {
@@ -214,6 +216,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
                         item.setUsage(Usage);
                         item.setIngredients(Ingredients);
                         item.setSideEffects(SideEffects);
+                        item.setDeleteMedicine(0);
 
                         if(imageChanged) {
                             Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -315,6 +318,21 @@ public class PharmacyAdminAddMedicine extends Fragment {
             @Override
             public void onClick(View view) {
                 clearAll(v);
+            }
+        });
+
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DBHandler db =  new DBHandler(getContext());
+                String nameToDelete = editTextName.getText().toString();
+                if(db.deleteMedicine(nameToDelete)){
+                    Toast.makeText(getContext(),"Medicine Deleted",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getContext(),"Medicine Not Deleted",Toast.LENGTH_SHORT).show();
+                }
+                clearAll(v);
+
             }
         });
         return v;
