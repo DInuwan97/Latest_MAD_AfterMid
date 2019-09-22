@@ -36,8 +36,11 @@ public class pharmacyAdminMedicineList extends Fragment {
         final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.list_medicine_item,MedicineList);
 
+        adapter.notifyDataSetChanged();
+
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
+
 
         listView.setOnItemClickListener (new AdapterView.OnItemClickListener(){
             @Override
@@ -65,10 +68,12 @@ public class pharmacyAdminMedicineList extends Fragment {
 
                 if(searchTxt != "") {
 
-                    ArrayList<String> list = dh.selectSome(searchTxt);
-                    final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                            R.layout.list_medicine_item, list);
-                    listView.setAdapter(adapter);
+              //      ArrayList<String> list = dh.selectSome(searchTxt);
+               //     final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+               //             R.layout.list_medicine_item, list);
+                    adapter.getFilter().filter(searchTxt);
+               //     adapter.notifyDataSetChanged();
+               //     listView.setAdapter(adapter);
 
 
                 }

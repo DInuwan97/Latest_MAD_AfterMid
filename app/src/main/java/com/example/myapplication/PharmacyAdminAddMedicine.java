@@ -14,10 +14,12 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.text.LoginFilter;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -27,6 +29,8 @@ import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.MedicineItemClass;
+import com.google.android.material.bottomnavigation.BottomNavigationItemView;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,6 +60,11 @@ public class PharmacyAdminAddMedicine extends Fragment {
     EditText    editSideEffects     ;
     Button      btnClear            ;
     Button      btnAdd              ;
+    MedicineItemClass item;
+    MedicineItemClass item2;
+    byte[] imageByte;
+    String imgStr;
+    Boolean imageChanged= false;
 
     DatabaseReference DBRef;
     @Override
@@ -73,6 +82,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
                 Bitmap scaled = Bitmap.createScaledBitmap(bitmap, 512, nh, true);
                 imageView.setImageBitmap(scaled);
 
+                imageChanged = true;
 
 
             }catch (FileNotFoundException e){
@@ -97,6 +107,8 @@ public class PharmacyAdminAddMedicine extends Fragment {
                 Bundle extras = data.getExtras();
                 bitmap = (Bitmap)extras.get("data");
                 imageView.setImageBitmap(bitmap);
+                imageChanged = true;
+
 
             }catch (Exception e){
                 Log.i("testing file"," exception camrea");
@@ -146,18 +158,29 @@ public class PharmacyAdminAddMedicine extends Fragment {
 
 
             DBHandler db = new DBHandler(getContext());
-            MedicineItemClass item  = db.selectMedicineItem(medicineName);
+            item2 = db.selectMedicineItem(medicineName);
             imageView.setImageResource(0);
-            editTextName.setText(item.getNameMedicine());
-            editPricePerItem.setText(item.getPrice()+"");
-            editItemType.setText(item.getPriceItemType());
-            editDescription.setText(item.getDescription());
-            editUsage.setText(item.getUsage());
-            editIngredients.setText(item.getIngredients());
-            editSideEffects.setText(item.getSideEffects());
+            editTextName.setText(item2.getNameMedicine());
+            editPricePerItem.setText(item2.getPrice()+"");
+            editItemType.setText(item2.getPriceItemType());
+            editDescription.setText(item2.getDescription());
+            editUsage.setText(item2.getUsage());
+            editIngredients.setText(item2.getIngredients());
+            editSideEffects.setText(item2.getSideEffects());
 
-            if(item.getImage()!=null) {
-                Bitmap image = BitmapFactory.decodeByteArray(item.getImage(), 0, item.getImage().length);
+            btnAdd.setText("Update");
+
+            if(item2.getImage()!=null) {
+                BitmapFactory.Options options= new BitmapFactory.Options();
+                imageByte = item2.getImage();
+
+                options.inJustDecodeBounds = false;
+                options.inDither = false;
+                options.inSampleSize = 1;
+                options.inScaled = false;
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+
+                Bitmap image = BitmapFactory.decodeByteArray(item2.getImage(), 0, item2.getImage().length,options);
                 imageView.setImageBitmap(image);
             }
         }
@@ -183,7 +206,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
 
 
 
-                        final MedicineItemClass item = new MedicineItemClass();
+                        item = new MedicineItemClass();
                         item.setNameMedicine(Name);
                         item.setPrice(pricePerItem);
                         item.setPriceItemType(ItemType);
@@ -192,18 +215,27 @@ public class PharmacyAdminAddMedicine extends Fragment {
                         item.setIngredients(Ingredients);
                         item.setSideEffects(SideEffects);
 
-                        Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-                        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG,100,outputStream);
-                        item.setImage(outputStream.toByteArray());
+                        if(imageChanged) {
+                            Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
+                            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                            item.setImage(outputStream.toByteArray());
 
+                            imgStr = Base64.encodeToString(outputStream.toByteArray(), Base64.DEFAULT);
+                            item.setImageBase64(imgStr);
+                        }else{
 
-                        final String imgStr = Base64.encodeToString(outputStream.toByteArray(),Base64.DEFAULT);
-                        item.setImageBase64(imgStr);
+                            item.setImage(imageByte);
+                            imgStr = Base64.encodeToString( imageByte, Base64.DEFAULT);
+                            item.setImageBase64(imgStr);
+
+                        }
+
 
                         DBHandler db = new DBHandler(getContext());
                         if(db.addMedicine(item)==1 ){
                             Toast.makeText(getContext(),"Medicine Added", Toast.LENGTH_SHORT).show();
+
 
                             DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
                             Query query = DBRef.orderByChild("nameMedicine").equalTo(item.getNameMedicine());
@@ -214,10 +246,10 @@ public class PharmacyAdminAddMedicine extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
+                              //          DBRef.child(postSnapshot.getKey()).setValue(item);
                                         DBRef.child(postSnapshot.getKey()).removeValue();
                                     }
                                     DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
-
                                     item.setImage(null);
                                     DBRef.push().setValue(item);
                                 }
@@ -228,12 +260,14 @@ public class PharmacyAdminAddMedicine extends Fragment {
                                 }
                             };
                             query.addListenerForSingleValueEvent(valueEventListener);
+
                             clearAll(v);
 
                         }else if(db.addMedicine(item)==2 ) {
 
                             Toast.makeText(getContext(), "Medicine Updated", Toast.LENGTH_SHORT).show();
 
+
                             DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
                             Query query = DBRef.orderByChild("nameMedicine").equalTo(item.getNameMedicine());
 
@@ -245,9 +279,12 @@ public class PharmacyAdminAddMedicine extends Fragment {
 
                                         DBRef.child(postSnapshot.getKey()).removeValue();
                                     }
+
                                     DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
 
+
                                     item.setImage(null);
+
                                     DBRef.push().setValue(item);
                                 }
 
@@ -259,6 +296,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
                             query.addListenerForSingleValueEvent(valueEventListener);
 
                             clearAll(v);
+
 
                         }else{
                             Toast.makeText(getContext(),"Medicine Not Added", Toast.LENGTH_SHORT).show();
@@ -267,7 +305,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
 
                     }
                 }catch (NumberFormatException e){
-                    Toast.makeText(getContext(),"Enter a Valid Amount", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Enter a Valid Price", Toast.LENGTH_SHORT).show();
                 }
 
             }

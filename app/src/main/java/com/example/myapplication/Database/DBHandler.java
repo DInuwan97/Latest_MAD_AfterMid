@@ -6,9 +6,19 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -93,7 +103,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "PharmacyAdmin";
+        String designation = "Patient";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -230,6 +240,48 @@ public class DBHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         db.close();
+
+        DatabaseReference DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+        DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+        Query query = DBRef.orderByChild("nameMedicine");
+
+
+
+        ValueEventListener valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+
+                    DatabaseReference DBRef2 = FirebaseDatabase.getInstance().getReference().child("Medicine")
+                            .child(postSnapshot.getKey());
+                    MedicineItemClass item = new MedicineItemClass();
+                    item.setAmount(Float.parseFloat(postSnapshot.child("amount").getValue().toString()));
+                    item.setDescription(postSnapshot.child("description").getValue().toString());
+                    item.setImageBase64(postSnapshot.child("imageBase64").getValue().toString());
+                    item.setIngredients(postSnapshot.child("ingredients").getValue().toString());
+                    item.setNameMedicine(postSnapshot.child("nameMedicine").getValue().toString());
+                    item.setPrice(Float.parseFloat(postSnapshot.child("price").getValue().toString()));
+                    item.setPriceItemType(postSnapshot.child("priceItemType").getValue().toString());
+                    item.setSideEffects(postSnapshot.child("sideEffects").getValue().toString());
+                    item.setUsage(postSnapshot.child("usage").getValue().toString());
+
+                    byte[] byteImage = Base64.decode( item.getImageBase64(), Base64.DEFAULT);
+                    item.setImage(byteImage);
+
+                    //MedicineItemClass item = postSnapshot.child(postSnapshot.getKey()).getValue(MedicineItemClass.class);
+                    Log.i("Tesing selecr fire", postSnapshot.child("nameMedicine").getValue().toString());
+                    addMedicine(item);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        };
+        query.addListenerForSingleValueEvent(valueEventListener);
+
         return list;
     }
     public ArrayList selectSome(String name){
@@ -261,7 +313,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //2 = updated
         //3 = not inserted nor updated
 
-        if(!checkImageExist(item.getNameMedicine())) {
+        if(!checkMedicineExist(item.getNameMedicine())) {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
@@ -307,7 +359,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkImageExist(String name){
+    public boolean checkMedicineExist(String name){
         //return true if there is already a medicine with the same name
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME };
@@ -333,6 +385,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
     }
+
     public MedicineItemClass selectMedicineItem(String name){
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME,
@@ -381,6 +434,8 @@ public class DBHandler extends SQLiteOpenHelper {
         return item;
     }
 
+
+
     public boolean deleteMedicine(String name){
 
         SQLiteDatabase db = getWritableDatabase();
@@ -390,7 +445,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{name});
 
         db.close();
-        if(checkImageExist(name)){
+        if(checkMedicineExist(name)){
             return false;
         }else{
             return true;
@@ -400,7 +455,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean updateMedicine(MedicineItemClass item){
 
-        if(checkImageExist(item.getNameMedicine())){
+        if(checkMedicineExist(item.getNameMedicine())){
             SQLiteDatabase db = getWritableDatabase();
 
             ContentValues values = new ContentValues();
