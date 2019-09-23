@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.icu.util.Freezable;
 import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.provider.ContactsContract;
 import android.util.Base64;
@@ -14,7 +15,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.PharmacyAdminAddMedicine;
+import com.example.myapplication.PharmacyMedicineList;
+import com.example.myapplication.pharmacyAdminMedicineList;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -71,7 +76,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Medicine.COLUMN_NAME_USAGE + " TEXT,"+
                 EcareManager.Medicine.COLUMN_NAME_INGREDIENTS + " TEXT,"+
                 EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS + " TEXT,"+
-                EcareManager.Medicine.COLUMN_NAME_DELETE + " INTEGER,"+
                 EcareManager.Medicine.COLUMN_NAME_IMAGE + " BLOB)";
 
         String SQL_CREATE_ENTRIES_CART_PHARMACY = "CREATE TABLE "+ EcareManager.PharmacyCart.TABLE_NAME + "("+
@@ -108,7 +112,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "Patient";
+        String designation = "PharmacyAdmin";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -248,18 +252,11 @@ public class DBHandler extends SQLiteOpenHelper {
                     item.setSideEffects(postSnapshot.child("sideEffects").getValue().toString());
                     item.setUsage(postSnapshot.child("usage").getValue().toString());
 
-                    item.setDeleteMedicine(Integer.parseInt(postSnapshot.child("deleteMedicine").getValue().toString()));
-
-
                     byte[] byteImage = Base64.decode( item.getImageBase64(), Base64.DEFAULT);
                     item.setImage(byteImage);
 
-                    //MedicineItemClass item = postSnapshot.child(postSnapshot.getKey()).getValue(MedicineItemClass.class);
-                    Log.i("Tesing selecr fire", postSnapshot.child("nameMedicine").getValue().toString());
-                    Log.i("Tesing selecr fire", postSnapshot.child("deleteMedicine").getValue().toString());
-                    if(item.getDeleteMedicine() == 0) {
-                        addMedicine(item);
-                    }
+                    addMedicine(item);
+
                 }
 
             }
@@ -270,12 +267,12 @@ public class DBHandler extends SQLiteOpenHelper {
             }
         };
         SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, EcareManager.Medicine.COLUMN_NAME_DELETE};
+        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
 
         Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
                 projection,
-                EcareManager.Medicine.COLUMN_NAME_DELETE + " = ?",
-                new String[]{"0"},
+               null,
+               null,
                 null,
                 null,
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
@@ -283,33 +280,26 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<String> list = new ArrayList<>();
         while (cursor.moveToNext()){
             String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
-            int delete = cursor.getInt(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_DELETE));
 
             list.add(MedicineName);
 
         }
+        query.addListenerForSingleValueEvent(valueEventListener);
         cursor.close();
-        deleteItems();
-        query.addValueEventListener(valueEventListener);
+
         db.close();
+        deleteFromLocal(list);
         return list;
     }
 
-    public void deleteItems(){
-        SQLiteDatabase db = getWritableDatabase();
-        db.delete(EcareManager.Medicine.TABLE_NAME,
-                EcareManager.Medicine.COLUMN_NAME_DELETE + " = ?",
-                new String[]{"1"});
-
-    }
-    public ArrayList selectSome(String name){
+    public ArrayList selectAllLocal(){
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
 
         Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
                 projection,
-                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " LIKE ?",
-                new String[]{name+"%"},
+                null,
+                null,
                 null,
                 null,
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
@@ -317,13 +307,51 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<String> list = new ArrayList<>();
         while (cursor.moveToNext()){
             String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
+
             list.add(MedicineName);
 
         }
         cursor.close();
         db.close();
+        deleteFromLocal(list);
         return list;
     }
+
+
+
+    ArrayList<String> firebaseList=new ArrayList<>();
+    ArrayList<String> sqlList;
+    public void deleteFromLocal(ArrayList<String > list){
+        sqlList=list;
+        DatabaseReference DBref2 = FirebaseDatabase.getInstance().getReference().child("Medicine");
+
+        Query query = DBref2.orderByChild("nameMedicine");
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                    firebaseList.add(postSnapShot.child("nameMedicine").getValue().toString());
+                }
+                sqlList.removeAll(firebaseList);
+                for(String name : sqlList){
+                    deleteMedicine(name);
+                }
+                Log.i("testing fire ","done");
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
+
+
+    }
+
 
     public int addMedicine(MedicineItemClass item){
 
@@ -342,7 +370,6 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
             values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
             values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
-            values.put(EcareManager.Medicine.COLUMN_NAME_DELETE,item.getDeleteMedicine());
             long id = db.insert(EcareManager.Medicine.TABLE_NAME,
                    null,
                     values);
@@ -364,7 +391,6 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
             values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
             values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
-            values.put(EcareManager.Medicine.COLUMN_NAME_DELETE,item.getDeleteMedicine());
             int count = db.update(EcareManager.Medicine.TABLE_NAME,values,
                     EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME +"=?",
                     new String[]{item.getNameMedicine()});
@@ -382,9 +408,8 @@ public class DBHandler extends SQLiteOpenHelper {
         //return true if there is already a medicine with the same name
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME };
-        String Selection = EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " =? AND " + EcareManager.Medicine.COLUMN_NAME_DELETE
-                + " =? ";
-        String[] selectionArgs= {name,"0"};
+        String Selection = EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " =? ";
+        String[] selectionArgs= {name};
 
         Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
                 projection,
@@ -466,7 +491,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         db.close();
 
-        DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+        /*DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
         Query query = DBRef.orderByChild("nameMedicine").equalTo(name);
 
 
@@ -485,6 +510,7 @@ public class DBHandler extends SQLiteOpenHelper {
             }
         };
         query.addListenerForSingleValueEvent(valueEventListener);
+*/
 
         if(checkMedicineExist(name)){
             return false;
@@ -508,7 +534,7 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
             values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
             values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
-            values.put(EcareManager.Medicine.COLUMN_NAME_DELETE,0);
+
 
             int count = db.update(EcareManager.Medicine.TABLE_NAME,
                     values,

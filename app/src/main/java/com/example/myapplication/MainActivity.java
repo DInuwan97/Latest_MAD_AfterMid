@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
         if(savedInstanceState == null) {
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();

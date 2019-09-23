@@ -216,7 +216,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
                         item.setUsage(Usage);
                         item.setIngredients(Ingredients);
                         item.setSideEffects(SideEffects);
-                        item.setDeleteMedicine(0);
+
 
                         if(imageChanged) {
                             Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
@@ -327,6 +327,26 @@ public class PharmacyAdminAddMedicine extends Fragment {
                 DBHandler db =  new DBHandler(getContext());
                 String nameToDelete = editTextName.getText().toString();
                 if(db.deleteMedicine(nameToDelete)){
+
+                    DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+
+                    Query query = DBRef.orderByChild("nameMedicine").equalTo(nameToDelete);
+                    ValueEventListener valueEventListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+
+                                DBRef.child(postSnapshot.getKey()).removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    };
+                    query.addListenerForSingleValueEvent(valueEventListener);
+
                     Toast.makeText(getContext(),"Medicine Deleted",Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getContext(),"Medicine Not Deleted",Toast.LENGTH_SHORT).show();

@@ -43,7 +43,6 @@ public final class EcareManager {
         public static final String COLUMN_NAME_INGREDIENTS = "ingredients";
         public static final String COLUMN_NAME_SIDE_EFFECTS = "sideeffects";
         public static final String COLUMN_NAME_IMAGE= "image";
-        public static final String COLUMN_NAME_DELETE= "deleteMedicine";
 
     }
 
