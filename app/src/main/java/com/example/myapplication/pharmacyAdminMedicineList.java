@@ -4,8 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,11 +20,17 @@ import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 
 public class pharmacyAdminMedicineList extends Fragment {
+    ArrayAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,11 +41,16 @@ public class pharmacyAdminMedicineList extends Fragment {
         final DBHandler dh = new DBHandler(getActivity().getApplicationContext());
 
         ArrayList<String> MedicineList = dh.selectAll();
-        final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+        adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.list_medicine_item,MedicineList);
+
+
 
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
 
         listView.setOnItemClickListener (new AdapterView.OnItemClickListener(){
             @Override
@@ -65,11 +78,7 @@ public class pharmacyAdminMedicineList extends Fragment {
 
                 if(searchTxt != "") {
 
-                    ArrayList<String> list = dh.selectSome(searchTxt);
-                    final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
-                            R.layout.list_medicine_item, list);
-                    listView.setAdapter(adapter);
-
+                    adapter.getFilter().filter(searchTxt);
 
                 }
 
@@ -77,8 +86,10 @@ public class pharmacyAdminMedicineList extends Fragment {
             }
         });
 
-
+        adapter.notifyDataSetChanged();
         return v;
     }
+
+
 
 }

@@ -2,9 +2,32 @@ package com.example.myapplication.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import android.icu.util.Freezable;
+import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.provider.ContactsContract;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.Toast;
+
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.PharmacyAdminAddMedicine;
+import com.example.myapplication.PharmacyMedicineList;
+import com.example.myapplication.pharmacyAdminMedicineList;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -76,6 +99,8 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
         db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Users.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Medicine.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.PharmacyCart.TABLE_NAME);
         //db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Doctors.TABLE_NAME);
 
         onCreate(db);
@@ -86,6 +111,7 @@ public class DBHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        //Administrator
         //Patient
         //PharmacyAdmin
         String designation = "Patient";
@@ -230,8 +256,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     public ArrayList selectAll(){
-        SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
+
 
         Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
                 projection,
@@ -239,26 +264,16 @@ public class DBHandler extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                null);//EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
+                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
 
-        ArrayList<String> list = new ArrayList<>();
-        while (cursor.moveToNext()){
-            String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
-            list.add(MedicineName);
 
-        }
-        cursor.close();
-        db.close();
-        return list;
-    }
-    public ArrayList selectSome(String name){
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
 
         Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
                 projection,
-                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " LIKE ?",
-                new String[]{name+"%"},
+               null,
+               null,
                 null,
                 null,
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
@@ -267,7 +282,6 @@ public class DBHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()){
             String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
             list.add(MedicineName);
-
         }
         cursor.close();
         db.close();
@@ -280,7 +294,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //2 = updated
         //3 = not inserted nor updated
 
-        if(!checkImageExist(item.getNameMedicine())) {
+        if(!checkMedicineExist(item.getNameMedicine())) {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME, item.getNameMedicine());
@@ -312,7 +326,6 @@ public class DBHandler extends SQLiteOpenHelper {
             values.put(EcareManager.Medicine.COLUMN_NAME_INGREDIENTS, item.getIngredients());
             values.put(EcareManager.Medicine.COLUMN_NAME_SIDE_EFFECTS, item.getSideEffects());
             values.put(EcareManager.Medicine.COLUMN_NAME_IMAGE, item.getImage());
-
             int count = db.update(EcareManager.Medicine.TABLE_NAME,values,
                     EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME +"=?",
                     new String[]{item.getNameMedicine()});
@@ -326,7 +339,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public boolean checkImageExist(String name){
+    public boolean checkMedicineExist(String name){
         //return true if there is already a medicine with the same name
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME };
@@ -352,6 +365,7 @@ public class DBHandler extends SQLiteOpenHelper {
         }
 
     }
+
     public MedicineItemClass selectMedicineItem(String name){
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME,
@@ -400,6 +414,8 @@ public class DBHandler extends SQLiteOpenHelper {
         return item;
     }
 
+
+
     public boolean deleteMedicine(String name){
 
         SQLiteDatabase db = getWritableDatabase();
@@ -409,7 +425,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{name});
 
         db.close();
-        if(checkImageExist(name)){
+
+        if(checkMedicineExist(name)){
             return false;
         }else{
             return true;
@@ -419,7 +436,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public boolean updateMedicine(MedicineItemClass item){
 
-        if(checkImageExist(item.getNameMedicine())){
+        if(checkMedicineExist(item.getNameMedicine())){
             SQLiteDatabase db = getWritableDatabase();
 
             ContentValues values = new ContentValues();

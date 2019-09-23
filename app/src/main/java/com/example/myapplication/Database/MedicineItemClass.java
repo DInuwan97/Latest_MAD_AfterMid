@@ -14,6 +14,17 @@ public class MedicineItemClass {
     private String sideEffects;
     private byte[] image;
 
+
+
+    private int deleteMedicine;
+
+    public int getDeleteMedicine() {
+        return deleteMedicine;
+    }
+
+    public void setDeleteMedicine(int deleteMedicine) {
+        this.deleteMedicine = deleteMedicine;
+    }
     public String getImageBase64() {
         return imageBase64;
     }
