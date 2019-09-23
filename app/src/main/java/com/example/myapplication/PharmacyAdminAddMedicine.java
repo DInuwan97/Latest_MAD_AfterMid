@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import android.provider.ContactsContract;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.LoginFilter;
 import android.text.TextUtils;
 import android.util.Base64;
@@ -171,6 +173,11 @@ public class PharmacyAdminAddMedicine extends Fragment {
             editSideEffects.setText(item2.getSideEffects());
 
             btnAdd.setText("Update");
+            editTextName.setEnabled(false);
+            editTextName.setFocusable(false);
+            editTextName.setCursorVisible(false);
+            editTextName.setTextColor(Color.BLACK);
+
 
             if(item2.getImage()!=null) {
                 BitmapFactory.Options options= new BitmapFactory.Options();
@@ -239,7 +246,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
                         if(db.addMedicine(item)==1 ){
                             Toast.makeText(getContext(),"Medicine Added", Toast.LENGTH_SHORT).show();
 
-
+                            item.setImage(null);
                             DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
                             Query query = DBRef.orderByChild("nameMedicine").equalTo(item.getNameMedicine());
 
@@ -249,12 +256,12 @@ public class PharmacyAdminAddMedicine extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
-                              //          DBRef.child(postSnapshot.getKey()).setValue(item);
-                                        DBRef.child(postSnapshot.getKey()).removeValue();
+                                        DBRef.child(postSnapshot.getKey()).setValue(item);
+                               //         DBRef.child(postSnapshot.getKey()).removeValue();
                                     }
-                                    DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
-                                    item.setImage(null);
-                                    DBRef.push().setValue(item);
+                               //     DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+                               //     item.setImage(null);
+                               //     DBRef.push().setValue(item);
                                 }
 
                                 @Override
@@ -274,21 +281,18 @@ public class PharmacyAdminAddMedicine extends Fragment {
                             DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
                             Query query = DBRef.orderByChild("nameMedicine").equalTo(item.getNameMedicine());
 
-
+                            item.setImage(null);
                             ValueEventListener valueEventListener = new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
-                                        DBRef.child(postSnapshot.getKey()).removeValue();
+                                        DBRef.child(postSnapshot.getKey()).setValue(item);
+                               //         DBRef.child(postSnapshot.getKey()).removeValue();
                                     }
-
-                                    DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
-
-
-                                    item.setImage(null);
-
-                                    DBRef.push().setValue(item);
+                              //     DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+                              //     item.setImage(null);
+                              //     DBRef.push().setValue(item);
                                 }
 
                                 @Override
@@ -317,6 +321,14 @@ public class PharmacyAdminAddMedicine extends Fragment {
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                editTextName.setFocusable(true);
+                editTextName.setFocusableInTouchMode(true);
+                editTextName.setInputType( InputType.TYPE_CLASS_TEXT);
+                editTextName.setEnabled(true);
+                editTextName.setCursorVisible(true);
+
+
                 clearAll(v);
             }
         });

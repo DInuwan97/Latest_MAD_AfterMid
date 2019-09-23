@@ -231,41 +231,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public ArrayList selectAll(){
 
-        DatabaseReference DBRef;
-        DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
-        Query query = DBRef.orderByChild("nameMedicine");
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
-                    DatabaseReference DBRef2 = FirebaseDatabase.getInstance().getReference().child("Medicine")
-                            .child(postSnapshot.getKey());
-                    MedicineItemClass item = new MedicineItemClass();
-                    item.setAmount(Float.parseFloat(postSnapshot.child("amount").getValue().toString()));
-                    item.setDescription(postSnapshot.child("description").getValue().toString());
-                    item.setImageBase64(postSnapshot.child("imageBase64").getValue().toString());
-                    item.setIngredients(postSnapshot.child("ingredients").getValue().toString());
-                    item.setNameMedicine(postSnapshot.child("nameMedicine").getValue().toString());
-                    item.setPrice(Float.parseFloat(postSnapshot.child("price").getValue().toString()));
-                    item.setPriceItemType(postSnapshot.child("priceItemType").getValue().toString());
-                    item.setSideEffects(postSnapshot.child("sideEffects").getValue().toString());
-                    item.setUsage(postSnapshot.child("usage").getValue().toString());
-
-                    byte[] byteImage = Base64.decode( item.getImageBase64(), Base64.DEFAULT);
-                    item.setImage(byteImage);
-
-                    addMedicine(item);
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
 
@@ -280,79 +246,12 @@ public class DBHandler extends SQLiteOpenHelper {
         ArrayList<String> list = new ArrayList<>();
         while (cursor.moveToNext()){
             String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
-
             list.add(MedicineName);
-
-        }
-        query.addListenerForSingleValueEvent(valueEventListener);
-        cursor.close();
-
-        db.close();
-        deleteFromLocal(list);
-        return list;
-    }
-
-    public ArrayList selectAllLocal(){
-        SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
-
-        Cursor cursor = db.query(EcareManager.Medicine.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
-
-        ArrayList<String> list = new ArrayList<>();
-        while (cursor.moveToNext()){
-            String MedicineName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME));
-
-            list.add(MedicineName);
-
         }
         cursor.close();
         db.close();
-        deleteFromLocal(list);
-
         return list;
     }
-
-
-
-    ArrayList<String> firebaseList=new ArrayList<>();
-    ArrayList<String> sqlList;
-    public void deleteFromLocal(ArrayList<String > list){
-        sqlList=list;
-        DatabaseReference DBref2 = FirebaseDatabase.getInstance().getReference().child("Medicine");
-
-        Query query = DBref2.orderByChild("nameMedicine");
-
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                    firebaseList.add(postSnapShot.child("nameMedicine").getValue().toString());
-                }
-                sqlList.removeAll(firebaseList);
-                for(String name : sqlList){
-                    deleteMedicine(name);
-                }
-                Log.i("testing fire ","done");
-
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        });
-
-
-    }
-
 
     public int addMedicine(MedicineItemClass item){
 
@@ -481,7 +380,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    DatabaseReference DBRef;
+
     public boolean deleteMedicine(String name){
 
         SQLiteDatabase db = getWritableDatabase();
@@ -491,27 +390,6 @@ public class DBHandler extends SQLiteOpenHelper {
                 new String[]{name});
 
         db.close();
-
-        /*DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
-        Query query = DBRef.orderByChild("nameMedicine").equalTo(name);
-
-
-        ValueEventListener valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
-
-                    DBRef.child(postSnapshot.getKey()).child("deleteMedicine").setValue(1);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        };
-        query.addListenerForSingleValueEvent(valueEventListener);
-*/
 
         if(checkMedicineExist(name)){
             return false;

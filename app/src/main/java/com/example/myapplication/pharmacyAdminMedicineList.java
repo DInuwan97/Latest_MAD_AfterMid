@@ -33,26 +33,6 @@ public class pharmacyAdminMedicineList extends Fragment {
     ArrayAdapter adapter;
 
     @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isResumed()){
-            if(isVisibleToUser) {
-                adapter.notifyDataSetChanged();
-            }
-        }
-    }
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if(getUserVisibleHint()) {
-            adapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -64,18 +44,7 @@ public class pharmacyAdminMedicineList extends Fragment {
         adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.list_medicine_item,MedicineList);
 
-        /*DatabaseReference dbred = FirebaseDatabase.getInstance().getReference().child("Medicine");
-        dbred.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
 
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
