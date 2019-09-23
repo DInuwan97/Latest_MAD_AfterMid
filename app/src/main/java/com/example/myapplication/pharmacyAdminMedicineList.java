@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.view.KeyEvent;
@@ -18,6 +19,11 @@ import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -32,6 +38,16 @@ public class pharmacyAdminMedicineList extends Fragment {
             if(isVisibleToUser) {
                 adapter.notifyDataSetChanged();
             }
+        }
+    }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getUserVisibleHint()) {
+            adapter.notifyDataSetChanged();
         }
     }
 
@@ -50,6 +66,19 @@ public class pharmacyAdminMedicineList extends Fragment {
 
 
        adapter.notifyDataSetChanged();
+
+        /*DatabaseReference dbred = FirebaseDatabase.getInstance().getReference().child("Medicine");
+        dbred.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });*/
 
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
@@ -92,5 +121,7 @@ public class pharmacyAdminMedicineList extends Fragment {
 
         return v;
     }
+
+
 
 }
