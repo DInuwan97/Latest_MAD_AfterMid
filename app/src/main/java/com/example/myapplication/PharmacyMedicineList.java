@@ -20,7 +20,26 @@ import java.util.ArrayList;
 
 
 public class PharmacyMedicineList extends Fragment {
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isResumed()){
+            if(isVisibleToUser) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
 
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getUserVisibleHint()) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+    ArrayAdapter adapter;
     DataPassListener mCallback;
 
     public interface DataPassListener{
@@ -36,14 +55,14 @@ public class PharmacyMedicineList extends Fragment {
         final DBHandler dh = new DBHandler(getActivity().getApplicationContext());
 
         ArrayList<String> MedicineList = dh.selectAll();
-        final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+        adapter= new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.list_medicine_item,MedicineList);
 
         adapter.notifyDataSetChanged();
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
 
-
+        adapter.notifyDataSetChanged();
 
         listView.setOnItemClickListener (new AdapterView.OnItemClickListener(){
             @Override
@@ -83,7 +102,7 @@ public class PharmacyMedicineList extends Fragment {
             }
         });
 
-
+        adapter.notifyDataSetChanged();
         return v;
     }
 

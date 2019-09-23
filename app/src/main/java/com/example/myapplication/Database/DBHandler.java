@@ -112,7 +112,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "PharmacyAdmin";
+        String designation = "Patient";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -314,6 +314,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         deleteFromLocal(list);
+
         return list;
     }
 

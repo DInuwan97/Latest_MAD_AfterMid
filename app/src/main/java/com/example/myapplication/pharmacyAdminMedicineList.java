@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,12 +64,8 @@ public class pharmacyAdminMedicineList extends Fragment {
         adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.list_medicine_item,MedicineList);
 
-
-
-       adapter.notifyDataSetChanged();
-
         /*DatabaseReference dbred = FirebaseDatabase.getInstance().getReference().child("Medicine");
-        dbred.addValueEventListener(new ValueEventListener() {
+        dbred.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 adapter.notifyDataSetChanged();
@@ -83,6 +80,8 @@ public class pharmacyAdminMedicineList extends Fragment {
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+
 
         listView.setOnItemClickListener (new AdapterView.OnItemClickListener(){
             @Override
@@ -118,7 +117,7 @@ public class pharmacyAdminMedicineList extends Fragment {
             }
         });
 
-
+        adapter.notifyDataSetChanged();
         return v;
     }
 
