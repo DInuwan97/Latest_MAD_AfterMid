@@ -31,7 +31,7 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final ViewHolder viewHolder;
+       final ViewHolder viewHolder;
 
         final MedicineItemClass item = getItem(position);
 

@@ -5,10 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.strictmode.SqliteObjectLeakedViolation;
-import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -92,7 +88,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         //Patient
         //PharmacyAdmin
-        String designation = "PharmacyAdmin";
+        String designation = "Patient";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -209,6 +205,30 @@ public class DBHandler extends SQLiteOpenHelper {
         return data;
     }
 
+
+    public boolean getUserCount(String userEmail){
+        SQLiteDatabase db = this.getWritableDatabase();
+        //return true if item already exists in the cart
+        Cursor cursor = db.query(EcareManager.Users.TABLE_NAME,
+                new String[]{EcareManager.Users.COL_NAME_USEREMAIL},
+                EcareManager.Users.COL_NAME_USEREMAIL + " = ?",
+                new String[]{userEmail},
+                null,
+                null,
+                EcareManager.Users.COL_NAME_USEREMAIL + " ASC");
+        int count = cursor.getCount();
+        db.close();
+
+        cursor.close();
+        if(count > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
     public ArrayList selectAll(){
         SQLiteDatabase db = getReadableDatabase();
         String[] projection = {EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME};
@@ -219,7 +239,7 @@ public class DBHandler extends SQLiteOpenHelper {
                 null,
                 null,
                 null,
-                EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
+                null);//EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " ASC");
 
         ArrayList<String> list = new ArrayList<>();
         while (cursor.moveToNext()){
@@ -557,6 +577,30 @@ public class DBHandler extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return totalAmount;
+
+    }
+
+
+    public boolean deleteUsers(String userEmail){
+
+        if(getUserCount(userEmail)) {
+
+            SQLiteDatabase db = getWritableDatabase();
+
+            db.delete(EcareManager.Users.TABLE_NAME,
+                    EcareManager.Users.COL_NAME_USEREMAIL + " =? ",
+                    new String[]{userEmail});
+
+            db.close();
+            if (getUserCount(userEmail)) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }else{
+            return true;
+        }
 
     }
 
