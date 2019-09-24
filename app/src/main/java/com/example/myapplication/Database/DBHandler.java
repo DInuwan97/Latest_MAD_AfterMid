@@ -155,9 +155,9 @@ public class DBHandler extends SQLiteOpenHelper {
         //Patient
         //PharmacyAdmin
         String designation = "Administrator";
-        String gender = "NULL";
-        String address = "NULL";
-        String mobile = "NULL";
+        String gender = "Male";
+        String address = "colombo";
+        String mobile = "0775356977";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);

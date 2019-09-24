@@ -65,7 +65,7 @@ public class FavoritesFragment extends Fragment {
             }
         }
 
-        btnViewPatientDetails = (Button) v.findViewById(R.id.buttonView);
+        btnViewPatientDetails = (Button) v.findViewById(R.id.btnUpdateUser);
 
         return v;
     }

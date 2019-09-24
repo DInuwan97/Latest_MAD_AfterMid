@@ -31,6 +31,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.view.Menu;
 
+import android.widget.Button;
 import android.widget.EditText;
 
 import android.widget.ListView;
@@ -48,7 +49,8 @@ public class MainActivity extends AppCompatActivity
 
     //for user profile update
     EditText txtAddress,txtMobile;
-    String userAddress,userMobile;
+    String userAddress = null,userMobile = null;
+    Button btnUserUpdate;
 
     //
 
@@ -223,7 +225,36 @@ public class MainActivity extends AppCompatActivity
         builder.setView(subView);
         builder.create();
 
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+
+
+
+       /* btnUserUpdate.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                DBHandler db = new DBHandler(getApplicationContext());
+
+
+                txtAddress = (EditText)findViewById(R.id.txtAddress);
+                txtMobile = (EditText)findViewById(R.id.txtMobile);
+                btnUserUpdate = (Button) findViewById(R.id.btnUpdateUser);
+
+                userAddress = txtAddress.toString();
+                userMobile = txtMobile.toString();
+
+
+
+                if(db.updateUserDetails(userAddress,userMobile)){
+                    Toast.makeText(getApplicationContext(),"Profile Updated",Toast.LENGTH_LONG).show();
+                }else{
+                    Log.i("testing","User not Deleted");
+                }
+            }
+        });*/
+
+
+        /*builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DBHandler db = new DBHandler(getApplicationContext());
@@ -247,8 +278,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(DialogInterface dialog, int which) {
 
             }
-        });
+        });*/
 
+        //btnUpdateUser
         builder.show();
     }
 }
