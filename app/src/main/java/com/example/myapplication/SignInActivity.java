@@ -97,6 +97,7 @@ public class SignInActivity extends AppCompatActivity {
 
                     db.addMedicine(item);
                 }
+
                 Toast.makeText(getApplicationContext(),"Synced with the Online Database", Toast.LENGTH_SHORT).show();
             }
 

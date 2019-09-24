@@ -36,6 +36,7 @@ public class pharmacyAdminMedicineList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Pharmacy Admin");
         final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_list, container, false);
 
         final DBHandler dh = new DBHandler(getActivity().getApplicationContext());

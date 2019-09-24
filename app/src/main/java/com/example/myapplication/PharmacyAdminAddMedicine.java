@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -69,6 +71,8 @@ public class PharmacyAdminAddMedicine extends Fragment {
     String imgStr;
     Boolean imageChanged= false;
 
+
+    Drawable editTextBackground;
     DatabaseReference DBRef;
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -125,6 +129,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_pharmacy_admin_add_medicine, container, false);
 
+        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Add Medicine");
         imageView           =v.findViewById(R.id.medicineImageView);
         btnGallery          =v.findViewById(R.id.btnGallery);
         btnCamera           =v.findViewById(R.id.btnCamera);
@@ -139,6 +144,8 @@ public class PharmacyAdminAddMedicine extends Fragment {
         btnClear            =v.findViewById(R.id.btnClear);
         btnDelete           =v.findViewById(R.id.btnDelete);
 
+
+        editTextBackground = editTextName.getBackground();
 
         btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +166,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
         Bundle args = getArguments();
         if(args!=null) {
             String medicineName = args.getString(DATA_RECIEVE);
-
+            ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Update Medicine");
 
             DBHandler db = new DBHandler(getContext());
             item2 = db.selectMedicineItem(medicineName);
@@ -173,6 +180,7 @@ public class PharmacyAdminAddMedicine extends Fragment {
             editSideEffects.setText(item2.getSideEffects());
 
             btnAdd.setText("Update");
+            editTextName.setBackground(null);
             editTextName.setEnabled(false);
             editTextName.setFocusable(false);
             editTextName.setCursorVisible(false);
@@ -256,12 +264,12 @@ public class PharmacyAdminAddMedicine extends Fragment {
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
 
-                                        DBRef.child(postSnapshot.getKey()).setValue(item);
-                               //         DBRef.child(postSnapshot.getKey()).removeValue();
+                                 //       DBRef.child(postSnapshot.getKey()).setValue(item);
+                                       DBRef.child(postSnapshot.getKey()).removeValue();
                                     }
-                               //     DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
-                               //     item.setImage(null);
-                               //     DBRef.push().setValue(item);
+                                   DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+                                   item.setImage(null);
+                                   DBRef.push().setValue(item);
                                 }
 
                                 @Override
@@ -322,13 +330,16 @@ public class PharmacyAdminAddMedicine extends Fragment {
             @Override
             public void onClick(View view) {
 
+                ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Add Medicine");
                 editTextName.setFocusable(true);
                 editTextName.setFocusableInTouchMode(true);
                 editTextName.setInputType( InputType.TYPE_CLASS_TEXT);
                 editTextName.setEnabled(true);
                 editTextName.setCursorVisible(true);
 
+                editTextName.setBackground(editTextBackground);
 
+                btnAdd.setText("ADD");
                 clearAll(v);
             }
         });

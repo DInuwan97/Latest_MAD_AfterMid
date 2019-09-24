@@ -53,6 +53,7 @@ public final class EcareManager {
         public static final String COLUMN_NAME_AMOUNT = "amount";
         public static final String COLUMN_NAME_PRICE_FOR_ONE_ITEM = "priceforone";
         public static final String COLUMN_NAME_PRICE_TYPE = "pricetype";
+        public static final String COLUMN_NAME_USERNAME = "username";
 
 
     }
@@ -65,6 +66,11 @@ public final class EcareManager {
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_STATUS = "status";
         public static final String COLUMN_NAME_PHONE_NUMBER = "phonenumber";
+        public static final String COLUMN_NAME_MEDICINE_ITEMS_NAMES = "itemsnames";
+        public static final String COLUMN_NAME_MEDICINE_ITEMS_AMOUNT = "itemscount";
+        public static final String COLUMN_NAME_PRICE_TOTAL = "total";
+        public static final String COLUMN_NAME_DATETIME = "datetime";
+
 
 
     }
