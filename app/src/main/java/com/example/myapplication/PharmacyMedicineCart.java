@@ -41,7 +41,7 @@ public class PharmacyMedicineCart extends Fragment{
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Medicine Cart");
         View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_cart, container, false);
 
         DBHandler db = new DBHandler(getContext());

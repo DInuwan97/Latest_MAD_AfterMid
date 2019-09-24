@@ -27,7 +27,7 @@ public class PharmacyMedicineList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
+        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Medicine List");
         final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_list, container, false);
 
         final DBHandler dh = new DBHandler(getActivity().getApplicationContext());
