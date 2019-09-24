@@ -108,7 +108,7 @@ public class PharmacyMedicineCart extends Fragment{
         btnOrderItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cartListAdap.notifyDataSetChanged();
+
                 /*builder.setMessage("Do you want to Buy the Selected Items ?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -148,6 +148,12 @@ public class PharmacyMedicineCart extends Fragment{
                editTextEmail.setText(DBHandler.getLoggedUserEmail());
                editTextName.setText(DBHandler.getLoggedUserName());
 
+               if(!TextUtils.equals(DBHandler.getLoggedUserAddress(),"NULL")){
+                   editTextAddress.setText(DBHandler.getLoggedUserAddress());
+               }
+               if(!TextUtils.equals(DBHandler.getLoggedUserMobile(),"NULL")){
+                   editTextPhone.setText(DBHandler.getLoggedUserMobile());
+               }
 
 
 

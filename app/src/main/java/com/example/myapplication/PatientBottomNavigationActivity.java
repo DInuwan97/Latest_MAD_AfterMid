@@ -95,7 +95,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
         } else {
 
             //remove the comment to make the back button work
-            //super.onBackPressed();
+            super.onBackPressed();
         }
     }
 

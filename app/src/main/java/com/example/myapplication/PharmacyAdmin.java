@@ -157,7 +157,7 @@ public class PharmacyAdmin extends AppCompatActivity
                             break;
 
                         case R.id.nav_pending_delivery_tasks:
-                            selectedFragment = new FavoritesFragment();
+                            selectedFragment = new PharmacyAdminPendingDelivery();
                             break;
                         case R.id.nav_completed_delivery_tasks:
                             selectedFragment = new FavoritesFragment();
