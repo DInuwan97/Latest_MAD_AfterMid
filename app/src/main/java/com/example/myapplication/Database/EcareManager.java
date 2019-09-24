@@ -16,6 +16,12 @@ public final class EcareManager {
         public static final String COL_NAME_DESIGNATION = "designation";
         public static final String COL_NAME_PASSWORD = "password";
 
+        public static final String COL_NAME_GENDER = "gender";
+        public static final String COL_NAME_MOBILE = "mobile";
+        public static final String COL_NAME_ADDRESS = "address";
+        public static final String COL_NAME_USERIMAGE = "userimage";
+
+
     }
 
     protected static class Doctors implements  BaseColumns{

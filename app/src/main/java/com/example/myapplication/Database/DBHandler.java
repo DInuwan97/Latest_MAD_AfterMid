@@ -14,9 +14,21 @@ public class DBHandler extends SQLiteOpenHelper {
 
     private static String LoggedUserName;
     private static String LoggedUserType;
+    private static String LoggedUserGender;
+    private static String LoggedUserAddress;
+    private static String LoggedUserMobile;
 
+    public static String getLoggedUserGender() {
+        return LoggedUserGender;
+    }
 
+    public static String getLoggedUserAddress() {
+        return LoggedUserAddress;
+    }
 
+    public static String getLoggedUserMobile() {
+        return LoggedUserMobile;
+    }
 
     public DBHandler(Context context) {
         super(context,DATABASE_NAME,null,1);
@@ -33,7 +45,10 @@ public class DBHandler extends SQLiteOpenHelper {
                 + EcareManager.Users.COL_NAME_USERNAME + " TEXT,"
                 + EcareManager.Users.COL_NAME_USEREMAIL + " TEXT,"
                 + EcareManager.Users.COL_NAME_DESIGNATION + " TEXT,"
-                + EcareManager.Users.COL_NAME_PASSWORD + " TEXT)";
+                + EcareManager.Users.COL_NAME_PASSWORD + " TEXT,"
+                + EcareManager.Users.COL_NAME_GENDER + " TEXT,"
+                + EcareManager.Users.COL_NAME_MOBILE + " TEXT,"
+                + EcareManager.Users.COL_NAME_ADDRESS + " TEXT)";
 
         //create doctors table
 
@@ -88,12 +103,18 @@ public class DBHandler extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         //Patient
         //PharmacyAdmin
-        String designation = "Patient";
+        String designation = "Administrator";
+        String gender = "NULL";
+        String address = "NULL";
+        String mobile = "NULL";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
         values.put(EcareManager.Users.COL_NAME_DESIGNATION,designation);
         values.put(EcareManager.Users.COL_NAME_PASSWORD,password);
+        values.put(EcareManager.Users.COL_NAME_GENDER,gender);
+        values.put(EcareManager.Users.COL_NAME_MOBILE,mobile);
+        values.put(EcareManager.Users.COL_NAME_ADDRESS,address);
 
         long result = db.insert(EcareManager.Users.TABLE_NAME,null,values);
 
@@ -111,7 +132,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String[] projection = { EcareManager.Users._ID,
                                 EcareManager.Users.COL_NAME_USERNAME,
-                                EcareManager.Users.COL_NAME_DESIGNATION};
+                                EcareManager.Users.COL_NAME_DESIGNATION,
+                                EcareManager.Users.COL_NAME_GENDER,
+                                EcareManager.Users.COL_NAME_ADDRESS,
+                                EcareManager.Users.COL_NAME_MOBILE};
 
         String [] selectionArgs = {userEmail,password};
 
@@ -131,6 +155,9 @@ public class DBHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
          this.LoggedUserName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_USERNAME));
          this.LoggedUserType = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_DESIGNATION));
+         this.LoggedUserGender = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_GENDER));
+         this.LoggedUserAddress = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_ADDRESS));
+         this.LoggedUserMobile = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_MOBILE));
         //cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_USERNAME));
          }
 
@@ -199,11 +226,35 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-    public Cursor getListContents(){
-        SQLiteDatabase db = this.getWritableDatabase();
-        Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.Users.TABLE_NAME ,null);
+    public Cursor getPatientListContents(){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selection = EcareManager.Users.COL_NAME_DESIGNATION+ " =? ";
+        String[] projection = {EcareManager.Users._ID,
+                EcareManager.Users.COL_NAME_USERNAME,
+                EcareManager.Users.COL_NAME_USEREMAIL,
+                EcareManager.Users.COL_NAME_DESIGNATION};
+
+        Cursor data = db.query(EcareManager.Users.TABLE_NAME,
+                projection,
+                selection,
+                new String[]{"Patient"},
+                null,
+                null,
+                null);
         return data;
     }
+
+
+    public Cursor getDoctorListContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.Doctors.TABLE_NAME ,null);
+        return data;
+    }
+
+
 
 
     public boolean getUserCount(String userEmail){
@@ -601,6 +652,26 @@ public class DBHandler extends SQLiteOpenHelper {
         }else{
             return true;
         }
+
+    }
+
+
+    public boolean updateUserDetails(String address,String mobile){
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(EcareManager.Users.COL_NAME_ADDRESS,address);
+        contentValues.put(EcareManager.Users.COL_NAME_MOBILE,mobile);
+
+        int result = db.update(EcareManager.Users.TABLE_NAME, contentValues,
+                 EcareManager.Users.COL_NAME_USEREMAIL+ " = ?",
+                null);
+
+        if(result == -1)
+            return false;
+        else
+            return true;
 
     }
 

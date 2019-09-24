@@ -69,7 +69,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
 
 
-        BottomNavigationView bottomNav = findViewById(R.id.patient_bottom_nav_menu);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav_menu);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         Toolbar toolbar = findViewById(R.id.toolbar);

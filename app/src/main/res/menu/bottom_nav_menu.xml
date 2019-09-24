@@ -13,8 +13,8 @@
 
     <item
         android:id="@+id/nav_search"
-        android:icon="@drawable/ic_test"
-        android:title="Search" />
+        android:icon="@drawable/ic_patients"
+        android:title="Doctors" />
 
     <item
         android:id="@+id/nav_newdoctor"

@@ -7,6 +7,8 @@ public class SystemUsers {
     private String Email;
     private String Designation;
 
+
+
     public SystemUsers(int id, String username, String email, String designation) {
         this.Id = id;
         this.Username = username;
