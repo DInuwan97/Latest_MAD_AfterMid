@@ -73,12 +73,18 @@ public class pharmacyMedicineItemDetails extends Fragment {
             @Override
             public void onClick(View view) {
                 if (editTextAmount.getText().toString() != "") {
-                    float amount = Float.parseFloat(editTextAmount.getText().toString());
-                    if(dh.cartAddItem(item,amount )){
-                        Toast.makeText(getActivity().getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getActivity().getApplicationContext(),"Not Added to Cart. Try Again",Toast.LENGTH_SHORT).show();
+                    float amount = 0;
+                    try {
+                        amount = Float.parseFloat(editTextAmount.getText().toString());
+                        if(dh.cartAddItem(item,amount )){
+                            Toast.makeText(getActivity().getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(),"Not Added to Cart. Try Again",Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (NumberFormatException e){
+                        Toast.makeText(getActivity().getApplicationContext(),"Enter a Valid Amount",Toast.LENGTH_SHORT).show();
                     }
+
                 }else{
                     Toast.makeText(getActivity().getApplicationContext(),"Enter a Valid Amount",Toast.LENGTH_SHORT).show();
                 }

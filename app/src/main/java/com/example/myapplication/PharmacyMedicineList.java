@@ -21,11 +21,8 @@ import java.util.ArrayList;
 
 public class PharmacyMedicineList extends Fragment {
 
-    DataPassListener mCallback;
+    ArrayAdapter adapter;
 
-    public interface DataPassListener{
-        public void passData(String data);
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,11 +33,14 @@ public class PharmacyMedicineList extends Fragment {
         final DBHandler dh = new DBHandler(getActivity().getApplicationContext());
 
         ArrayList<String> MedicineList = dh.selectAll();
-        final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
+        adapter= new ArrayAdapter<String>(getActivity().getApplicationContext(),
                 R.layout.list_medicine_item,MedicineList);
 
+        adapter.notifyDataSetChanged();
         final ListView listView = v.findViewById(R.id.pharmacyListMedicine);
         listView.setAdapter(adapter);
+
+        adapter.notifyDataSetChanged();
 
         listView.setOnItemClickListener (new AdapterView.OnItemClickListener(){
             @Override
@@ -68,12 +68,12 @@ public class PharmacyMedicineList extends Fragment {
 
                 if(searchTxt != "") {
 
-                        ArrayList<String> list = dh.selectSome(searchTxt);
+                        /*ArrayList<String> list = dh.selectSome(searchTxt);
                         final ArrayAdapter adapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
                                 R.layout.list_medicine_item, list);
-                        listView.setAdapter(adapter);
+                        listView.setAdapter(adapter);*/
 
-
+                        adapter.getFilter().filter(searchTxt);
                 }
 
                 return false;

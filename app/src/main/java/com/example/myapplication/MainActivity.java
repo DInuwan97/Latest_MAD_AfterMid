@@ -30,7 +30,11 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.view.Menu;
+
 import android.widget.EditText;
+
+import android.widget.ListView;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -78,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         txtViewUserName.setText(myDB.getLoggedUserName().toString());
 
         LoggedUserType = myDB.getLoggedUserType().toString();
+
 
 
 
