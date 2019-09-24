@@ -38,11 +38,15 @@
     <string name="title_activity_pharmacy_admin">PharmacyAdmin</string>
     <string name="PharmacyAdminBtnChooseGallery" translatable="false">Gallery</string>
     <string name="PharmacyAdminCamera">Camera</string>
+
+    <string name="title_activity_doctor_portal">DoctorPortalActivity</string>
+
     <string name="PharmacyAdminDelete">Delete</string>
 
     <string name="UserEmail">Email</string>
     <string name="UserAddress">Address</string>
     <string name="UserPhone">Phone Number</string>
     <string name="UserName">Name</string>
+
 
 </resources>

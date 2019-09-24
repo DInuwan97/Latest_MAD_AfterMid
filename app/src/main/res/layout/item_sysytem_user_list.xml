@@ -55,7 +55,7 @@
 
 
                         <TextView
-                            android:id="@+id/textView2"
+                            android:id="@+id/txtDoctorEmail"
                             android:layout_width="wrap_content"
                             android:layout_height="26dp"
                             android:layout_marginLeft="50dp"
@@ -149,7 +149,7 @@
                             app:layout_constraintVertical_bias="0.819" />
 
                         <Button
-                            android:id="@+id/button4"
+                            android:id="@+id/buttonDelete"
                             android:layout_width="92dp"
                             android:layout_height="38dp"
                             android:layout_marginStart="8dp"

@@ -123,20 +123,17 @@ public class SignInActivity extends AppCompatActivity {
             Intent intent;
 
 
-
-
-
             if(myDb.getLoggedUserType().toString().equals("Patient")) {
                 intent = new Intent(SignInActivity.this, PatientBottomNavigationActivity.class);
             }else if(myDb.getLoggedUserType().toString().equals("Administrator")){
                 intent = new Intent(SignInActivity.this, MainActivity.class);
             }else if(myDb.getLoggedUserType().toString().equals("PharmacyAdmin")){
                 intent = new Intent(SignInActivity.this, PharmacyAdmin.class);
+            }else if(myDb.getLoggedUserType().toString().equals("Doctor")){
+                intent = new Intent(SignInActivity.this, DoctorPortalActivity.class);
             }else{
-                intent = new Intent(SignInActivity.this, MainActivity.class);
+                intent = new Intent(SignInActivity.this, DoctorPortalActivity.class);
             }
-
-
 
 
             Log.i("TEST_Si",useremail.toString());

@@ -1,12 +1,10 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.Database.DBHandler;
-import com.example.myapplication.EcareFragments.DoctorListFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.util.Log;
@@ -30,37 +28,29 @@ import androidx.fragment.app.FragmentTransaction;
 
 
 import android.view.Menu;
-
-import android.widget.EditText;
-
-import android.widget.ListView;
-
 import android.widget.TextView;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity
+public class DoctorPortalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
     Intent intent;
     TextView txtViewUserEmail,txtViewUserName;
     String LoggedUserEmail,LoggedUserType;
 
+    //UserDeleteDialogBox userDeleteDialogBox;
 
-    //for user profile update
-    EditText txtAddress,txtMobile;
-    String userAddress,userMobile;
 
-    //
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_doctor_portal);
 
         DBHandler myDB = new DBHandler(this);
 
-        if(/*myDB.getLoggedUserGender().toString().equals("NULL")  || */ myDB.getLoggedUserAddress().toString().equals("NULL")  || myDB.getLoggedUserMobile().toString().equals("NULL")){
+        if(myDB.getLoggedUserGender() == "NULL" || myDB.getLoggedUserAddress() == "NULL" || myDB.getLoggedUserMobile() == "NULL"){
             loadDialog();
         }
 
@@ -82,7 +72,6 @@ public class MainActivity extends AppCompatActivity
         txtViewUserName.setText(myDB.getLoggedUserName().toString());
 
         LoggedUserType = myDB.getLoggedUserType().toString();
-
 
 
 
@@ -192,7 +181,7 @@ public class MainActivity extends AppCompatActivity
                             break;
 
                         case R.id.nav_search:
-                            selectedFragment = new DoctorListFragment();
+                            selectedFragment = new SearchFragment();
                             break;
 
                         case R.id.nav_newdoctor:
@@ -213,41 +202,15 @@ public class MainActivity extends AppCompatActivity
 
     public void loadDialog() {
         LayoutInflater inflater = LayoutInflater.from(this);
-        View subView = inflater.inflate(R.layout.dialogbox_update_user_profile, null);
+        View subView = inflater.inflate(R.layout.dialogbox_delete_user_confirmation, null);
 
-       //S TextView txtDeleteUserDialogBoxConfirmation = (TextView) subView.findViewById(R.id.txtDeleteUser);
+        TextView txtDeleteUserDialogBoxConfirmation = (TextView) subView.findViewById(R.id.txtDeleteUser);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-       // builder.setTitle("Update Your Profile");
+        builder.setTitle("Do you want to Delete this User?");
         //builder.setMessage("Successfully Deleted");
         builder.setView(subView);
         builder.create();
-
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DBHandler db = new DBHandler(getApplicationContext());
-
-                txtAddress = (EditText)findViewById(R.id.txtAddress);
-                txtMobile = (EditText)findViewById(R.id.txtMobile);
-
-                userAddress = txtAddress.toString();
-                userMobile = txtMobile.toString();
-
-                if(db.updateUserDetails(userAddress,userMobile)){
-                    Toast.makeText(getApplicationContext(),"Profile Updated",Toast.LENGTH_LONG).show();
-                }else{
-                    Log.i("testing","User not Deleted");
-                }
-            }
-        });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });
 
         builder.show();
     }

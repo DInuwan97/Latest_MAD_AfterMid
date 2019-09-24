@@ -8,12 +8,16 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 
-public class PatientDetails extends Fragment {
+public class UpcommingChanellingFragment extends Fragment {
+
+    public UpcommingChanellingFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_patient_details, container, false);
+        return inflater.inflate(R.layout.fragment_upcomming_chanelling, container, false);
     }
 
 
