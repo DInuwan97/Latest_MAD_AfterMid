@@ -33,6 +33,7 @@ public class pharmacyMedicineItemDetails extends Fragment {
 
         final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_item_details, container, false);
 
+        ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Medicine Details");
         TextView txtViewName = v.findViewById(R.id.Name_field);
         TextView txtPrice = v.findViewById(R.id.Price_field);
         TextView txtPriceType = v.findViewById(R.id.price_type);

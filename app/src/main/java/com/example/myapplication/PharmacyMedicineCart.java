@@ -41,7 +41,7 @@ public class PharmacyMedicineCart extends Fragment{
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ((MainActivity)getActivity()).getSupportActionBar().setTitle("Medicine Cart");
+        ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Medicine Cart");
         View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_cart, container, false);
 
         DBHandler db = new DBHandler(getContext());
@@ -230,7 +230,7 @@ public class PharmacyMedicineCart extends Fragment{
                                         DBHandler db = new DBHandler(getContext());
 
                                         if(db.clearCart()){
-
+                                            ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Medicine List");
                                             getFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                                     new PharmacyMedicineList()).commit();
                                         }else{
