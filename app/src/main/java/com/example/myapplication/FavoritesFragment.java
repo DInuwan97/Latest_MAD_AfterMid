@@ -6,10 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -38,7 +35,7 @@ public class FavoritesFragment extends Fragment {
         listView = (ListView)v.findViewById(R.id.listView1);
         myDB = new DBHandler(getActivity().getApplicationContext());
         ArrayList <String> theList = new ArrayList<>();
-        Cursor data = myDB.getListContents();
+        Cursor data = myDB.getPatientListContents();
 
         mSystemUsersList = new ArrayList<>();
 
@@ -49,14 +46,21 @@ public class FavoritesFragment extends Fragment {
             //Toast.makeText(getActivity().getApplicationContext(),"The Table was Not Empty",Toast.LENGTH_LONG).show();
             while(data.moveToNext()){
 
-                mSystemUsersList.add(new SystemUsers(
-                        data.getInt(0),
-                        data.getString(1),
-                        data.getString(2),
-                        data.getString(3)));
+                //if(data.getString(3) == "Patient") {
 
-                adapterSystemUsers = new SystemUsersAdapter(getContext(), (ArrayList<SystemUsers>) mSystemUsersList);
-                listView.setAdapter(adapterSystemUsers);
+                    mSystemUsersList.add(
+
+
+                            new SystemUsers(
+
+                            data.getInt(0),
+                            data.getString(1),
+                            data.getString(2),
+                            data.getString(3)));
+
+                    adapterSystemUsers = new SystemUsersAdapter(getContext(), (ArrayList<SystemUsers>) mSystemUsersList);
+                    listView.setAdapter(adapterSystemUsers);
+                //}
 
             }
         }
@@ -68,7 +72,7 @@ public class FavoritesFragment extends Fragment {
 
 
     public void showPatientDetailsFragment(View view){
-        Intent intent1 = new Intent(getActivity().getApplicationContext(),PatientDetails.class);
+        Intent intent1 = new Intent(getActivity().getApplicationContext(), PatientDetails.class);
         startActivity(intent1);
     }
 }

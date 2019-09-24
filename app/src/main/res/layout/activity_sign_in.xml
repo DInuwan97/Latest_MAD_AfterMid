@@ -108,7 +108,7 @@
         app:layout_constraintVertical_bias="0.942" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/txtHospital"
         android:layout_width="136dp"
         android:layout_height="33dp"
         android:layout_marginStart="24dp"
