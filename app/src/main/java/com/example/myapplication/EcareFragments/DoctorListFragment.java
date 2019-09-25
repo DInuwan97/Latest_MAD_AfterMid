@@ -1,6 +1,7 @@
 package com.example.myapplication.EcareFragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,7 +18,9 @@ import android.widget.Toast;
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.DoctorListAdapter;
 import com.example.myapplication.DoctorsInformation;
+import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.SearchFragment;
 
 
 import java.util.ArrayList;
@@ -30,13 +33,14 @@ public class DoctorListFragment extends Fragment {
     private ListView listView;
     private DoctorListAdapter adapterDoctorList;
     private List<DoctorsInformation> mDoctorList;
-    private Button btnViewPatientDetails;
+    private Button btnViewPatientDetails,btnViewDoctor;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_doctor_list, container, false);
 
+        btnViewDoctor = (Button)v.findViewById(R.id.btnViewDoctor);
         myDB = new DBHandler(getActivity().getApplicationContext());
         listView = (ListView)v.findViewById(R.id.listView1);
         myDB = new DBHandler(getActivity().getApplicationContext());
@@ -65,6 +69,17 @@ public class DoctorListFragment extends Fragment {
 
             }
         }
+
+    /*    btnViewDoctor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDoctorTimeSlots(view);
+            }
+        });*/
+
+
+
+
 
         return v;
     }

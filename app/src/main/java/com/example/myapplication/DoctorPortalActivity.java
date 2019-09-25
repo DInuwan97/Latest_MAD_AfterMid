@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.myapplication.Database.DBHandler;
+import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.util.Log;
@@ -181,7 +182,7 @@ public class DoctorPortalActivity extends AppCompatActivity
                             break;
 
                         case R.id.nav_search:
-                            selectedFragment = new SearchFragment();
+                            selectedFragment = new AddDoctorTimeSlotFragment();
                             break;
 
                         case R.id.nav_newdoctor:
@@ -213,6 +214,11 @@ public class DoctorPortalActivity extends AppCompatActivity
         builder.create();
 
         builder.show();
+    }
+
+    public void showChannelingSlots(View view){
+        Intent intent = new Intent(this,AddNewDoctorFragment.class);
+        startActivity(intent);
     }
 }
 

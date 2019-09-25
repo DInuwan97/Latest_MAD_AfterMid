@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -37,7 +38,11 @@ public class FavoritesFragment extends Fragment {
         ArrayList <String> theList = new ArrayList<>();
         Cursor data = myDB.getPatientListContents();
 
+        btnViewPatientDetails = (Button)v.findViewById(R.id.btnUpdateUser);
+
         mSystemUsersList = new ArrayList<>();
+
+
 
 
         if(data.getCount() == 0){
@@ -45,34 +50,20 @@ public class FavoritesFragment extends Fragment {
         }else{
             //Toast.makeText(getActivity().getApplicationContext(),"The Table was Not Empty",Toast.LENGTH_LONG).show();
             while(data.moveToNext()){
-
-                //if(data.getString(3) == "Patient") {
-
-                    mSystemUsersList.add(
-
-
-                            new SystemUsers(
-
+                    mSystemUsersList.add(new SystemUsers(
                             data.getInt(0),
                             data.getString(1),
                             data.getString(2),
                             data.getString(3)));
-
                     adapterSystemUsers = new SystemUsersAdapter(getContext(), (ArrayList<SystemUsers>) mSystemUsersList);
                     listView.setAdapter(adapterSystemUsers);
-                //}
-
             }
         }
 
         btnViewPatientDetails = (Button) v.findViewById(R.id.btnUpdateUser);
-
         return v;
     }
 
 
-    public void showPatientDetailsFragment(View view){
-        Intent intent1 = new Intent(getActivity().getApplicationContext(), PatientDetails.class);
-        startActivity(intent1);
-    }
+
 }

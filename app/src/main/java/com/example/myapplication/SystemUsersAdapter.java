@@ -21,6 +21,9 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
     private ArrayList<SystemUsers> mSystemUserList;
     private LayoutInflater layoutInflater;
 
+
+    TextView txtPatientName,txtPatientEmail,txtPatientGender,txtPatientMobile,txtPatientAddress;
+
     public SystemUsersAdapter(Context mContext, ArrayList<SystemUsers> mSystemUserList) {
         super(mContext,R.layout.item_sysytem_user_list,mSystemUserList);
         this.layoutInflater = LayoutInflater.from(mContext);
@@ -32,6 +35,8 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
 
         final ViewHolder viewHolder;
         final SystemUsers item = getItem(position);
+
+
 
 
         if (converttView == null) {
@@ -46,11 +51,25 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
         viewHolder.txtEmail.setText(mSystemUserList.get(position).getEmail().toString());
         viewHolder.txtDesignation.setText(mSystemUserList.get(position).getDesignation().toString());
 
+
+        //viewHolder.txtPatientName.setText(mSystemUserList.get(position).getUsername());
+
+        txtPatientName = (TextView)converttView.findViewById(R.id.txtPatientName);
+
+
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View view) {
                 openDialog(item);
+            }
+        });
+
+        viewHolder.btnView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                loadPatientDetailsDialog(item);
             }
         });
 
@@ -95,11 +114,35 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
         builder.show();
     }
 
+
+    public void loadPatientDetailsDialog(final SystemUsers item) {
+
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View subView = inflater.inflate(R.layout.dialogbox_view_patient_profile, null);
+
+
+
+      //  txtPatientName.setText(item.getUsername());
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(subView);
+        builder.create();
+        builder.show();
+
+    }
+
+
+
     private class ViewHolder{
         TextView txtName;
         TextView txtEmail;
         TextView txtDesignation;
         Button btnDelete,btnView;
+
+
+        TextView txtPatientName,txtPatientEmail,txtPatientGender,txtPatientMobile,txtPatientAddress;
 
         TextView txtDeleteUserDialogBoxConfirmation;
 
@@ -109,6 +152,9 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
             txtEmail = (TextView)v.findViewById(R.id.txtEmail);
             txtDesignation = (TextView)v.findViewById(R.id.txtDesignation);
             btnDelete = (Button) v.findViewById(R.id.buttonDelete);
+            btnView = (Button) v.findViewById(R.id.btnUpdateUser);
+
+
 
 
         }

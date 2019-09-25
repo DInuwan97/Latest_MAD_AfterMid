@@ -38,7 +38,7 @@
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/viewPager"
                             android:layout_width="match_parent"
-                            android:layout_height="160dp"
+                            android:layout_height="117dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
@@ -46,32 +46,13 @@
                             android:background="@drawable/card_viiew_style"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="1.0">
 
                         </androidx.viewpager.widget.ViewPager>
 
-
-                        <TextView
-                            android:id="@+id/txtDoctorEmail"
-                            android:layout_width="wrap_content"
-                            android:layout_height="26dp"
-                            android:layout_marginLeft="50dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="Sustainability"
-                            android:textColor="@color/colorBlack"
-                            android:textSize="14sp"
-                            android:textStyle="bold"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="@+id/viewPager"
-                            app:layout_constraintHorizontal_bias="0.079"
-                            app:layout_constraintStart_toStartOf="@+id/viewPager"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.283" />
 
                         <TextView
                             android:id="@+id/txtEmail"
@@ -90,7 +71,7 @@
                             app:layout_constraintHorizontal_bias="0.091"
                             app:layout_constraintStart_toStartOf="@+id/viewPager"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.477" />
+                            app:layout_constraintVertical_bias="0.372" />
 
                         <TextView
                             android:id="@+id/txtDesignation"
@@ -109,7 +90,7 @@
                             app:layout_constraintHorizontal_bias="0.076"
                             app:layout_constraintStart_toStartOf="@+id/viewPager"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.841" />
+                            app:layout_constraintVertical_bias="0.818" />
 
                         <TextView
                             android:id="@+id/txtName"
@@ -143,10 +124,10 @@
                             android:textColor="@color/colorLightWhite"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.933"
+                            app:layout_constraintHorizontal_bias="0.924"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.819" />
+                            app:layout_constraintVertical_bias="0.098" />
 
                         <Button
                             android:id="@+id/buttonDelete"
@@ -161,10 +142,10 @@
                             android:textColor="@color/colorLightWhite"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.933"
+                            app:layout_constraintHorizontal_bias="0.924"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.098" />
+                            app:layout_constraintVertical_bias="0.78" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

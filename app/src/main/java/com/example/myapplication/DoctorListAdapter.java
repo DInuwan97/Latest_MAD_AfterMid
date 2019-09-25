@@ -1,12 +1,15 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
 
 import java.util.ArrayList;
 
@@ -57,6 +60,15 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             }
         });*/
 
+
+        viewHolder.btnViewDoctor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddDoctorTimeSlotFragment.class);
+                mContext.startActivity(intent);
+            }
+        });
+
         return converttView;
     }
 
@@ -74,6 +86,8 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
         TextView txtDesignation;
         //Button btnDelete,btnView;
 
+        Button btnViewDoctor;
+
         TextView txtDeleteUserDialogBoxConfirmation;
 
         public ViewHolder(View v){
@@ -85,6 +99,7 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             txtHospital = (TextView)v.findViewById(R.id.txtDoctorNic);
             txtSpecialization = (TextView)v.findViewById(R.id.txtSpecialization);
 
+            btnViewDoctor = (Button) v.findViewById(R.id.btnViewDoctor);
 
 
             txtDesignation = (TextView)v.findViewById(R.id.txtDesignation);
@@ -92,6 +107,11 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
 
 
         }
+    }
+
+    public void showDoctorTimeSlots(View v){
+        Intent intent = new Intent(getContext(),MainActivity.class);
+        mContext.startActivity(intent);
     }
 
 
