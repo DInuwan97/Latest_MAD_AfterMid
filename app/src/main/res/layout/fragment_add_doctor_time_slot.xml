@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".EcareFragments.AddDoctorTimeSlotFragment"
+        android:background="@color/colorLightWhite">
+
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite"
+        tools:context=".EcareFragments.AddDoctorTimeSlotFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewPager"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/btn_primary_style"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0">
+
+                    </androidx.viewpager.widget.ViewPager>
+
+
+                    <TextView
+                        android:id="@+id/txtHospital"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Department of Autonomation"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.115"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.597" />
+
+                    <TextView
+                        android:id="@+id/txtDoctorEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Sustainability"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.079"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.259" />
+
+                    <TextView
+                        android:id="@+id/txtDoctorMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="New Office Building"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.091"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.428" />
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Posted      "
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.072"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.817" />
+
+                    <TextView
+                        android:id="@+id/txtSpecialization"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text=" 25/08/2019"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.313"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.949" />
+
+                    <TextView
+                        android:id="@+id/txtDoctorNic"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text=" 01/09/2019"
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.313"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.817" />
+
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="21dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="DeadLine "
+                        android:textColor="@color/colorSecondaryText"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.071"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.949" />
+
+                    <TextView
+                        android:id="@+id/txtDoctorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_marginLeft="50dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Central Water Leak"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                        app:layout_constraintHorizontal_bias="0.104"
+                        app:layout_constraintStart_toStartOf="@+id/viewPager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.092" />
+
+                    <Button
+                        android:id="@+id/btnViewDoctor"
+                        android:layout_width="101dp"
+                        android:layout_height="29dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/btn_info_style"
+                        android:text="View slots1"
+                        android:textColor="@color/colorLightWhite"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.925"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.86" />
+
+                    <ImageView
+                        android:id="@+id/imageView5"
+                        android:layout_width="99dp"
+                        android:layout_height="99dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:src="@mipmap/ic_launcher"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.918"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.258"
+                        tools:ignore="MissingConstraints" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <TextView
+        android:id="@+id/add_expenses"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="200dp"
+        android:text="Add Chenneling Slot"
+        android:textColor="@color/colorBlack"
+        android:textSize="20sp"
+        android:textStyle="bold"
+
+        />
+
+
+    <RelativeLayout
+        android:layout_width="403dp"
+        android:layout_height="251dp"
+        android:layout_below="@+id/add_expenses"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/btn_primary_style"
+        android:elevation="5dp"
+        android:paddingBottom="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <EditText
+                android:id="@+id/txtSelectTime"
+                android:layout_width="314dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edit_text_style"
+                android:ems="10"
+                android:hint="Select Date"
+                android:inputType="textPersonName"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.55" />
+
+            <EditText
+                android:id="@+id/txtSelectDate"
+                android:layout_width="314dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edit_text_style"
+                android:ems="10"
+                android:hint="Select Date"
+                android:inputType="textPersonName"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.169" />
+
+            <TextView
+                android:id="@+id/txt4"
+                android:layout_width="314dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="5dp"
+                android:text="Select Date"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.038" />
+
+            <TextView
+                android:id="@+id/txt8"
+                android:layout_width="314dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="5dp"
+                android:text="Select Time"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.382" />
+
+            <Button
+                android:id="@+id/save_btn"
+
+                android:layout_width="314dp"
+                android:layout_height="43dp"
+
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorWhite"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="SAVE CHANGES"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt4"
+                app:layout_constraintVertical_bias="0.943" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!--<EditText-->
+            <!--android:id="@+id/select_date"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="12dp"-->
+            <!--android:layout_marginTop="36dp"-->
+            <!--android:layout_marginRight="12dp"-->
+            <!--android:background="@drawable/btn_primary_style"-->
+            <!--android:hint="Select Date"-->
+            <!--android:inputType="textPersonName"-->
+            <!--android:padding="8dp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textSize="15sp" />-->
+
+
+    </RelativeLayout>
+
+</RelativeLayout>
