@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -14,17 +15,41 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.myapplication.Database.AdminDeliveryItemClass;
 import com.example.myapplication.Database.DeliverClass;
+import com.example.myapplication.NotificationService.MySingleton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class PharmacyAdminPendingDeliveryDetails extends Fragment {
+
+
+    final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
+    final private String serverKey = "key=" + "AIzaSyD_UjU_BbJZ9ZEuC2uz3QNXOJRSbm0a9Qc";
+    final private String contentType = "application/json";
+    final String TAG = "NOTIFICATION TAG";
+
+    String NOTIFICATION_TITLE;
+    String NOTIFICATION_MESSAGE;
+    String TOPIC;
 
     final static String DATA_RECIEVE_ID                          = "datarecieveid";
     final static String DATA_RECIEVE_NAME                = "datarecievename";
@@ -51,7 +76,7 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
     Button btnReject;
     DeliverClass item;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pharmacy_admin_pending_delivery_details, container, false);
 
@@ -127,8 +152,43 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
                 Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                            if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+
+                                dbref.child(postSnapShot.getKey()).child("status").setValue(3);
+                                TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
+                                NOTIFICATION_TITLE = "Delivery Notification";
+                                NOTIFICATION_MESSAGE = "Your Request has been accepted and will be delivered to you within 2 buisness days";
+
+                                JSONObject notification = new JSONObject();
+                                JSONObject notifcationBody = new JSONObject();
+                                try {
+                                    notifcationBody.put("title", NOTIFICATION_TITLE);
+                                    notifcationBody.put("message", NOTIFICATION_MESSAGE);
+
+                                    notification.put("to", TOPIC);
+                                    notification.put("data", notifcationBody);
+                                } catch (JSONException e) {
+                                    Log.i(TAG, "onCreate: " + e.getMessage() );
+                                }
+                                sendNotification(notification);
+
+
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
             }
         });
@@ -137,4 +197,30 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         return v;
     }
 
+    private void sendNotification(JSONObject notification) {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                        Log.i(TAG, "onErrorResponse: Didn't work");
+                    }
+                }){
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("Authorization", serverKey);
+                params.put("Content-Type", contentType);
+                return params;
+            }
+        };
+        MySingleton.getInstance(getContext()).addToRequestQueue(jsonObjectRequest);
+    }
 }

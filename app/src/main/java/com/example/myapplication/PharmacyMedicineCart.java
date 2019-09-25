@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -232,7 +234,10 @@ public class PharmacyMedicineCart extends Fragment{
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                        dbref.push().setValue(deliverItem);
+                                        String key = dbref.push().getKey();
+                                        dbref.child(key).setValue(deliverItem);
+                                        FirebaseMessaging.getInstance().subscribeToTopic(key);
+
                                         DBHandler db = new DBHandler(getContext());
 
                                         if(db.clearCart()){

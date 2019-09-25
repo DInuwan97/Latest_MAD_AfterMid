@@ -55,6 +55,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentTitle(remoteMessage.getData().get("title"))
                 .setContentText(remoteMessage.getData().get("message"))
                 .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(remoteMessage.getData().get("message")))
                 .setSound(notificationSoundUri)
                 .setContentIntent(pendingIntent);
 
