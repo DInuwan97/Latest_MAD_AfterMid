@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.myapplication.Database.DeliverClass;
 import com.google.firebase.database.DataSnapshot;
@@ -26,7 +28,7 @@ import java.util.ArrayList;
 
 
 public class PharmacyAdminPendingDelivery extends Fragment {
-
+    PharmacyAdminDeliveryPendingAdapter adapter;
     ArrayList<DeliverClass> list = new ArrayList<>();
     ListView listView;
     @Override
@@ -57,42 +59,24 @@ public class PharmacyAdminPendingDelivery extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                    /*DeliverClass item = new DeliverClass();
-                    String id = postSnapShot.child("id").toString();
-                    try {
-                        item.setId(Integer.parseInt(id));
-
-                    } catch (NumberFormatException e) {
-
-                        e.printStackTrace();
-                    }
-                    item.setAddress(postSnapShot.child("address").toString());
-                    item.setEmail(postSnapShot.child("email").toString());
-                    item.setItemNames(postSnapShot.child("itemNames").toString());
-                    item.setItemsAmount(postSnapShot.child("itemsAmoint").toString());
-                    try {
-                        item.setStatus(Integer.parseInt(postSnapShot.child("status").toString()));
-                    } catch (NumberFormatException e) {
-                        Log.i("error test 2", postSnapShot.child("status").toString());
-                        e.printStackTrace();
-                    }
-                    try {
-                        item.setTotalprice(Float.parseFloat(postSnapShot.child("totalprice").toString()));
-                    } catch (NumberFormatException e) {
-                        Log.i("error test 2",postSnapShot.child("totalprice").toString());
-                        e.printStackTrace();
-                    }
-                    item.setUserName(postSnapShot.child("userName").toString());
-*/                  DeliverClass item;
+                    DeliverClass item;
                     item = postSnapShot.getValue(DeliverClass.class);
 
-                    Log.i("error test 2",item.getPhonenumber()+"");
+                   // Log.i("error test 2",item.getPhonenumber()+"");
                     list.add(item);
 
                 }
-                PharmacyAdminDeliveryPendingAdapter adapter = new PharmacyAdminDeliveryPendingAdapter(getContext(),list);
-                listView.setAdapter(adapter);
-                va.cancel();
+                try {
+                    adapter = new PharmacyAdminDeliveryPendingAdapter(getContext(),list);
+                    listView.setAdapter(adapter);
+                    va.cancel();
+                }catch (NullPointerException e){
+                    e.printStackTrace();
+                    Toast.makeText(getContext(),"Error. Restart the Application.",Toast.LENGTH_SHORT).show();
+                    adapter.notifyDataSetChanged();
+                }
+
+
 
             }
 
@@ -101,6 +85,9 @@ public class PharmacyAdminPendingDelivery extends Fragment {
 
             }
         });
+
+
+
 
         return v;
     }

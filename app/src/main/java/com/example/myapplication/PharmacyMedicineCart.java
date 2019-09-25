@@ -190,8 +190,8 @@ public class PharmacyMedicineCart extends Fragment{
                                     amountList.add(amountMedicine);
 
                                 }
-                                String nameArray = TextUtils.join("#!?/",nameList);
-                                String amountArray = TextUtils.join("#!?/",amountList);
+                                String nameArray = TextUtils.join("#!",nameList);
+                                String amountArray = TextUtils.join("#!",amountList);
 
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                                 String dateTime = simpleDateFormat.format(new Date());

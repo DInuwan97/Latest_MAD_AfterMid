@@ -154,7 +154,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "PharmacyAdmin";
+        String designation = "Patient";
         String gender = "Male";
         String address = "colombo";
         String mobile = "0775356977";
