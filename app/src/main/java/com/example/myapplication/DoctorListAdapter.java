@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
+import com.example.myapplication.EcareFragments.DoctorListFragment;
 
 import java.util.ArrayList;
 
@@ -41,9 +45,12 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             viewHolder.btnViewDoctor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getContext(),"Button was clicked for list itme "+ position,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getContext(),"Button was clicked for list itme "+ position,Toast.LENGTH_SHORT).show();
                     //Bundle bundle = new Bundle();
-                    //Intent i = new Intent(getContext(),AddDoctorTimeSlotFragment.class);
+                    //Intent i = new Intent(getContext().getApplicationContext(), AddDoctorTimeSlotFragment.class);
+                   // getContext().getApplicationContext().startActivity(i);
+                    ((DoctorPortalActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DoctorListFragment()).commit();
+
 
 
                 }
