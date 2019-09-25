@@ -9,13 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
-import com.example.myapplication.EcareFragments.DoctorListFragment;
 
 import java.util.ArrayList;
 
@@ -54,12 +51,18 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
 
                     Fragment fragment = new AddDoctorTimeSlotFragment();
                     Bundle args = new Bundle();
-                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_EMAIL, viewHolder.txtDoctorEmail.toString());
+
+                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_EMAIL, String.valueOf(mDoctorList.get(position).getEmail()));
+                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_DOCTORNAME, String.valueOf(mDoctorList.get(position).getUsername()));
+                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_DOCTORMOBILE,  String.valueOf(mDoctorList.get(position).getMobile()));
+                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_HOSPITAL,  String.valueOf(mDoctorList.get(position).getHospital()));
+                    //args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_SPECIALIZATION, viewHolder.txtSpecialization.toString());
 
                     fragment.setArguments(args);
                     //Toast.makeText(getContext(),"Button was clicked for list itme "+ position,Toast.LENGTH_SHORT).show();
                     //Bundle bundle = new Bundle();
-                    //Intent i = new Intent(getContext().getApplicationContext(), AddDoctorTimeSlotFragment.class);
+                    Intent i = new Intent(con, AddDoctorTimeSlotFragment.class);
+                    i.putExtra("A",viewHolder.txtDoctorName.toString());
                    // getContext().getApplicationContext().startActivity(i);
                     ((MainActivity)con).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
                 }
@@ -75,7 +78,7 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             viewHolder.txtDoctorMobile.setText(mDoctorList.get(position).getMobile().toString());
             viewHolder.txtHospital.setText(mDoctorList.get(position).getHospital().toString());
             viewHolder.txtDoctorNic.setText(mDoctorList.get(position).getNic().toString());
-            viewHolder.txtSpecialization.setText(mDoctorList.get(position).getNic().toString());
+//            viewHolder.txtSpecialization.setText(mDoctorList.get(position).getSpecialization().toString());
 
 
         /*viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){

@@ -13,6 +13,10 @@ public class DoctorsInformation {
     private String Specialization;
     private byte[] image;
 
+    public DoctorsInformation(){
+
+    }
+
     public DoctorsInformation(int id, String username, String email, String mobile, String nic, String hospital, String specialization) {
         Id = id;
         Username = username;
@@ -41,6 +45,34 @@ public class DoctorsInformation {
 
     public String getNic() {
         return Nic;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
+
+    public void setUsername(String username) {
+        Username = username;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public void setMobile(String mobile) {
+        Mobile = mobile;
+    }
+
+    public void setNic(String nic) {
+        Nic = nic;
+    }
+
+    public void setHospital(String hospital) {
+        Hospital = hospital;
+    }
+
+    public void setSpecialization(String specialization) {
+        Specialization = specialization;
     }
 
     public String getSpecialization() {

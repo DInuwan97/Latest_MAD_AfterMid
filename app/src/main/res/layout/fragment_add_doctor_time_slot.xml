@@ -210,7 +210,7 @@
                         android:layout_marginEnd="8dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/btn_info_style"
-                        android:text="View slots1"
+                        android:text="View slots"
                         android:textColor="@color/colorLightWhite"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
