@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 public class DoctorsInformation {
 
+    public static final String DATA_RECIEVE = "data_recieve";
     private int Id;
     private String Username;
     private String Email;

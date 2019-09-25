@@ -2,12 +2,16 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
 
@@ -18,6 +22,8 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
     private Context mContext;
     private ArrayList<DoctorsInformation> mDoctorList;
     private LayoutInflater layoutInflater;
+
+    ArrayAdapter adapter;
 
     public DoctorListAdapter(Context mContext, ArrayList<DoctorsInformation> mDoctorList) {
         super(mContext,R.layout.item_doctor_list,mDoctorList);
@@ -36,6 +42,19 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
         if (converttView == null) {
             converttView = layoutInflater.inflate(R.layout.item_doctor_list, parent, false);
             viewHolder = new ViewHolder(converttView);
+            viewHolder.btnViewDoctor = (Button) converttView.findViewById(R.id.btnViewDoctor);
+
+            viewHolder.btnViewDoctor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getContext(),"Button was clicked for list itme "+ position,Toast.LENGTH_SHORT).show();
+                    //Bundle bundle = new Bundle();
+                    //Intent i = new Intent(getContext(),AddDoctorTimeSlotFragment.class);
+
+
+                }
+            });
+
             converttView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)converttView.getTag();
@@ -52,6 +71,7 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
 
 
 
+
         /*viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -61,13 +81,6 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
         });*/
 
 
-        viewHolder.btnViewDoctor.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), AddDoctorTimeSlotFragment.class);
-                mContext.startActivity(intent);
-            }
-        });
 
         return converttView;
     }
@@ -109,10 +122,7 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
         }
     }
 
-    public void showDoctorTimeSlots(View v){
-        Intent intent = new Intent(getContext(),MainActivity.class);
-        mContext.startActivity(intent);
-    }
+
 
 
 
