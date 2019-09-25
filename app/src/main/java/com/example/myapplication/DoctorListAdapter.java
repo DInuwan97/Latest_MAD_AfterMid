@@ -1,12 +1,21 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
+import com.example.myapplication.EcareFragments.DoctorListFragment;
 
 import java.util.ArrayList;
 
@@ -16,10 +25,14 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
     private ArrayList<DoctorsInformation> mDoctorList;
     private LayoutInflater layoutInflater;
 
+    ArrayAdapter adapter;
+    Context con;
+
     public DoctorListAdapter(Context mContext, ArrayList<DoctorsInformation> mDoctorList) {
-        super(mContext,R.layout.item_doctor_list,mDoctorList);
+        super(mContext, R.layout.item_doctor_list,mDoctorList);
         this.layoutInflater = LayoutInflater.from(mContext);
         this.mDoctorList = mDoctorList;
+        con = mContext;
     }
 
 
@@ -33,6 +46,25 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
         if (converttView == null) {
             converttView = layoutInflater.inflate(R.layout.item_doctor_list, parent, false);
             viewHolder = new ViewHolder(converttView);
+            viewHolder.btnViewDoctor = (Button) converttView.findViewById(R.id.btnViewDoctor);
+
+            viewHolder.btnViewDoctor.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Fragment fragment = new AddDoctorTimeSlotFragment();
+                    Bundle args = new Bundle();
+                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_EMAIL, viewHolder.txtDoctorEmail.toString());
+
+                    fragment.setArguments(args);
+                    //Toast.makeText(getContext(),"Button was clicked for list itme "+ position,Toast.LENGTH_SHORT).show();
+                    //Bundle bundle = new Bundle();
+                    //Intent i = new Intent(getContext().getApplicationContext(), AddDoctorTimeSlotFragment.class);
+                   // getContext().getApplicationContext().startActivity(i);
+                    ((MainActivity)con).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
+                }
+            });
+
             converttView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)converttView.getTag();
@@ -46,9 +78,6 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             viewHolder.txtSpecialization.setText(mDoctorList.get(position).getNic().toString());
 
 
-
-
-
         /*viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -56,6 +85,8 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
                 //openDialog(item);
             }
         });*/
+
+
 
         return converttView;
     }
@@ -74,6 +105,8 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
         TextView txtDesignation;
         //Button btnDelete,btnView;
 
+        Button btnViewDoctor;
+
         TextView txtDeleteUserDialogBoxConfirmation;
 
         public ViewHolder(View v){
@@ -85,6 +118,7 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             txtHospital = (TextView)v.findViewById(R.id.txtDoctorNic);
             txtSpecialization = (TextView)v.findViewById(R.id.txtSpecialization);
 
+            btnViewDoctor = (Button) v.findViewById(R.id.btnViewDoctor);
 
 
             txtDesignation = (TextView)v.findViewById(R.id.txtDesignation);
@@ -93,6 +127,8 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
 
         }
     }
+
+
 
 
 

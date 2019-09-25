@@ -3,32 +3,27 @@ package com.example.myapplication;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.myapplication.Database.DBHandler;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.view.GravityCompat;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-
-import android.view.MenuItem;
-
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-
-import android.view.Menu;
-import android.widget.TextView;
+import com.example.myapplication.Database.DBHandler;
+import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 public class DoctorPortalActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -181,7 +176,7 @@ public class DoctorPortalActivity extends AppCompatActivity
                             break;
 
                         case R.id.nav_search:
-                            selectedFragment = new SearchFragment();
+                            selectedFragment = new AddDoctorTimeSlotFragment();
                             break;
 
                         case R.id.nav_newdoctor:
@@ -213,6 +208,11 @@ public class DoctorPortalActivity extends AppCompatActivity
         builder.create();
 
         builder.show();
+    }
+
+    public void showChannelingSlots(View view){
+        Intent intent = new Intent(this, AddNewDoctorFragment.class);
+        startActivity(intent);
     }
 }
 
