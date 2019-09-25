@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.provider.ContactsContract;
 import android.text.TextUtils;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -108,7 +110,7 @@ public class PharmacyMedicineCart extends Fragment{
         btnOrderItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cartListAdap.notifyDataSetChanged();
+
                 /*builder.setMessage("Do you want to Buy the Selected Items ?")
                         .setCancelable(false)
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -148,6 +150,12 @@ public class PharmacyMedicineCart extends Fragment{
                editTextEmail.setText(DBHandler.getLoggedUserEmail());
                editTextName.setText(DBHandler.getLoggedUserName());
 
+               if(!TextUtils.equals(DBHandler.getLoggedUserAddress(),"NULL")){
+                   editTextAddress.setText(DBHandler.getLoggedUserAddress());
+               }
+               if(!TextUtils.equals(DBHandler.getLoggedUserMobile(),"NULL")){
+                   editTextPhone.setText(DBHandler.getLoggedUserMobile());
+               }
 
 
 
@@ -184,8 +192,8 @@ public class PharmacyMedicineCart extends Fragment{
                                     amountList.add(amountMedicine);
 
                                 }
-                                String nameArray = TextUtils.join("#!?/",nameList);
-                                String amountArray = TextUtils.join("#!?/",amountList);
+                                String nameArray = TextUtils.join("#!",nameList);
+                                String amountArray = TextUtils.join("#!",amountList);
 
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                                 String dateTime = simpleDateFormat.format(new Date());
@@ -226,7 +234,10 @@ public class PharmacyMedicineCart extends Fragment{
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                        dbref.push().setValue(deliverItem);
+                                        String key = dbref.push().getKey();
+                                        dbref.child(key).setValue(deliverItem);
+                                        FirebaseMessaging.getInstance().subscribeToTopic(key);
+
                                         DBHandler db = new DBHandler(getContext());
 
                                         if(db.clearCart()){

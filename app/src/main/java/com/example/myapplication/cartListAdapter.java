@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.Database.DBHandler;
@@ -29,6 +31,7 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
     }
 
 
+
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
        final ViewHolder viewHolder;
@@ -42,6 +45,7 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
+
 
 
         viewHolder.txtViewName.setText(item.getNameMedicine());
@@ -89,6 +93,7 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
                 }else{
                     amount = 0;
                 }
+
                 String amountStr = amount+"";
                 viewHolder.Amount.setText(amountStr);
                 DBHandler dh = new DBHandler(getContext());
@@ -123,6 +128,7 @@ public class cartListAdapter extends ArrayAdapter<MedicineItemClass> {
 
         return  convertView;
     }
+
 
 
 

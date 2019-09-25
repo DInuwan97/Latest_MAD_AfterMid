@@ -47,6 +47,9 @@
     <string name="UserAddress">Address</string>
     <string name="UserPhone">Phone Number</string>
     <string name="UserName">Name</string>
+    <string name="PharmacyDeliveryReject">REJECT</string>
+    <string name="PharmacyDeliveyAccept">ACCEPT</string>
+    <string name="PharmacyDeliveryAddressProp">sadasdasdasdsad\nasdsadasdasdana\nsdfwdaasd\nnsdsadawdad</string>
 
 
 </resources>
