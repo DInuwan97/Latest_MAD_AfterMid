@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.EcareFragments.AddDoctorTimeSlotFragment;
 import com.example.myapplication.EcareFragments.DoctorListFragment;
@@ -22,11 +26,13 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
     private LayoutInflater layoutInflater;
 
     ArrayAdapter adapter;
+    Context con;
 
     public DoctorListAdapter(Context mContext, ArrayList<DoctorsInformation> mDoctorList) {
         super(mContext, R.layout.item_doctor_list,mDoctorList);
         this.layoutInflater = LayoutInflater.from(mContext);
         this.mDoctorList = mDoctorList;
+        con = mContext;
     }
 
 
@@ -45,14 +51,17 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             viewHolder.btnViewDoctor.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    Fragment fragment = new AddDoctorTimeSlotFragment();
+                    Bundle args = new Bundle();
+                    args.putString(AddDoctorTimeSlotFragment.DATA_RECIEVE_EMAIL, viewHolder.txtDoctorEmail.toString());
+
+                    fragment.setArguments(args);
                     //Toast.makeText(getContext(),"Button was clicked for list itme "+ position,Toast.LENGTH_SHORT).show();
                     //Bundle bundle = new Bundle();
                     //Intent i = new Intent(getContext().getApplicationContext(), AddDoctorTimeSlotFragment.class);
                    // getContext().getApplicationContext().startActivity(i);
-                    ((DoctorPortalActivity)mContext).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,new DoctorListFragment()).commit();
-
-
-
+                    ((MainActivity)con).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment).commit();
                 }
             });
 
@@ -67,10 +76,6 @@ public class DoctorListAdapter extends ArrayAdapter<DoctorsInformation> {
             viewHolder.txtHospital.setText(mDoctorList.get(position).getHospital().toString());
             viewHolder.txtDoctorNic.setText(mDoctorList.get(position).getNic().toString());
             viewHolder.txtSpecialization.setText(mDoctorList.get(position).getNic().toString());
-
-
-
-
 
 
         /*viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){

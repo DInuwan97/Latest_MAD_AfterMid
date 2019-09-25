@@ -12,6 +12,8 @@ import com.example.myapplication.R;
 
 public class AddDoctorTimeSlotFragment extends Fragment {
 
+    public static final String DATA_RECIEVE_EMAIL = "datarecieveemail";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
