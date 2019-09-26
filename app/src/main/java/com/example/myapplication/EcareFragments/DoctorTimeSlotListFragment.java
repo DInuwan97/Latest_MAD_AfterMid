@@ -1,7 +1,12 @@
-package com.example.myapplication;
+package com.example.myapplication.EcareFragments;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.fragment.app.Fragment;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,24 +14,20 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import com.example.myapplication.Adapters.TimeSlotListAdapter;
 import com.example.myapplication.Database.DBHandler;
-import com.example.myapplication.Models.TimeSlots;
+import com.example.myapplication.R;
+import com.example.myapplication.SystemUsers;
+import com.example.myapplication.SystemUsersAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchFragment extends Fragment {
-    @Nullable
-
+public class DoctorTimeSlotListFragment extends Fragment {
 
     DBHandler myDB;
     private ListView listView;
-    private TimeSlotListAdapter adapterTimeSlotList;
-    private List<TimeSlots> mDoctorTimeSlotsList;
+    private SystemUsersAdapter adapterTimeSlotList;
+    private List<SystemUsers> mDoctorTimeSlotsList;
     private Button btnViewPatientDetails;
 
     @Override
@@ -37,7 +38,7 @@ public class SearchFragment extends Fragment {
 
 
         myDB = new DBHandler(getActivity().getApplicationContext());
-        listView = (ListView)v.findViewById(R.id.listView2);
+        listView = (ListView)v.findViewById(R.id.listView1);
         myDB = new DBHandler(getActivity().getApplicationContext());
         ArrayList<String> theList = new ArrayList<>();
         Cursor data = myDB.getDoctorSlotListContents();
@@ -52,15 +53,16 @@ public class SearchFragment extends Fragment {
 
                 //if(data.getString(3) == "Patient") {
 
-                mDoctorTimeSlotsList.add(new TimeSlots
-                               ("anura@gmail.com",
-                                "Monday",
-                                "7.00PM",
-                                "8.30PM"));
+                mDoctorTimeSlotsList.add(
 
 
+                        new SystemUsers(
+                                data.getInt(0),
+                                data.getString(1),
+                                data.getString(2),
+                                data.getString(3)));
 
-                adapterTimeSlotList = new TimeSlotListAdapter(getContext(), (ArrayList<TimeSlots>) mDoctorTimeSlotsList);
+                adapterTimeSlotList = new SystemUsersAdapter(getContext(), (ArrayList<SystemUsers>) mDoctorTimeSlotsList);
                 listView.setAdapter(adapterTimeSlotList);
                 //}
 
@@ -72,4 +74,5 @@ public class SearchFragment extends Fragment {
 
         return v;
     }
+
 }

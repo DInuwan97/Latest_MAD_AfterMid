@@ -11,10 +11,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.DoctorsInformation;
+import com.example.myapplication.Models.TimeSlots;
 import com.example.myapplication.R;
 
 import java.util.Calendar;
@@ -38,6 +41,8 @@ public class AddDoctorTimeSlotFragment extends Fragment {
     int currentMinute;
     String amPm;
 
+    Button btnAddTimeSlot;
+
 
 
 
@@ -48,8 +53,13 @@ public class AddDoctorTimeSlotFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_add_doctor_time_slot, container, false);
 
         final EditText chooseTime = (EditText)v.findViewById(R.id.txtSelectTimeStart);
-
         final EditText chooseTime2 = (EditText)v.findViewById(R.id.txtSelectTimeEnd);
+        final EditText slotDay = (EditText)v.findViewById(R.id.txtSelectDate);
+        btnAddTimeSlot = (Button)v.findViewById(R.id.save_btn);
+        Button btnViewDoctor = (Button) v.findViewById(R.id.btnViewDoctor);
+
+
+
 
         Bundle args = getArguments();
         docInfo = new DoctorsInformation();
@@ -126,6 +136,42 @@ public class AddDoctorTimeSlotFragment extends Fragment {
         });
 
 
+        btnAddTimeSlot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                TimeSlots timeSlots = new TimeSlots();
+                Bundle args = getArguments();
+
+                timeSlots.setDoctorEmail(args.getString(DATA_RECIEVE_EMAIL));
+                timeSlots.setSlotDay(slotDay.getText().toString());
+                timeSlots.setSlotStartTime(chooseTime.getText().toString());
+                timeSlots.setSlotEndTime(chooseTime2.getText().toString());
+
+                DBHandler myDB = new DBHandler(getActivity().getApplicationContext());
+
+                boolean isInserted = myDB.addTimeSlot(timeSlots);
+
+                if(isInserted == true){
+                    Toast.makeText(getActivity().getApplicationContext(), "Sucessfully Added!!!", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getActivity().getApplicationContext(), "Dail to add", Toast.LENGTH_LONG).show();
+                }
+
+
+            }
+        });
+
+
+        btnViewDoctor.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
+
 
 
 
@@ -162,7 +208,7 @@ public class AddDoctorTimeSlotFragment extends Fragment {
             txtHospital = (TextView)v.findViewById(R.id.txtDoctorNic);
             txtSpecialization = (TextView)v.findViewById(R.id.txtSpecialization);
 
-            btnViewDoctor = (Button) v.findViewById(R.id.btnViewDoctor);
+
 
 
             txtDesignation = (TextView)v.findViewById(R.id.txtDesignation);
