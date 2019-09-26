@@ -166,10 +166,10 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "Administrator";
-        String gender = "Male";
-        String address = "colombo";
-        String mobile = "0775356977";
+        String designation = "Patient";
+        String gender = "NULL";
+        String address = "NULL";
+        String mobile = "NULL";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -749,26 +749,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-
-    public boolean updateUserDetails(String address,String mobile){
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues contentValues = new ContentValues();
-
-        contentValues.put(EcareManager.Users.COL_NAME_ADDRESS,address);
-        contentValues.put(EcareManager.Users.COL_NAME_MOBILE,mobile);
-
-        int result = db.update(EcareManager.Users.TABLE_NAME, contentValues,
-                 EcareManager.Users.COL_NAME_USEREMAIL+ " = ?",
-                null);
-
-        if(result == -1)
-            return false;
-        else
-            return true;
-
-    }
-
     public long addDeliver(DeliverClass item){
 
 
@@ -830,19 +810,14 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-
-
-
     public void updateUser(String address,String mobile,String email){
         ContentValues values = new ContentValues();
         values.put(EcareManager.Users.COL_NAME_ADDRESS,address);
-        values.put(EcareManager.Users.COL_NAME_MOBILE,address);
+        values.put(EcareManager.Users.COL_NAME_MOBILE,mobile);
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(EcareManager.Users.TABLE_NAME, values, EcareManager.Users.COL_NAME_USEREMAIL + "	= ?", new String[] { String.valueOf(email)});
     }
-
-
 
 
     public boolean addTimeSlot(TimeSlots timeSlots){
@@ -869,7 +844,6 @@ public class DBHandler extends SQLiteOpenHelper {
 
     public Cursor getDoctorSlotListContents(){
         SQLiteDatabase db = this.getWritableDatabase();
-
 
         Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.TimeSlots.TABLE_NAME ,null);
         return data;

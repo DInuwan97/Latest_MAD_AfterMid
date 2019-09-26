@@ -18,24 +18,20 @@ public class TimeSlotListAdapter extends ArrayAdapter<TimeSlots> {
     private Context mContext;
     private ArrayList<TimeSlots> mDoctorTimeSlotsList;
     private LayoutInflater layoutInflater;
-
     ArrayAdapter adapter;
-    Context con;
 
-    public TimeSlotListAdapter(Context context, ArrayList<TimeSlots> mDoctorTimeSlotsList) {
-        super(context, R.layout.item_time_slot_list,mDoctorTimeSlotsList);
-         layoutInflater = LayoutInflater.from(mContext);
-        mDoctorTimeSlotsList = mDoctorTimeSlotsList;
-        con = mContext;
+
+    public TimeSlotListAdapter(Context mContext, ArrayList<TimeSlots> mDoctorTimeSlotsList) {
+        super(mContext, R.layout.item_time_slot_list,mDoctorTimeSlotsList);
+        this.layoutInflater = LayoutInflater.from(mContext);
+        this.mDoctorTimeSlotsList = mDoctorTimeSlotsList;
     }
-
 
     @Override
     public View getView(final int position, View converttView, ViewGroup parent){
 
         final ViewHolder viewHolder;
         final TimeSlots item = getItem(position);
-
 
         if (converttView == null) {
             converttView = layoutInflater.inflate(R.layout.item_time_slot_list, parent, false);
@@ -45,11 +41,10 @@ public class TimeSlotListAdapter extends ArrayAdapter<TimeSlots> {
             viewHolder = (ViewHolder)converttView.getTag();
         }
 
-        viewHolder.txtDoctorMail.setText(mDoctorTimeSlotsList.get(position).getDoctorEmail());
-        viewHolder.txtSlotDay.setText(mDoctorTimeSlotsList.get(position).getSlotDay());
-        viewHolder.txtSlotStartTime.setText(mDoctorTimeSlotsList.get(position).getSlotStartTime());
-        viewHolder.txtSlotEndTime.setText(mDoctorTimeSlotsList.get(position).getSlotEndTime());
-
+        viewHolder.txtDoctorMail.setText(mDoctorTimeSlotsList.get(position).getDoctorEmail().toString());
+        viewHolder.txtSlotDay.setText(mDoctorTimeSlotsList.get(position).getSlotDay().toString());
+        viewHolder.txtSlotStartTime.setText(mDoctorTimeSlotsList.get(position).getSlotStartTime().toString());
+        viewHolder.txtSlotEndTime.setText(mDoctorTimeSlotsList.get(position).getSlotEndTime().toString());
         return converttView;
     }
 
@@ -62,8 +57,8 @@ public class TimeSlotListAdapter extends ArrayAdapter<TimeSlots> {
 
            txtDoctorMail = (TextView)v.findViewById(R.id.txtDoctorEmail);
            txtSlotDay = (TextView)v.findViewById(R.id.txtSlotDay);
-           txtSlotStartTime = (TextView)v.findViewById(R.id.txtSelectTimeStart);
-           txtSlotEndTime= (TextView)v.findViewById(R.id.txtSelectTimeEnd);
+           txtSlotStartTime = (TextView)v.findViewById(R.id.txtSlotStartTime);
+           txtSlotEndTime= (TextView)v.findViewById(R.id.txtSlotEndTime);
 
         }
     }

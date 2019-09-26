@@ -27,14 +27,11 @@ public class SearchFragment extends Fragment {
     private ListView listView;
     private TimeSlotListAdapter adapterTimeSlotList;
     private List<TimeSlots> mDoctorTimeSlotsList;
-    private Button btnViewPatientDetails;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View  v = inflater.inflate(R.layout.fragment_doctor_time_slot_list, container, false);
-
+        View  v = inflater.inflate(R.layout.fragment_search, container, false);
 
         myDB = new DBHandler(getActivity().getApplicationContext());
         listView = (ListView)v.findViewById(R.id.listView2);
@@ -47,28 +44,20 @@ public class SearchFragment extends Fragment {
         if(data.getCount() == 0){
             Toast.makeText(getActivity().getApplicationContext(),"The Table was Empty",Toast.LENGTH_LONG).show();
         }else{
-            //Toast.makeText(getActivity().getApplicationContext(),"The Table was Not Empty",Toast.LENGTH_LONG).show();
+
             while(data.moveToNext()){
 
-                //if(data.getString(3) == "Patient") {
-
                 mDoctorTimeSlotsList.add(new TimeSlots
-                               ("anura@gmail.com",
-                                "Monday",
-                                "7.00PM",
-                                "8.30PM"));
-
-
+                               (data.getString(1),
+                                data.getString(2),
+                                data.getString(3),
+                                data.getString(4)));
 
                 adapterTimeSlotList = new TimeSlotListAdapter(getContext(), (ArrayList<TimeSlots>) mDoctorTimeSlotsList);
                 listView.setAdapter(adapterTimeSlotList);
-                //}
 
             }
         }
-
-
-
 
         return v;
     }
