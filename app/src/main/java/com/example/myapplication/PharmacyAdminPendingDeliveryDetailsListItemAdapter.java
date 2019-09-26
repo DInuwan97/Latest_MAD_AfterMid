@@ -45,7 +45,7 @@ public class PharmacyAdminPendingDeliveryDetailsListItemAdapter extends ArrayAda
             viewHolder = (ViewHolder)convertView.getTag();
         }
         viewHolder.txtNameMedicine.setText(item.getName());
-        viewHolder.txtAmount.setText("Rs. "+item.getAmount());
+        viewHolder.txtAmount.setText(item.getAmount()+"");
 
         return convertView;
     }

@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
 
             <TextView
                 android:id="@+id/invisible"
@@ -148,11 +150,33 @@
                     android:layout_width="102dp"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:text="Time"
+                    android:text="Request Time"
                     android:textColor="@android:color/black" />
 
                 <TextView
                     android:id="@+id/txtViewDateTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:textColor="@color/colorBlack" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lblAcceptedTime"
+                    android:layout_width="102dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:text="Accepted Time"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/txtViewAcceptedDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -182,7 +206,6 @@
                     android:textColor="@color/colorBlack" />
 
             </LinearLayout>
-
             <TextView
                 android:id="@+id/invisible11"
                 android:layout_width="68dp"
@@ -212,9 +235,8 @@
                     android:id="@+id/TableAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_weight="0.7"
+                    android:layout_margin="10dp"
                     android:text="Amount"
                     android:textColor="@color/colorBlack"
                     android:textSize="16sp"
@@ -224,15 +246,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="237dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:orientation="horizontal"
                 android:weightSum="1">
 
                 <ListView
-                    android:id="@+id/AdminPendingList"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp">
+                    android:id="@+id/AdminAcceptedList"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content">
 
                 </ListView>
 
@@ -252,13 +274,13 @@
                 android:weightSum="1.0">
 
                 <Button
-                    android:id="@+id/btnAccept"
+                    android:id="@+id/btnComplete"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="10dp"
                     android:layout_weight="0.5"
                     android:background="@color/colorPrimary"
-                    android:text="Accept" />
+                    android:text="Complete Delivery" />
 
                 <Button
                     android:id="@+id/btnReject"
@@ -277,6 +299,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
         </LinearLayout>
+
     </ScrollView>
 
 

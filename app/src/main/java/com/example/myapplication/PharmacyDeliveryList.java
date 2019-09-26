@@ -1,17 +1,21 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.DeliverClass;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,17 +27,20 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 
-public class PharmacyAdminPendingDelivery extends Fragment {
-    PharmacyAdminPendingDeliveryAdapter adapter;
+public class PharmacyDeliveryList extends Fragment {
+
+    PharmacyDeliveryAdapter adapter;
     ArrayList<DeliverClass> list = new ArrayList<>();
     ListView listView;
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View v = inflater.inflate(R.layout.fragment_pharmacy_admin_pending_delivery, container, false);
-        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Pending Deliveries");
+        View v = inflater.inflate(R.layout.fragment_pharmacy_delivery_list, container, false);
 
-        listView = v.findViewById(R.id.listAdminPendingDelivery);
+
+        ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Deliveries");
+
+        listView = v.findViewById(R.id.listViewDelivery);
 
 
 
@@ -50,7 +57,7 @@ public class PharmacyAdminPendingDelivery extends Fragment {
         va.show();
 
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-        Query query = dbref.orderByChild("status").equalTo(0);
+        Query query = dbref.orderByChild("userName").equalTo(DBHandler.getLoggedUserName());
 
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -58,13 +65,12 @@ public class PharmacyAdminPendingDelivery extends Fragment {
                 for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
                     DeliverClass item;
                     item = postSnapShot.getValue(DeliverClass.class);
-
-                   // Log.i("error test 2",item.getPhonenumber()+"");
                     list.add(item);
+
 
                 }
                 try {
-                    adapter = new PharmacyAdminPendingDeliveryAdapter(getContext(),list);
+                    adapter = new PharmacyDeliveryAdapter(getContext(),list);
                     listView.setAdapter(adapter);
                     va.cancel();
                 }catch (NullPointerException e){
@@ -88,6 +94,5 @@ public class PharmacyAdminPendingDelivery extends Fragment {
 
         return v;
     }
-
 
 }

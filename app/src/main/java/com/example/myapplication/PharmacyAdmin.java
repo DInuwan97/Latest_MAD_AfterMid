@@ -69,6 +69,8 @@ public class PharmacyAdmin extends AppCompatActivity
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
 
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -152,15 +154,15 @@ public class PharmacyAdmin extends AppCompatActivity
                             selectedFragment = new PharmacyAdminAddMedicine();
                             break;
 
-                        case R.id.nav_add_pharmacy_admin:
-                            selectedFragment = new FavoritesFragment();
+                        case R.id.nav_accepted_delivery_tasks:
+                            selectedFragment = new PharmacyAdminAcceptedDeliveries();
                             break;
 
                         case R.id.nav_pending_delivery_tasks:
                             selectedFragment = new PharmacyAdminPendingDelivery();
                             break;
                         case R.id.nav_completed_delivery_tasks:
-                            selectedFragment = new FavoritesFragment();
+                            selectedFragment = new PharmacyAdminCompletedDeliveries();
                             break;
                     }
 

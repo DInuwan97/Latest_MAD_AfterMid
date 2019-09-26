@@ -154,7 +154,7 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "Patient";
+        String designation = "Doctor";
         String gender = "Male";
         String address = "colombo";
         String mobile = "0775356977";
@@ -785,49 +785,24 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    public boolean dilevered(int id){
-        SQLiteDatabase db =  getWritableDatabase();
+    public boolean competeDelivery(String userName, int id){
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(EcareManager.Deliver.COLUMN_NAME_STATUS, 1);
-        int count = db.update(EcareManager.Deliver.TABLE_NAME,values,
-                EcareManager.Deliver._ID+" = ?",new String[]{String.valueOf(id)});
-        if(count > 0){
+        int count = db.update(EcareManager.Deliver.TABLE_NAME,
+                values,
+                EcareManager.Deliver.COLUMN_NAME_USER_NAME+" = ? AND "
+                        + EcareManager.Deliver._ID +" = ? ",
+                new String[]{userName,Integer.toString(id)});
+
+        if(count>0){
             return true;
         }else{
             return false;
         }
 
-
     }
 
-    /*public int checkDeliveryStatus(int id){
-
-    }*/
-
-    public boolean stopDeliver(int id){
-        SQLiteDatabase db=  getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(EcareManager.Deliver.COLUMN_NAME_STATUS, 2);
-        int count = db.update(EcareManager.Deliver.TABLE_NAME,values,
-                EcareManager.Deliver._ID+" = ?",new String[]{String.valueOf(id)});
-        if(count > 0){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-
-
-    public void updateTask(String address,String mobile,String email){
-        ContentValues values = new ContentValues();
-        values.put(EcareManager.Users.COL_NAME_ADDRESS,address);
-        values.put(EcareManager.Users.COL_NAME_MOBILE,address);
-
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(EcareManager.Users.TABLE_NAME, values, EcareManager.Users.COL_NAME_USEREMAIL + "	= ?", new String[] { String.valueOf(email)});
-    }
 
 
 

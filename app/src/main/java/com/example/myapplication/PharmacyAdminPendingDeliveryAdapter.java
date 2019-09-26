@@ -1,27 +1,24 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.myapplication.Database.AdminDeliveryItemClass;
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.DeliverClass;
 import com.example.myapplication.NotificationService.MySingleton;
@@ -41,9 +38,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class PharmacyAdminPendingDeliveryDetails extends Fragment {
-
+public class PharmacyAdminPendingDeliveryAdapter extends ArrayAdapter<DeliverClass> {
+    private LayoutInflater layoutInflater;
+    private ArrayList<DeliverClass> itemArray;
+    Context con;
 
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AIzaSyD_UjU_BbJZ9ZEuC2uz3QNXOJRSbm0a9Qc";
@@ -54,105 +52,63 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
     String NOTIFICATION_MESSAGE;
     String TOPIC;
 
-    final static String DATA_RECIEVE_ID                          = "datarecieveid";
-    final static String DATA_RECIEVE_NAME                = "datarecievename";
-    final static String DATA_RECIEVE_ADDRESS         = "datarecieveaddress";
-    final static String DATA_RECIEVE_EMAIL          = "datarecieveemail";
-    final static String DATA_RECIEVE_STATUS           = "datarecievestatus";
-    final static String DATA_RECIEVE_PHONENUMBER    = "datarecievephonenumber";
-    final static String DATA_RECIEVE_ITEMNAMES       = "datarecieveitemnames";
-    final static String DATA_RECIEVE_ITEMSAMOUNTS    = "datarecieveitemamounts";
-    final static String DATA_RECIEVE_TOTALPRICE      = "datarecievetotoalprice";
-    final static String DATA_RECIEVE_DATETIME        = "datarecievedatetime";
 
-    TextView UserName ;
-    TextView UserEmail ;
-    TextView UserPhone ;
-    TextView UserAddress ;
-    TextView Status ;
-    TextView Time ;
-    TextView TotalPrice ;
-    ListView list;
+    public PharmacyAdminPendingDeliveryAdapter(Context context, ArrayList<DeliverClass> data) {
+        super(context, R.layout.list_pharmacy_admin_pending_delivery_item,data);
+        this.layoutInflater = LayoutInflater.from(context);
+        itemArray = data;
+        con= context;
+
+    }
 
 
-    Button btnAccept;
-    Button btnReject;
-    DeliverClass item;
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pharmacy_admin_pending_delivery_details, container, false);
-        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Pending Delivery Details");
-        UserName = v.findViewById(R.id.txtViewUserName);
-        UserEmail = v.findViewById(R.id.txtViewUserEmail);
-        UserPhone = v.findViewById(R.id.txtViewPhone);
-        UserAddress = v.findViewById(R.id.txtViewAddress);
-        Status = v.findViewById(R.id.txtViewStatus);
-        Time = v.findViewById(R.id.txtViewDateTime);
-        TotalPrice = v.findViewById(R.id.txtViewTotal);
-        list = v.findViewById(R.id.AdminPendingList);
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        btnAccept = v.findViewById(R.id.btnAccept);
-        btnReject = v.findViewById(R.id.btnReject);
+        ViewHolder viewHolder;
+        final DeliverClass item = getItem(position);
 
-
-        Bundle args = getArguments();
-        item = new DeliverClass();
-        item.setId(args.getInt(DATA_RECIEVE_ID));
-        item.setUserName(args.getString(DATA_RECIEVE_NAME));
-        item.setAddress(args.getString(DATA_RECIEVE_ADDRESS));
-        item.setEmail(args.getString(DATA_RECIEVE_EMAIL));
-        item.setStatus(args.getInt(DATA_RECIEVE_STATUS));
-        item.setPhonenumber(args.getInt(DATA_RECIEVE_PHONENUMBER));
-        item.setItemNames(args.getString(DATA_RECIEVE_ITEMNAMES));
-        item.setItemsAmount(args.getString(DATA_RECIEVE_ITEMSAMOUNTS));
-        item.setTotalprice(args.getFloat(DATA_RECIEVE_TOTALPRICE));
-        item.setDateTime(args.getString(DATA_RECIEVE_DATETIME));
-
-
-        //Log.i("testindadasd",item.getAddress()+"");
-        UserName.setText(item.getUserName());
-        UserEmail.setText(item.getEmail());
-        UserPhone.setText("+" + item.getPhonenumber());
-        UserAddress.setText(item.getAddress());
-        if (item.getStatus() == 4) {
-            Status.setText("Delivery Not Accepted");
-        } else if (item.getStatus() == 3) {
-            Status.setText("Delivery Accepted");
-        } else if (item.getStatus() == 2) {
-            Status.setText("Delivery Canceled by the User");
-        } else if(item.getStatus()==1){
-            Status.setText("Delivery Completed");
-        } else if(item.getStatus() == 0){
-            Status.setText("Delivery Pending");
+        if(convertView == null){
+            convertView = layoutInflater.inflate(R.layout.list_pharmacy_admin_pending_delivery_item,parent,false);
+            viewHolder = new ViewHolder(convertView);
+            convertView.setTag(viewHolder);
+        }else{
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
-
-        Time.setText(item.getDateTime());
-        TotalPrice.setText("Rs. "+item.getTotalprice());
-
-
-        String Names[] = TextUtils.split(item.getItemNames(),"#!");
-
-        String Amounts[] = TextUtils.split(item.getItemsAmount(),"#!");
-        ArrayList<AdminDeliveryItemClass> arrayList = new ArrayList<>();
-        for(int i = 0; i<Names.length;i++){
+        viewHolder.txtName.setText(item.getUserName());
+        viewHolder.txtTotal.setText("Rs. "+item.getTotalprice());
+        viewHolder.txtDateTime.setText(item.getDateTime());
+        viewHolder.txtPhoneNo.setText(item.getPhonenumber()+"");
+        viewHolder.txtAddress.setText(item.getAddress());
 
 
-            AdminDeliveryItemClass adminDeliveryItemClass = new AdminDeliveryItemClass();
-            adminDeliveryItemClass.setName(Names[i]);
-            adminDeliveryItemClass.setAmount(Amounts[i]);
-            arrayList.add(adminDeliveryItemClass);
-        }
+        viewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Fragment fragment = new PharmacyAdminPendingDeliveryDetails();
+                Bundle args = new Bundle();
+                args.putInt(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_ID,item.getId());
+                args.putString(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_NAME,item.getUserName());
+                args.putString(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_EMAIL,item.getEmail());
+                args.putInt(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_STATUS,item.getStatus());
+                args.putString(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_ADDRESS,item.getAddress());
+                args.putInt(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_PHONENUMBER,item.getPhonenumber());
+                args.putString(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_ITEMNAMES,item.getItemNames());
+                args.putString(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_ITEMSAMOUNTS,item.getItemsAmount());
+                args.putFloat(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_TOTALPRICE,item.getTotalprice());
+                args.putString(PharmacyAdminPendingDeliveryDetails.DATA_RECIEVE_DATETIME,item.getDateTime());
 
 
+                fragment.setArguments(args);
 
-        PharmacyAdminPendingDeliveryDetailsListItemAdapter adapter = new PharmacyAdminPendingDeliveryDetailsListItemAdapter(getContext(),arrayList);
-        list.setAdapter(adapter);
+                ((PharmacyAdmin)con).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,fragment
+                        ).commit();
+            }
+        });
 
-
-
-        btnAccept.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
@@ -167,11 +123,10 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                                 String dateTime = simpleDateFormat.format(new Date());
                                 item.setAcceptDateTime(dateTime);
+                                dbref.child(postSnapShot.getKey()).child("status").setValue(3);
                                 dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
 
-                                dbref.child(postSnapShot.getKey()).child("status").setValue(3);
                                 dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
-
                                 TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
                                 NOTIFICATION_TITLE = "Delivery Notification";
                                 NOTIFICATION_MESSAGE = "Your Request has been accepted and will be delivered to you within 2 buisness days";
@@ -190,13 +145,8 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                                 sendNotification(notification);
 
 
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminPendingDelivery()).commit();
-
-
-
-
-
+                                remove(item);
+                                notifyDataSetChanged();
                             }
                         }
                     }
@@ -210,8 +160,7 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
             }
         });
 
-
-        btnReject.setOnClickListener(new View.OnClickListener() {
+        viewHolder.btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
@@ -226,8 +175,8 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
                                 String dateTime = simpleDateFormat.format(new Date());
                                 item.setAcceptDateTime(dateTime);
-                                dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
 
+                                dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
                                 dbref.child(postSnapShot.getKey()).child("status").setValue(4);
                                 dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
                                 TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
@@ -248,9 +197,9 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                                 sendNotification(notification);
 
 
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminPendingDelivery()).commit();
 
+                                remove(item);
+                                notifyDataSetChanged();
                             }
                         }
                     }
@@ -260,9 +209,35 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
 
                     }
                 });
+
+
+
             }
         });
-        return v;
+
+
+        return convertView;
+    }
+    private class ViewHolder{
+        TextView txtName;
+        TextView txtAddress;
+        TextView txtPhoneNo;
+        TextView txtDateTime;
+        TextView txtTotal;
+        Button btnReject;
+        Button btnAccept;
+        CardView cardView;
+        public ViewHolder(View view){
+            txtName = view.findViewById(R.id.txtUserName);
+            txtAddress = view.findViewById(R.id.txtAddress);
+            txtPhoneNo = view.findViewById(R.id.txtPhoneNo);
+            txtDateTime = view.findViewById(R.id.txtViewDateTime);
+            txtTotal = view.findViewById(R.id.txtTotalAmount);
+            btnReject = view.findViewById(R.id.btnReject);
+            btnAccept = view.findViewById(R.id.btnAccept);
+            cardView = view.findViewById(R.id.Card);
+        }
+
     }
 
     private void sendNotification(JSONObject notification) {

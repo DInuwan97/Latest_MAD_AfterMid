@@ -10,13 +10,13 @@
         android:title="Add Medicine" />
 
     <item
-        android:id="@+id/nav_add_pharmacy_admin"
-        android:icon="@drawable/ic_add_box"
-        android:title="Add Admin" />
-    <item
         android:id="@+id/nav_pending_delivery_tasks"
         android:icon="@drawable/ic_add_box"
         android:title="Pending Deliveries" />
+    <item
+        android:id="@+id/nav_accepted_delivery_tasks"
+        android:icon="@drawable/ic_add_box"
+        android:title="Accepted Deliveries" />
     <item
         android:id="@+id/nav_completed_delivery_tasks"
         android:icon="@drawable/ic_add_box"

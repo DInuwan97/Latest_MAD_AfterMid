@@ -349,33 +349,34 @@ public class PharmacyAdminAddMedicine extends Fragment {
             public void onClick(View view) {
                 DBHandler db =  new DBHandler(getContext());
                 String nameToDelete = editTextName.getText().toString();
-                if(db.deleteMedicine(nameToDelete)){
+                if(!TextUtils.isEmpty(nameToDelete)) {
+                    if (db.deleteMedicine(nameToDelete)) {
 
-                    DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
+                        DBRef = FirebaseDatabase.getInstance().getReference().child("Medicine");
 
-                    Query query = DBRef.orderByChild("nameMedicine").equalTo(nameToDelete);
-                    ValueEventListener valueEventListener = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                        Query query = DBRef.orderByChild("nameMedicine").equalTo(nameToDelete);
+                        ValueEventListener valueEventListener = new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
 
-                                DBRef.child(postSnapshot.getKey()).removeValue();
+                                    DBRef.child(postSnapshot.getKey()).removeValue();
+                                }
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    };
-                    query.addListenerForSingleValueEvent(valueEventListener);
+                            }
+                        };
+                        query.addListenerForSingleValueEvent(valueEventListener);
 
-                    Toast.makeText(getContext(),"Medicine Deleted",Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getContext(),"Medicine Not Deleted",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Medicine Deleted", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Medicine Not Deleted", Toast.LENGTH_SHORT).show();
+                    }
+                    clearAll(v);
                 }
-                clearAll(v);
-
             }
         });
         return v;

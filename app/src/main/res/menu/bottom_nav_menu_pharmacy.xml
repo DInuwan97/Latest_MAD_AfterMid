@@ -10,7 +10,10 @@
         android:id="@+id/nav_cart"
         android:icon="@drawable/ic_add_box"
         android:title="Cart" />
-
+    <item
+        android:id="@+id/nav_previous_orders"
+        android:icon="@drawable/ic_add_box"
+        android:title="Orders" />
 
 
 </menu>

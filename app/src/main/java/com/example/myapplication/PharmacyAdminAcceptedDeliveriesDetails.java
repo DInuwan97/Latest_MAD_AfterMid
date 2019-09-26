@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -42,8 +41,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class PharmacyAdminPendingDeliveryDetails extends Fragment {
-
+public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
 
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AIzaSyD_UjU_BbJZ9ZEuC2uz3QNXOJRSbm0a9Qc";
@@ -64,6 +62,8 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
     final static String DATA_RECIEVE_ITEMSAMOUNTS    = "datarecieveitemamounts";
     final static String DATA_RECIEVE_TOTALPRICE      = "datarecievetotoalprice";
     final static String DATA_RECIEVE_DATETIME        = "datarecievedatetime";
+    final static String DATA_RECIEVE_ACCEPTDATETIME        = "datarecievedacceptdatetime";
+
 
     TextView UserName ;
     TextView UserEmail ;
@@ -72,17 +72,19 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
     TextView Status ;
     TextView Time ;
     TextView TotalPrice ;
+    TextView AcceptDateTime ;
     ListView list;
 
-
-    Button btnAccept;
+    Button btnComplete;
     Button btnReject;
+
     DeliverClass item;
+
     @Override
-    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_pharmacy_admin_pending_delivery_details, container, false);
-        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Pending Delivery Details");
+        View v = inflater.inflate(R.layout.fragment_pharmacy_admin_accepted_deliveries_details, container, false);
+        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Accepted Delivery Details");
         UserName = v.findViewById(R.id.txtViewUserName);
         UserEmail = v.findViewById(R.id.txtViewUserEmail);
         UserPhone = v.findViewById(R.id.txtViewPhone);
@@ -90,11 +92,12 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         Status = v.findViewById(R.id.txtViewStatus);
         Time = v.findViewById(R.id.txtViewDateTime);
         TotalPrice = v.findViewById(R.id.txtViewTotal);
-        list = v.findViewById(R.id.AdminPendingList);
+        AcceptDateTime = v.findViewById(R.id.txtViewAcceptedDate);
+        list = v.findViewById(R.id.AdminAcceptedList);
 
-        btnAccept = v.findViewById(R.id.btnAccept);
+
+        btnComplete = v.findViewById(R.id.btnComplete);
         btnReject = v.findViewById(R.id.btnReject);
-
 
         Bundle args = getArguments();
         item = new DeliverClass();
@@ -108,9 +111,8 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         item.setItemsAmount(args.getString(DATA_RECIEVE_ITEMSAMOUNTS));
         item.setTotalprice(args.getFloat(DATA_RECIEVE_TOTALPRICE));
         item.setDateTime(args.getString(DATA_RECIEVE_DATETIME));
+        item.setAcceptDateTime(args.getString(DATA_RECIEVE_ACCEPTDATETIME));
 
-
-        //Log.i("testindadasd",item.getAddress()+"");
         UserName.setText(item.getUserName());
         UserEmail.setText(item.getEmail());
         UserPhone.setText("+" + item.getPhonenumber());
@@ -126,15 +128,14 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         } else if(item.getStatus() == 0){
             Status.setText("Delivery Pending");
         }
-
-
         Time.setText(item.getDateTime());
         TotalPrice.setText("Rs. "+item.getTotalprice());
 
-
+        AcceptDateTime.setText(item.getAcceptDateTime());
         String Names[] = TextUtils.split(item.getItemNames(),"#!");
 
         String Amounts[] = TextUtils.split(item.getItemsAmount(),"#!");
+
         ArrayList<AdminDeliveryItemClass> arrayList = new ArrayList<>();
         for(int i = 0; i<Names.length;i++){
 
@@ -144,15 +145,10 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
             adminDeliveryItemClass.setAmount(Amounts[i]);
             arrayList.add(adminDeliveryItemClass);
         }
-
-
-
         PharmacyAdminPendingDeliveryDetailsListItemAdapter adapter = new PharmacyAdminPendingDeliveryDetailsListItemAdapter(getContext(),arrayList);
         list.setAdapter(adapter);
 
-
-
-        btnAccept.setOnClickListener(new View.OnClickListener() {
+        btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
@@ -164,17 +160,11 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                         for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
                             if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                                String dateTime = simpleDateFormat.format(new Date());
-                                item.setAcceptDateTime(dateTime);
-                                dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
-
-                                dbref.child(postSnapShot.getKey()).child("status").setValue(3);
-                                dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
-
+                                dbref.child(postSnapShot.getKey()).child("status").setValue(0);
+                                dbref.child(postSnapShot.getKey()).child("acceptedby").setValue("");
                                 TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
                                 NOTIFICATION_TITLE = "Delivery Notification";
-                                NOTIFICATION_MESSAGE = "Your Request has been accepted and will be delivered to you within 2 buisness days";
+                                NOTIFICATION_MESSAGE = "Sorry. Current Deliverer Rejected Your Delivery.";
 
                                 JSONObject notification = new JSONObject();
                                 JSONObject notifcationBody = new JSONObject();
@@ -191,11 +181,7 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
 
 
                                 getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminPendingDelivery()).commit();
-
-
-
-
+                                        new PharmacyAdminAcceptedDeliveries()).commit();
 
                             }
                         }
@@ -210,8 +196,7 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
             }
         });
 
-
-        btnReject.setOnClickListener(new View.OnClickListener() {
+        btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
@@ -223,16 +208,10 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                         for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
                             if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                                String dateTime = simpleDateFormat.format(new Date());
-                                item.setAcceptDateTime(dateTime);
-                                dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
 
-                                dbref.child(postSnapShot.getKey()).child("status").setValue(4);
-                                dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
                                 TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
                                 NOTIFICATION_TITLE = "Delivery Notification";
-                                NOTIFICATION_MESSAGE = "Sorry. Your Request has been Rejected.";
+                                NOTIFICATION_MESSAGE = "Your Delivery has Arrived.";
 
                                 JSONObject notification = new JSONObject();
                                 JSONObject notifcationBody = new JSONObject();
@@ -249,7 +228,7 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
 
 
                                 getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminPendingDelivery()).commit();
+                                        new PharmacyAdminAcceptedDeliveries()).commit();
 
                             }
                         }

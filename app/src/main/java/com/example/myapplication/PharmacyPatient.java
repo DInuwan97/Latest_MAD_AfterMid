@@ -40,6 +40,9 @@ public class PharmacyPatient extends Fragment {
                     case R.id.nav_medicine:
                         selectedFragment = new PharmacyMedicineList();
                         break;
+                    case R.id.nav_previous_orders:
+                        selectedFragment = new PharmacyDeliveryList();
+                        break;
 
 
                 }

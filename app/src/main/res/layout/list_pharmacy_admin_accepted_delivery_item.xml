@@ -39,7 +39,7 @@
                         <androidx.viewpager.widget.ViewPager
                             android:id="@+id/viewPager"
                             android:layout_width="match_parent"
-                            android:layout_height="160dp"
+                            android:layout_height="185dp"
                             android:layout_marginStart="8dp"
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
@@ -124,10 +124,10 @@
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/viewPager"
-                            app:layout_constraintHorizontal_bias="0.076"
+                            app:layout_constraintHorizontal_bias="0.548"
                             app:layout_constraintStart_toStartOf="@+id/viewPager"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.841" />
+                            app:layout_constraintVertical_bias="0.774" />
 
                         <TextView
                             android:id="@+id/txtViewDateTime3"
@@ -143,10 +143,48 @@
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="@+id/viewPager"
-                            app:layout_constraintHorizontal_bias="0.076"
+                            app:layout_constraintHorizontal_bias="0.086"
                             app:layout_constraintStart_toStartOf="@+id/viewPager"
                             app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.679" />
+                            app:layout_constraintVertical_bias="0.798" />
+
+                        <TextView
+                            android:id="@+id/txtViewDateTime2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="26dp"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="Accepted Time"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                            app:layout_constraintHorizontal_bias="0.089"
+                            app:layout_constraintStart_toStartOf="@+id/viewPager"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.955" />
+
+                        <TextView
+                            android:id="@+id/txtViewAccepted"
+                            android:layout_width="wrap_content"
+                            android:layout_height="21dp"
+                            android:layout_marginLeft="50dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="01/09/2019"
+                            android:textColor="@color/colorSecondaryText"
+                            android:textSize="14sp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="@+id/viewPager"
+                            app:layout_constraintHorizontal_bias="0.548"
+                            app:layout_constraintStart_toStartOf="@+id/viewPager"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.926" />
 
                         <TextView
                             android:id="@+id/txtUserName"
@@ -167,43 +205,7 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.092" />
 
-                        <Button
-                            android:id="@+id/btnAccept"
-                            android:layout_width="46dp"
-                            android:layout_height="39dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="120dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="@drawable/btn_pharmacy_cart_plus_minus"
-                            android:text="✔"
-                            android:textColor="@color/colorLightWhite"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.719"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.111" />
 
-                        <Button
-                            android:id="@+id/btnReject"
-                            android:layout_width="46dp"
-                            android:layout_height="39dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="120dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:background="@drawable/btn_pharmacy_cart_delete"
-                            android:text="✘"
-                            android:textColor="@color/colorLightWhite"
-                            android:textSize="14sp"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.936"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.111" />
 
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
