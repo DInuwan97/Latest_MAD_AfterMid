@@ -819,11 +819,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
 
-    public void updateTask(String address,String mobile,String email){
+    public void updateUser(String address,String mobile,String email){
         ContentValues values = new ContentValues();
         values.put(EcareManager.Users.COL_NAME_ADDRESS,address);
         values.put(EcareManager.Users.COL_NAME_MOBILE,address);
-
 
         SQLiteDatabase db = this.getWritableDatabase();
         db.update(EcareManager.Users.TABLE_NAME, values, EcareManager.Users.COL_NAME_USEREMAIL + "	= ?", new String[] { String.valueOf(email)});
