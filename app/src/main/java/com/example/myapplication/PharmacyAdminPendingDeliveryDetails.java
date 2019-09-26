@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -155,57 +157,72 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-                Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
+                builder.setTitle("CONFIRMATION").setMessage("Do you want to Accept the Delivery?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                            if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                        Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                                String dateTime = simpleDateFormat.format(new Date());
-                                item.setAcceptDateTime(dateTime);
-                                dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                    if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
-                                dbref.child(postSnapShot.getKey()).child("status").setValue(3);
-                                dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                        String dateTime = simpleDateFormat.format(new Date());
+                                        item.setAcceptDateTime(dateTime);
+                                        dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
 
-                                TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
-                                NOTIFICATION_TITLE = "Delivery Notification";
-                                NOTIFICATION_MESSAGE = "Your Request has been accepted and will be delivered to you within 2 buisness days";
+                                        dbref.child(postSnapShot.getKey()).child("status").setValue(3);
+                                        dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
 
-                                JSONObject notification = new JSONObject();
-                                JSONObject notifcationBody = new JSONObject();
-                                try {
-                                    notifcationBody.put("title", NOTIFICATION_TITLE);
-                                    notifcationBody.put("message", NOTIFICATION_MESSAGE);
+                                        TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
+                                        NOTIFICATION_TITLE = "Delivery Notification";
+                                        NOTIFICATION_MESSAGE = "Your Request has been accepted and will be delivered to you within 2 buisness days";
 
-                                    notification.put("to", TOPIC);
-                                    notification.put("data", notifcationBody);
-                                } catch (JSONException e) {
-                                    Log.i(TAG, "onCreate: " + e.getMessage() );
+                                        JSONObject notification = new JSONObject();
+                                        JSONObject notifcationBody = new JSONObject();
+                                        try {
+                                            notifcationBody.put("title", NOTIFICATION_TITLE);
+                                            notifcationBody.put("message", NOTIFICATION_MESSAGE);
+
+                                            notification.put("to", TOPIC);
+                                            notification.put("data", notifcationBody);
+                                        } catch (JSONException e) {
+                                            Log.i(TAG, "onCreate: " + e.getMessage() );
+                                        }
+                                        sendNotification(notification);
+
+
+                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                new PharmacyAdminPendingDelivery()).commit();
+
+
+
+
+
+                                    }
                                 }
-                                sendNotification(notification);
+                            }
 
-
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminPendingDelivery()).commit();
-
-
-
-
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                        }
+                        });
                     }
-
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
+                builder.show();
+
 
             }
         });
@@ -214,52 +231,67 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-                Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
+                builder.setTitle("CONFIRMATION").setMessage("Do you want to Deleete/Reject the Delivery?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                            if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                        Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
 
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                                String dateTime = simpleDateFormat.format(new Date());
-                                item.setAcceptDateTime(dateTime);
-                                dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                    if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
-                                dbref.child(postSnapShot.getKey()).child("status").setValue(4);
-                                dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
-                                TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
-                                NOTIFICATION_TITLE = "Delivery Notification";
-                                NOTIFICATION_MESSAGE = "Sorry. Your Request has been Rejected.";
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                        String dateTime = simpleDateFormat.format(new Date());
+                                        item.setAcceptDateTime(dateTime);
+                                        dbref.child(postSnapShot.getKey()).child("AcceptDateTime").setValue(dateTime);
 
-                                JSONObject notification = new JSONObject();
-                                JSONObject notifcationBody = new JSONObject();
-                                try {
-                                    notifcationBody.put("title", NOTIFICATION_TITLE);
-                                    notifcationBody.put("message", NOTIFICATION_MESSAGE);
+                                        dbref.child(postSnapShot.getKey()).child("status").setValue(4);
+                                        dbref.child(postSnapShot.getKey()).child("acceptedby").setValue(DBHandler.getLoggedUserName());
+                                        TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
+                                        NOTIFICATION_TITLE = "Delivery Notification";
+                                        NOTIFICATION_MESSAGE = "Sorry. Your Request has been Rejected.";
 
-                                    notification.put("to", TOPIC);
-                                    notification.put("data", notifcationBody);
-                                } catch (JSONException e) {
-                                    Log.i(TAG, "onCreate: " + e.getMessage() );
+                                        JSONObject notification = new JSONObject();
+                                        JSONObject notifcationBody = new JSONObject();
+                                        try {
+                                            notifcationBody.put("title", NOTIFICATION_TITLE);
+                                            notifcationBody.put("message", NOTIFICATION_MESSAGE);
+
+                                            notification.put("to", TOPIC);
+                                            notification.put("data", notifcationBody);
+                                        } catch (JSONException e) {
+                                            Log.i(TAG, "onCreate: " + e.getMessage() );
+                                        }
+                                        sendNotification(notification);
+
+
+                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                new PharmacyAdminPendingDelivery()).commit();
+
+                                    }
                                 }
-                                sendNotification(notification);
+                            }
 
-
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminPendingDelivery()).commit();
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                        }
+                        });
                     }
-
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
+                builder.show();
+
             }
         });
         return v;

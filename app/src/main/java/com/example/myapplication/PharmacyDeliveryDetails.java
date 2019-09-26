@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -128,7 +130,7 @@ public class PharmacyDeliveryDetails extends Fragment {
         AcceptedBy.setText(item.getAcceptedby());
 
         String Names[] = TextUtils.split(item.getItemNames(),"#!");
-        String Amounts[] = TextUtils.split(item.getItemsAmount(),"#!");
+        final String Amounts[] = TextUtils.split(item.getItemsAmount(),"#!");
         ArrayList<AdminDeliveryItemClass> arrayList = new ArrayList<>();
         for(int i = 0; i<Names.length;i++){
             AdminDeliveryItemClass adminDeliveryItemClass = new AdminDeliveryItemClass();
@@ -149,64 +151,109 @@ public class PharmacyDeliveryDetails extends Fragment {
             public void onClick(View view) {
                 if (item.getStatus() == 4 ||item.getStatus() == 1 ||item.getStatus() == 2  ) {
 
-                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-                    Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
-
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("CONFIRMATION").setMessage("Do you want to Delete the Record?");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                                if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                            Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
 
-                                    dbref.child(postSnapShot.getKey()).removeValue();
-                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                            new PharmacyDeliveryList()).commit();
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                        if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+
+                                            dbref.child(postSnapShot.getKey()).removeValue();
+                                            getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                    new PharmacyDeliveryList()).commit();
+
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
-                            }
+                            });
                         }
-
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
                         }
                     });
+                    builder.show();
+
 
 
 
                 } else if (item.getStatus() == 3) {
-                    Fragment fragment = new PharmacyQRCodeImageView();
-                    Bundle args = new Bundle();
-                    Log.i("PharmacyDeliveryDetails",item.getKey());
-                    args.putString(PharmacyQRCodeImageView.DATA_RECIEVE_KEY,item.getKey());
-                    fragment.setArguments(args);
-                    getFragmentManager().beginTransaction().
-                            replace(R.id.fragment_container,fragment).commit();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("CONFIRMATION").setMessage("Do you want to Complete the Delivery by scanning the QR Code?");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Fragment fragment = new PharmacyQRCodeImageView();
+                            Bundle args = new Bundle();
+                            Log.i("PharmacyDeliveryDetails",item.getKey());
+                            args.putString(PharmacyQRCodeImageView.DATA_RECIEVE_KEY,item.getKey());
+                            fragment.setArguments(args);
+                            getFragmentManager().beginTransaction().
+                                    replace(R.id.fragment_container,fragment).commit();
+                        }
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+
+                        }
+                    });
+                    builder.show();
+
 
 
                 } else if(item.getStatus() == 0){
 
-                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-                    Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
-
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("CONFIRMATION").setMessage("Do you want to Cancel the Delivery?");
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                                if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                            Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
 
-                                    dbref.child(postSnapShot.getKey()).child("status").setValue(2);
-                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                            new PharmacyDeliveryList()).commit();
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                        if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+
+                                            dbref.child(postSnapShot.getKey()).child("status").setValue(2);
+                                            getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                    new PharmacyDeliveryList()).commit();
+                                        }
+                                    }
                                 }
-                            }
-                        }
 
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    });
+                    builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        public void onClick(DialogInterface dialogInterface, int i) {
 
                         }
                     });
+                    builder.show();
+
                 }
             }
         });

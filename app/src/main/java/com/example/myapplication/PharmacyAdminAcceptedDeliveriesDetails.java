@@ -163,48 +163,65 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
         btnReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-                Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                AlertDialog.Builder builder= new AlertDialog.Builder(getActivity());
+                builder.setTitle("CONFIRMATION").setMessage("Do you want to reject the Delivey ?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                            if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                        Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
+
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                    if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
 
-                                dbref.child(postSnapShot.getKey()).child("status").setValue(0);
-                                dbref.child(postSnapShot.getKey()).child("acceptedby").setValue("");
-                                TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
-                                NOTIFICATION_TITLE = "Delivery Notification";
-                                NOTIFICATION_MESSAGE = "Sorry. Current Deliverer Rejected Your Delivery.";
+                                        dbref.child(postSnapShot.getKey()).child("status").setValue(0);
+                                        dbref.child(postSnapShot.getKey()).child("acceptedby").setValue("");
+                                        TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
+                                        NOTIFICATION_TITLE = "Delivery Notification";
+                                        NOTIFICATION_MESSAGE = "Sorry. Current Deliverer Rejected Your Delivery.";
 
-                                JSONObject notification = new JSONObject();
-                                JSONObject notifcationBody = new JSONObject();
-                                try {
-                                    notifcationBody.put("title", NOTIFICATION_TITLE);
-                                    notifcationBody.put("message", NOTIFICATION_MESSAGE);
+                                        JSONObject notification = new JSONObject();
+                                        JSONObject notifcationBody = new JSONObject();
+                                        try {
+                                            notifcationBody.put("title", NOTIFICATION_TITLE);
+                                            notifcationBody.put("message", NOTIFICATION_MESSAGE);
 
-                                    notification.put("to", TOPIC);
-                                    notification.put("data", notifcationBody);
-                                } catch (JSONException e) {
-                                    Log.i(TAG, "onCreate: " + e.getMessage() );
+                                            notification.put("to", TOPIC);
+                                            notification.put("data", notifcationBody);
+                                        } catch (JSONException e) {
+                                            Log.i(TAG, "onCreate: " + e.getMessage() );
+                                        }
+                                        sendNotification(notification);
+
+
+                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                new PharmacyAdminAcceptedDeliveries()).commit();
+
+                                    }
                                 }
-                                sendNotification(notification);
+                            }
 
-
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminAcceptedDeliveries()).commit();
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                        }
+                        });
                     }
-
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
 
             }
         });

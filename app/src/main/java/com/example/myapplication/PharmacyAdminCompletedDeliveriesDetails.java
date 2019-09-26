@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -142,30 +144,45 @@ public class PharmacyAdminCompletedDeliveriesDetails extends Fragment {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
-                Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
-
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("CONFIRMATION").setMessage("Do you want to delete the record?");
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
-                            if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                        Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
 
-                                dbref.child(postSnapShot.getKey()).removeValue();
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminCompletedDeliveries()).commit();
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                    if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+
+                                        dbref.child(postSnapShot.getKey()).removeValue();
+                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                                new PharmacyAdminCompletedDeliveries()).commit();
 
 
+
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
                             }
-                        }
+                        });
                     }
-
+                });
+                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    public void onClick(DialogInterface dialogInterface, int i) {
 
                     }
                 });
+                builder.show();
+
             }
         });
 
