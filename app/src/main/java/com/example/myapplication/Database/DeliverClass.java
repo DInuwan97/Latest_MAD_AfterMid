@@ -18,6 +18,15 @@ public class DeliverClass {
     private String AcceptDateTime;
     private String DeliveredDateTime;
     private String acceptedby;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getAcceptedby() {
         return acceptedby;

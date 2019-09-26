@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,12 @@ import android.widget.TextView;
 
 import com.example.myapplication.Database.AdminDeliveryItemClass;
 import com.example.myapplication.Database.DeliverClass;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -35,6 +43,7 @@ public class PharmacyDeliveryDetails extends Fragment {
     final static String DATA_RECIEVE_ACCEPTDATETIME        = "datarecieveacceptdatetime";
     final static String DATA_RECIEVE_DELIVERDATETIME        = "datarecievedeliverdatetime";
     final static String DATA_RECIEVE_ACCEPTEDBY       = "datarecieveacceptedby";
+    final static String DATA_RECIEVE_KEY       = "datarecievekey";
 
     TextView UserName ;
     TextView UserEmail ;
@@ -53,7 +62,7 @@ public class PharmacyDeliveryDetails extends Fragment {
 
     DeliverClass item;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pharmacy_delivery_details, container, false);
 
@@ -64,8 +73,8 @@ public class PharmacyDeliveryDetails extends Fragment {
         Status = v.findViewById(R.id.txtViewStatus);
         Time = v.findViewById(R.id.txtViewDateTime);
         AcceptDate = v.findViewById(R.id.txtViewAcceptedDate);
-        DeliverDate = v.findViewById(R.id.txtViewdelivererName);
-        AcceptedBy = v.findViewById(R.id.txtViewCompletedDate);
+        DeliverDate = v.findViewById(R.id.txtViewCompletedDate);
+        AcceptedBy = v.findViewById(R.id.txtViewdelivererName);
         TotalPrice = v.findViewById(R.id.txtViewTotal);
 
         list = v.findViewById(R.id.AdminAcceptedList);
@@ -89,6 +98,7 @@ public class PharmacyDeliveryDetails extends Fragment {
         item.setAcceptDateTime(args.getString(DATA_RECIEVE_ACCEPTDATETIME));
         item.setDeliveredDateTime(args.getString(DATA_RECIEVE_DELIVERDATETIME));
         item.setAcceptedby(args.getString(DATA_RECIEVE_ACCEPTEDBY));
+        item.setKey(args.getString(DATA_RECIEVE_KEY));
 
         UserName.setText(item.getUserName());
         UserEmail.setText(item.getEmail());
@@ -115,6 +125,7 @@ public class PharmacyDeliveryDetails extends Fragment {
         TotalPrice.setText("Rs. "+item.getTotalprice());
         AcceptDate.setText(item.getAcceptDateTime());
         DeliverDate.setText(item.getDeliveredDateTime());
+        AcceptedBy.setText(item.getAcceptedby());
 
         String Names[] = TextUtils.split(item.getItemNames(),"#!");
         String Amounts[] = TextUtils.split(item.getItemsAmount(),"#!");
@@ -133,6 +144,72 @@ public class PharmacyDeliveryDetails extends Fragment {
 
 
 
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (item.getStatus() == 4 ||item.getStatus() == 1 ||item.getStatus() == 2  ) {
+
+                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                    Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
+
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+
+                                    dbref.child(postSnapShot.getKey()).removeValue();
+                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            new PharmacyDeliveryList()).commit();
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                } else if (item.getStatus() == 3) {
+                    Fragment fragment = new PharmacyQRCodeImageView();
+                    Bundle args = new Bundle();
+                    Log.i("PharmacyDeliveryDetails",item.getKey());
+                    args.putString(PharmacyQRCodeImageView.DATA_RECIEVE_KEY,item.getKey());
+                    fragment.setArguments(args);
+                    getFragmentManager().beginTransaction().
+                            replace(R.id.fragment_container,fragment).commit();
+
+
+                } else if(item.getStatus() == 0){
+
+                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery");
+                    Query query = dbref.orderByChild("userName").equalTo(item.getUserName());
+
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
+                                if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
+
+                                    dbref.child(postSnapShot.getKey()).child("status").setValue(2);
+                                    getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                            new PharmacyDeliveryList()).commit();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        });
 
 
 

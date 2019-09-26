@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -15,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
@@ -30,6 +34,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+import com.google.zxing.qrcode.QRCodeReader;
+import com.google.zxing.qrcode.encoder.QRCode;
+import com.journeyapps.barcodescanner.CaptureActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -42,6 +51,7 @@ import java.util.Map;
 
 
 public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
+
 
     final private String FCM_API = "https://fcm.googleapis.com/fcm/send";
     final private String serverKey = "key=" + "AIzaSyD_UjU_BbJZ9ZEuC2uz3QNXOJRSbm0a9Qc";
@@ -78,10 +88,12 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
     Button btnComplete;
     Button btnReject;
 
+
+    String key;
     DeliverClass item;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_pharmacy_admin_accepted_deliveries_details, container, false);
         ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Accepted Delivery Details");
@@ -160,6 +172,7 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
                         for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
                             if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
+
                                 dbref.child(postSnapShot.getKey()).child("status").setValue(0);
                                 dbref.child(postSnapShot.getKey()).child("acceptedby").setValue("");
                                 TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
@@ -196,6 +209,7 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
             }
         });
 
+
         btnComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -208,27 +222,66 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
                         for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
                             if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
+                                key = postSnapShot.getKey();
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                builder.setMessage("Send a Notification to the Reciever ?").setTitle("Notification Alert");
+                                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
 
-                                TOPIC = "/topics/"+postSnapShot.getKey(); //topic has to match what the receiver subscribed to
-                                NOTIFICATION_TITLE = "Delivery Notification";
-                                NOTIFICATION_MESSAGE = "Your Delivery has Arrived.";
+                                        TOPIC = "/topics/"+key; //topic has to match what the receiver subscribed to
+                                        NOTIFICATION_TITLE = "Delivery Notification";
+                                        NOTIFICATION_MESSAGE = "Your Delivery has Arrived.";
 
-                                JSONObject notification = new JSONObject();
-                                JSONObject notifcationBody = new JSONObject();
-                                try {
-                                    notifcationBody.put("title", NOTIFICATION_TITLE);
-                                    notifcationBody.put("message", NOTIFICATION_MESSAGE);
+                                        JSONObject notification = new JSONObject();
+                                        JSONObject notifcationBody = new JSONObject();
+                                        try {
+                                            notifcationBody.put("title", NOTIFICATION_TITLE);
+                                            notifcationBody.put("message", NOTIFICATION_MESSAGE);
 
-                                    notification.put("to", TOPIC);
-                                    notification.put("data", notifcationBody);
-                                } catch (JSONException e) {
-                                    Log.i(TAG, "onCreate: " + e.getMessage() );
-                                }
-                                sendNotification(notification);
+                                            notification.put("to", TOPIC);
+                                            notification.put("data", notifcationBody);
+                                        } catch (JSONException e) {
+                                            Log.i(TAG, "onCreate: " + e.getMessage() );
+                                        }
+                                        sendNotification(notification);
+
+                                    }
+                                });
+                                builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                    }
+                                });
+
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+
+                                AlertDialog.Builder builder1 = new AlertDialog.Builder(getActivity());
+                                builder1.setTitle("QR Scanner").setMessage("You want to Open the QR Scanner ?");
+                                builder1.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    }
+                                });
+                                builder1.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
+                                        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                                        intentIntegrator.setPrompt("Please focus the camera on the QR Code");
+                                        intentIntegrator.setBeepEnabled(false);
+                                        intentIntegrator.setBarcodeImageEnabled(false);
+                                        intentIntegrator.setCameraId(0);
+                                        intentIntegrator.forSupportFragment(PharmacyAdminAcceptedDeliveriesDetails.this).initiateScan();
+
+                                    }
+                                });
+
+                                AlertDialog dialog1 = builder1.create();
+                                dialog1.show();
 
 
-                                getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                        new PharmacyAdminAcceptedDeliveries()).commit();
 
                             }
                         }
@@ -242,6 +295,36 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
             }
         });
         return v;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data!= null) {
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if (result != null) {
+                if(TextUtils.equals(key,result.getContents())) {
+                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery").child(result.getContents());
+                    dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            dbref.child("status").setValue(1);
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                            String dateTime = simpleDateFormat.format(new Date());
+
+                            dbref.child("DeliveredDateTime").setValue(dateTime);
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+                }else{
+                    Toast.makeText(getContext(),"Wrong QR Code. Try Again",Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     private void sendNotification(JSONObject notification) {

@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class PharmacyDeliveryAdapter extends ArrayAdapter<DeliverClass> {
         }else if(item.getStatus() == 1){
             viewHolder.txtStatus.setText("Recieved");
         }else if(item.getStatus() == 2){
-            viewHolder.txtStatus.setText("cancelled");
+            viewHolder.txtStatus.setText("Cancelled");
         }else if(item.getStatus() == 3){
             viewHolder.txtStatus.setText("Accepted");
         }else if(item.getStatus() == 4){
@@ -82,7 +83,8 @@ public class PharmacyDeliveryAdapter extends ArrayAdapter<DeliverClass> {
                 args.putString(PharmacyDeliveryDetails.DATA_RECIEVE_ACCEPTEDBY, item.getAcceptedby());
                 args.putString(PharmacyDeliveryDetails.DATA_RECIEVE_ACCEPTDATETIME, item.getAcceptDateTime());
                 args.putString(PharmacyDeliveryDetails.DATA_RECIEVE_DELIVERDATETIME, item.getDeliveredDateTime());
-
+                args.putString(PharmacyDeliveryDetails.DATA_RECIEVE_KEY, item.getKey());
+                Log.i("PharmacyDeliveryAdapter",item.getKey());
 
                 fragment.setArguments(args);
 

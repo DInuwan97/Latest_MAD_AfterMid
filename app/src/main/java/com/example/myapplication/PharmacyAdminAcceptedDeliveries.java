@@ -64,6 +64,7 @@ public class PharmacyAdminAcceptedDeliveries extends Fragment {
                 for(DataSnapshot postSnapShot : dataSnapshot.getChildren()){
                     if(TextUtils.equals(postSnapShot.child("acceptedby").getValue().toString(), DBHandler.getLoggedUserName())) {
                         DeliverClass item;
+
                         item = postSnapShot.getValue(DeliverClass.class);
 
                         list.add(item);
