@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.Models.TimeSlots;
 import com.example.myapplication.PharmacyAdminAddMedicine;
 import com.example.myapplication.PharmacyMedicineCart;
 import com.example.myapplication.PharmacyMedicineList;
@@ -125,11 +126,22 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Deliver.COLUMN_NAME_PRICE_TOTAL + " REAL)";
 
 
+
+        String SQL_CREATE_ENTRIES_TIMESLOTS = "CREATE TABLE " + EcareManager.TimeSlots.TABLE_NAME+ " ("+
+                EcareManager.TimeSlots._ID+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                EcareManager.TimeSlots.COL_DOCTOR_EMAIL+ " TEXT, "+
+                EcareManager.TimeSlots.COL_SLOT_DAY+ " TEXT, "+
+                EcareManager.TimeSlots.COL_SLOT_START_TIME+ " TEXT, "+
+                EcareManager.TimeSlots.COL_SLOT_END_TIME + " TEXT)";
+
+
+
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
         db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
         db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
         db.execSQL(SQL_CREATE_ENTRIES_CART_PHARMACY);
         db.execSQL(SQL_CREATE_ENTRIES_DELIVERY);
+        db.execSQL(SQL_CREATE_ENTRIES_TIMESLOTS);
 
     }
 
@@ -142,7 +154,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + EcareManager.PharmacyCart.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + EcareManager.Deliver.TABLE_NAME);
         //db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Doctors.TABLE_NAME);
-
+        db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.TimeSlots.TABLE_NAME);
         onCreate(db);
     }
 
@@ -154,10 +166,12 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "Doctor";
-        String gender = "Male";
-        String address = "colombo";
-        String mobile = "0775356977";
+
+        String designation = "Patient";
+        String gender = "NULL";
+        String address = "NULL";
+        String mobile = "NULL";
+
 
         values.put(EcareManager.Users.COL_NAME_USERNAME, userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL, userEmail);
@@ -734,26 +748,9 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-    public boolean updateUserDetails(String address, String mobile) {
 
-        SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues contentValues = new ContentValues();
+    public long addDeliver(DeliverClass item){
 
-        contentValues.put(EcareManager.Users.COL_NAME_ADDRESS, address);
-        contentValues.put(EcareManager.Users.COL_NAME_MOBILE, mobile);
-
-        int result = db.update(EcareManager.Users.TABLE_NAME, contentValues,
-                EcareManager.Users.COL_NAME_USEREMAIL + " = ?",
-                null);
-
-        if (result == -1)
-            return false;
-        else
-            return true;
-
-    }
-
-    public long addDeliver(DeliverClass item) {
 
 
         //status 0 =  not deliverd yet
@@ -781,7 +778,81 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
 
-}
+
+
+    public boolean dilevered(int id){
+        SQLiteDatabase db =  getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(EcareManager.Deliver.COLUMN_NAME_STATUS, 1);
+        int count = db.update(EcareManager.Deliver.TABLE_NAME,values,
+                EcareManager.Deliver._ID+" = ?",new String[]{String.valueOf(id)});
+        if(count > 0){
+            return true;
+        }else{
+            return false;
+        }
+
+
+    }
+
+    /*public int checkDeliveryStatus(int id){
+
+    }*/
+
+    public boolean stopDeliver(int id){
+        SQLiteDatabase db=  getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(EcareManager.Deliver.COLUMN_NAME_STATUS, 2);
+        int count = db.update(EcareManager.Deliver.TABLE_NAME,values,
+                EcareManager.Deliver._ID+" = ?",new String[]{String.valueOf(id)});
+        if(count > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+    public void updateUser(String address,String mobile,String email){
+        ContentValues values = new ContentValues();
+        values.put(EcareManager.Users.COL_NAME_ADDRESS,address);
+        values.put(EcareManager.Users.COL_NAME_MOBILE,mobile);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.update(EcareManager.Users.TABLE_NAME, values, EcareManager.Users.COL_NAME_USEREMAIL + "	= ?", new String[] { String.valueOf(email)});
+    }
+
+
+    public boolean addTimeSlot(TimeSlots timeSlots){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(EcareManager.TimeSlots.COL_DOCTOR_EMAIL,timeSlots.getDoctorEmail());
+        values.put(EcareManager.TimeSlots.COL_SLOT_DAY,timeSlots.getSlotDay());
+        values.put(EcareManager.TimeSlots.COL_SLOT_START_TIME,timeSlots.getSlotStartTime());
+        values.put(EcareManager.TimeSlots.COL_SLOT_END_TIME,timeSlots.getSlotEndTime());
+
+
+        long result = db.insert(EcareManager.TimeSlots.TABLE_NAME,null,values);
+
+        if(result == -1)
+            return false;
+        else
+            return true;
+
+    }
+
+
+    public Cursor getDoctorSlotListContents(){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.TimeSlots.TABLE_NAME ,null);
+        return data;
+    }
+
+
 
 
 

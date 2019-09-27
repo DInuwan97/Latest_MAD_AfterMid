@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -34,6 +37,11 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
     EditText txtDoctorName,txtDoctorEmail,txtHospital,txtDoctorMobile,txtSpecilization,txtDoctorNic;
 
+    EditText txtAddress,txtMobile;
+
+    private String address;
+    private String mobile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
         if(/*myDB.getLoggedUserGender().toString().equals("NULL")  || */ myDB.getLoggedUserAddress().toString().equals("NULL")  || myDB.getLoggedUserMobile().toString().equals("NULL")){
             loadDialog();
+
         }
 
 
@@ -185,6 +194,9 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
         LayoutInflater inflater = LayoutInflater.from(this);
         View subView = inflater.inflate(R.layout.dialogbox_update_user_profile, null);
 
+        txtAddress =(EditText)subView.findViewById(R.id.txtAddress);
+        txtMobile = (EditText)subView.findViewById(R.id.txtMobile);
+
         //S TextView txtDeleteUserDialogBoxConfirmation = (TextView) subView.findViewById(R.id.txtDeleteUser);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -195,58 +207,23 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
 
 
+        builder.setPositiveButton("Update Profile", new DialogInterface.OnClickListener() {
 
-
-       /* btnUserUpdate.setOnClickListener(new View.OnClickListener(){
 
             @Override
-            public void onClick(View view) {
-                DBHandler db = new DBHandler(getApplicationContext());
+            public void onClick(DialogInterface dialogInterface, int i) {
 
 
-                txtAddress = (EditText)findViewById(R.id.txtAddress);
-                txtMobile = (EditText)findViewById(R.id.txtMobile);
-                btnUserUpdate = (Button) findViewById(R.id.btnUpdateUser);
+                address = txtAddress.getText().toString();
+                mobile = txtMobile.getText().toString();
 
-                userAddress = txtAddress.toString();
-                userMobile = txtMobile.toString();
+                    DBHandler myDB = new DBHandler(getApplicationContext());
+                    myDB.updateUser(address,mobile,LoggedUserEmail.toString());
+                    finish();
+                    startActivity(getIntent());
 
-
-
-                if(db.updateUserDetails(userAddress,userMobile)){
-                    Toast.makeText(getApplicationContext(),"Profile Updated",Toast.LENGTH_LONG).show();
-                }else{
-                    Log.i("testing","User not Deleted");
-                }
-            }
-        });*/
-
-
-        /*builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                DBHandler db = new DBHandler(getApplicationContext());
-
-                txtAddress = (EditText)findViewById(R.id.txtAddress);
-                txtMobile = (EditText)findViewById(R.id.txtMobile);
-
-                userAddress = txtAddress.toString();
-                userMobile = txtMobile.toString();
-
-                if(db.updateUserDetails(userAddress,userMobile)){
-                    Toast.makeText(getApplicationContext(),"Profile Updated",Toast.LENGTH_LONG).show();
-                }else{
-                    Log.i("testing","User not Deleted");
-                }
             }
         });
-
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-
-            }
-        });*/
 
         //btnUpdateUser
         builder.show();

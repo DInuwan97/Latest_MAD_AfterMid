@@ -259,8 +259,8 @@
 
 
     <RelativeLayout
-        android:layout_width="403dp"
-        android:layout_height="251dp"
+        android:layout_width="387dp"
+        android:layout_height="290dp"
         android:layout_below="@+id/add_expenses"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="10dp"
@@ -274,7 +274,7 @@
             android:layout_height="match_parent">
 
             <EditText
-                android:id="@+id/txtSelectTime"
+                android:id="@+id/txtSelectTimeEnd"
                 android:layout_width="314dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="8dp"
@@ -283,18 +283,39 @@
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/edit_text_style"
                 android:ems="10"
-                android:hint="Select Date"
-                android:inputType="textPersonName"
+                android:hint="Select Ending Time"
                 android:paddingLeft="20dp"
                 android:singleLine="true"
                 android:textColor="@color/colorPrimary"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.55" />
+                app:layout_constraintVertical_bias="0.671" />
+
+            <EditText
+                android:id="@+id/txtSelectTimeStart"
+                android:layout_width="314dp"
+                android:layout_height="36dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/edit_text_style"
+                android:ems="10"
+                android:hint="Select Starting Time"
+                android:paddingLeft="20dp"
+                android:singleLine="true"
+                android:textColor="@color/colorPrimary"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.385" />
 
             <EditText
                 android:id="@+id/txtSelectDate"
@@ -314,10 +335,10 @@
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.169" />
+                app:layout_constraintVertical_bias="0.105" />
 
             <TextView
                 android:id="@+id/txt4"
@@ -333,10 +354,10 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.038" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/txt8"
@@ -352,10 +373,29 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.382" />
+                app:layout_constraintVertical_bias="0.524" />
+
+            <TextView
+                android:id="@+id/txt"
+                android:layout_width="314dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:elevation="5dp"
+                android:text="Select Time"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.333"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.259" />
 
             <Button
                 android:id="@+id/save_btn"
@@ -369,7 +409,7 @@
                 android:layout_marginBottom="8dp"
                 android:background="@color/colorWhite"
                 android:backgroundTint="@color/colorPrimary"
-                android:text="SAVE CHANGES"
+                android:text="ADD TIME SLOT"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/colorWhite"
@@ -377,26 +417,26 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.338"
+                app:layout_constraintHorizontal_bias="0.333"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt4"
-                app:layout_constraintVertical_bias="0.943" />
+                app:layout_constraintVertical_bias="0.955" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         <!--<EditText-->
-            <!--android:id="@+id/select_date"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginLeft="12dp"-->
-            <!--android:layout_marginTop="36dp"-->
-            <!--android:layout_marginRight="12dp"-->
-            <!--android:background="@drawable/btn_primary_style"-->
-            <!--android:hint="Select Date"-->
-            <!--android:inputType="textPersonName"-->
-            <!--android:padding="8dp"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textSize="15sp" />-->
+        <!--android:id="@+id/select_date"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="12dp"-->
+        <!--android:layout_marginTop="36dp"-->
+        <!--android:layout_marginRight="12dp"-->
+        <!--android:background="@drawable/btn_primary_style"-->
+        <!--android:hint="Select Date"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:padding="8dp"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textSize="15sp" />-->
 
 
     </RelativeLayout>

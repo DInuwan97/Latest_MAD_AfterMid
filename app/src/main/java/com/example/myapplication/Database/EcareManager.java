@@ -78,6 +78,15 @@ public final class EcareManager {
         public static final String COLUMN_NAME_DATETIME = "datetime";
 
 
+    }
+
+    protected  static class TimeSlots implements BaseColumns{
+
+        public static final String TABLE_NAME = "timeslots";
+        public static final String COL_DOCTOR_EMAIL = "doctoremail";
+        public static final String COL_SLOT_DAY = "slotday";
+        public static final String COL_SLOT_START_TIME = "slotstarttime";
+        public static final String COL_SLOT_END_TIME = "slotendtime";
 
     }
 

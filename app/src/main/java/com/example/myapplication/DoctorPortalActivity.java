@@ -176,7 +176,7 @@ public class DoctorPortalActivity extends AppCompatActivity
                             break;
 
                         case R.id.nav_search:
-                            selectedFragment = new AddDoctorTimeSlotFragment();
+                            selectedFragment = new SearchFragment();
                             break;
 
                         case R.id.nav_newdoctor:

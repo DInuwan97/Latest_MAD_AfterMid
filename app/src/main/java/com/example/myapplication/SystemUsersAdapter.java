@@ -22,8 +22,6 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
     private LayoutInflater layoutInflater;
 
 
-    TextView txtPatientName,txtPatientEmail,txtPatientGender,txtPatientMobile,txtPatientAddress;
-
     public SystemUsersAdapter(Context mContext, ArrayList<SystemUsers> mSystemUserList) {
         super(mContext, R.layout.item_sysytem_user_list,mSystemUserList);
         this.layoutInflater = LayoutInflater.from(mContext);
@@ -36,9 +34,6 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
         final ViewHolder viewHolder;
         final SystemUsers item = getItem(position);
 
-
-
-
         if (converttView == null) {
             converttView = layoutInflater.inflate(R.layout.item_sysytem_user_list, parent, false);
             viewHolder = new ViewHolder(converttView);
@@ -50,11 +45,6 @@ public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
         viewHolder.txtName.setText(mSystemUserList.get(position).getUsername());
         viewHolder.txtEmail.setText(mSystemUserList.get(position).getEmail().toString());
         viewHolder.txtDesignation.setText(mSystemUserList.get(position).getDesignation().toString());
-
-
-        //viewHolder.txtPatientName.setText(mSystemUserList.get(position).getUsername());
-
-       // txtPatientName = (TextView)converttView.findViewById(R.id.txtPatientName);
 
 
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){
