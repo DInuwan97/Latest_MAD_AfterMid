@@ -31,7 +31,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
     TextView txtViewUserEmail,txtViewUserName;
     String LoggedUserEmail,LoggedUserType;
 
-    EditText txtDoctorName,txtDoctorEmail,txtHospital,txtDoctorMobile,txtSpecilization,txtDoctorNic;
+   // EditText txtDoctorName,txtDoctorEmail,txtHospital,txtDoctorMobile,txtSpecilization,txtDoctorNic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

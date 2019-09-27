@@ -29,12 +29,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 public class DBHandler extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "EcareInfo.db";
 
     private static String LoggedUserName;
     private static String LoggedUserType;
+    private static String LoggedUserID;
+    private static String PatientID = "1";
+
 
 
 
@@ -67,7 +72,7 @@ public class DBHandler extends SQLiteOpenHelper {
                                     + EcareManager.Doctors.COL_NAME_SPECIALIZATION + " TEXT,"
                                     + EcareManager.Doctors.COL_NAME_NIC + " TEXT)";
 
-        String SQL_CREATE_ENTRIES_MEDICINE = "CREATE TABLE  "+ EcareManager.Medicine.TABLE_NAME +" ( "+
+        String SQL_CREATE_ENTRIES_MEDICINE = "CREATE TABLE "+ EcareManager.Medicine.TABLE_NAME +" ( "+
                 EcareManager.Medicine._ID + " INTEGER PRIMARY KEY AUTOINCREMENT ,"+
                 EcareManager.Medicine.COLUMN_NAME_MEDICINE_NAME + " TEXT ,"+
                 EcareManager.Medicine.COLUMN_NAME_PRICE + " REAL,"+
@@ -86,10 +91,20 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.PharmacyCart.COLUMN_NAME_PRICE_TYPE + " TEXT)";
 
 
+        String SQL_CREATE_ENTRIES_TESTS = "CREATE TABLE "+ EcareManager.Tests.TABLE_NAME +" ("+
+                EcareManager.Tests._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                EcareManager.Tests.COLUMN_NAME_PATIENT_ID + " INTEGER,"+
+                EcareManager.Tests.COLUMN_NAME_TESTER_ID + " INTEGER,"+
+                EcareManager.Tests.COLUMN_NAME_TEST_NAME + " TEXT,"+
+                EcareManager.Tests.COLUMN_NAME_TEST_DESCRIPTION + " TEXT,"+
+                EcareManager.Tests.COLUMN_NAME_TEST_PRICE + " REAL,"+
+                EcareManager.Tests.COLUMN_NAME_TEST_DATE + " TEXT)";
+
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
         db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
         db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
         db.execSQL(SQL_CREATE_ENTRIES_CART_PHARMACY);
+        db.execSQL(SQL_CREATE_ENTRIES_TESTS);
 
     }
 
@@ -99,6 +114,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Users.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Medicine.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.PharmacyCart.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Tests.TABLE_NAME);
         //db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Doctors.TABLE_NAME);
 
         onCreate(db);
@@ -112,7 +128,9 @@ public class DBHandler extends SQLiteOpenHelper {
         //Administrator
         //Patient
         //PharmacyAdmin
-        String designation = "Patient";
+        //Tester
+
+        String designation = "Tester";
 
         values.put(EcareManager.Users.COL_NAME_USERNAME,userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL,userEmail);
@@ -155,6 +173,7 @@ public class DBHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
          this.LoggedUserName = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_USERNAME));
          this.LoggedUserType = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_DESIGNATION));
+         this.LoggedUserID = cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users._ID));
         //cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Users.COL_NAME_USERNAME));
          }
 
@@ -172,6 +191,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
+
+
+
+
     public static String getLoggedUserName() {
         return LoggedUserName;
     }
@@ -179,6 +202,22 @@ public class DBHandler extends SQLiteOpenHelper {
     public static String getLoggedUserType(){
         return LoggedUserType;
     }
+
+    public static String getPatientID() {
+        return PatientID;
+    }
+
+    public static void setPatientID(String patientID) {
+        PatientID = patientID;
+    }
+
+    public static String getLoggedUserID() { return LoggedUserID;    }
+
+    public static void setLoggedUserID(String loggedUserID) { LoggedUserID = loggedUserID;  }
+
+
+
+
 
     public boolean addDoctor(String doctorName,String doctorEmail,String hospitalName,String doctorMobile,
                              String doctorSpecilization,String doctorNic){
@@ -561,6 +600,193 @@ public class DBHandler extends SQLiteOpenHelper {
         return totalAmount;
 
     }
+
+
+    //functions for tests
+
+
+    // add test query
+    public boolean addTest(int pid,int tid,String tname,String des,float price,String date)
+    {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(EcareManager.Tests.COLUMN_NAME_PATIENT_ID,pid);
+        values.put(EcareManager.Tests.COLUMN_NAME_TESTER_ID,tid);
+        values.put(EcareManager.Tests.COLUMN_NAME_TEST_NAME,tname);
+        values.put(EcareManager.Tests.COLUMN_NAME_TEST_DESCRIPTION,des);
+        values.put(EcareManager.Tests.COLUMN_NAME_TEST_PRICE,price);
+        values.put(EcareManager.Tests.COLUMN_NAME_TEST_DATE,date);
+
+        long chkAddTest = db.insert(EcareManager.Tests.TABLE_NAME,null,values);
+
+        return chkAddTest > 0;
+
+    }
+
+    //get name of the user to show in description
+    public void getUserName(String pid)
+    {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String GET_USER_NAME_QUERY = "SELECT * FROM "+EcareManager.Users.TABLE_NAME+" WHERE "+EcareManager.Users._ID+" = ?";
+        Cursor cursor = db.rawQuery(GET_USER_NAME_QUERY,new String[]{pid});
+
+        while(cursor.moveToFirst())
+        {
+
+            LoggedUserName = cursor.getString(1);
+
+        }
+
+
+    }
+
+    //get test table contents fro patient
+    //for update fragment
+
+    public Cursor getPreviousTests(String pid)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String QUERY_GET_PRE_TEST = "SELECT * FROM "+EcareManager.Tests.TABLE_NAME+" WHERE "+EcareManager.Tests.COLUMN_NAME_PATIENT_ID+" = ?";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_PRE_TEST,new String[]{pid});
+
+        Log.d(TAG, "getPreviousTests: query executed");
+
+        return cursor;
+
+    }
+
+    //get test table contents of all time
+    //for history fragment
+
+    public Cursor getTestsHistory()
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String QUERY_GET_PRE_TEST = "SELECT * FROM "+EcareManager.Tests.TABLE_NAME;
+
+        Cursor cursor = db.rawQuery(QUERY_GET_PRE_TEST,null);
+
+        return cursor;
+
+    }
+
+    public Cursor getTest(String testID)
+    {
+
+        Log.d(TAG, "getTest: testID :"+testID);
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String QUERY_GET_TEST = "SELECT * FROM "+EcareManager.Tests.TABLE_NAME+" WHERE "+EcareManager.Tests._ID+" = ? ";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_TEST,new String[]{testID});
+
+        return cursor;
+
+    }
+
+    public void updateTest(String tID,String tName,String tDes,String tCost)
+    {
+        Log.d(TAG, "updateTEst: testID :"+tID);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(EcareManager.Tests.COLUMN_NAME_TEST_NAME,tName);
+        values.put(EcareManager.Tests.COLUMN_NAME_TEST_DESCRIPTION,tDes);
+        values.put( EcareManager.Tests.COLUMN_NAME_TEST_PRICE,tCost);
+
+        db.update(EcareManager.Tests.TABLE_NAME,values,"_id = ?",new String[]{tID});
+
+        Log.d(TAG, "updateTEst: query executed");
+
+
+        /*String QUERY_UPDATE_TEST = " UPDATE "+EcareManager.Tests.TABLE_NAME+" SET "+
+                EcareManager.Tests.COLUMN_NAME_TEST_NAME + " = '" + tName +"' , "+
+                EcareManager.Tests.COLUMN_NAME_TEST_DESCRIPTION + " = '" + tDes +"' , "+
+                EcareManager.Tests.COLUMN_NAME_TEST_PRICE+ " = '"+ tCost + "' WHERE "+
+                EcareManager.Tests._ID+ " = ? ";*/
+
+
+
+        //db.execSQL(QUERY_UPDATE_TEST,new String[]{tID});
+
+    }
+
+    public void deleteTest(String testID)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        int chkDelete = db.delete(EcareManager.Tests.TABLE_NAME,"_id = ?",new String[]{testID});
+
+        Log.d(TAG, "deleteTest: chkdelete value : "+chkDelete);
+
+
+    }
+
+
+    public Cursor getPatientName(String pid)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String patName ;
+
+        String QUERY_GET_PATIENT_DATA = " SELECT * FROM "+ EcareManager.Users.TABLE_NAME +" WHERE "+EcareManager.Users._ID + " = ? ";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_PATIENT_DATA,new String[]{pid});
+
+        Log.d(TAG, "getPatientName: BeforepatName :");
+
+        return cursor;
+
+
+    }
+
+    public String gettestID(String testName)
+    {
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String TestID;
+
+        String QUERY_GET_TEST_ID = " SELECT * FROM "+ EcareManager.Tests.TABLE_NAME +" WHERE "+EcareManager.Tests.COLUMN_NAME_TEST_NAME+" = ?";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_TEST_ID,new String[]{testName});
+
+        if(cursor.moveToFirst())
+        {
+
+            TestID = cursor.getString(cursor.getColumnIndex("_id"));
+
+
+        }
+        else
+        {
+
+            TestID = " ";
+
+        }
+
+        return TestID;
+
+
+    }
+
+
+    //create method to get prescription
+
+
+
+
+
+
+
 
 
 

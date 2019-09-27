@@ -131,6 +131,8 @@ public class SignInActivity extends AppCompatActivity {
                 intent = new Intent(SignInActivity.this, MainActivity.class);
             }else if(myDb.getLoggedUserType().toString().equals("PharmacyAdmin")){
                 intent = new Intent(SignInActivity.this, PharmacyAdmin.class);
+            }else if(myDb.getLoggedUserType().toString().equals("Tester")){
+                intent = new Intent(SignInActivity.this, TestActivity.class);
             }else{
                 intent = new Intent(SignInActivity.this, MainActivity.class);
             }
