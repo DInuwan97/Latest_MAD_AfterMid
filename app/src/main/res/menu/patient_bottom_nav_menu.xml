@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
-        android:title="Home" />
+        android:id="@+id/nav_my_appointments"
+        android:icon="@drawable/ic_my_appointments"
+        android:title="Appointments" />
 
     <item
-        android:id="@+id/nav_favorites"
-        android:icon="@drawable/ic_add_box"
-        android:title="Favorites" />
+        android:id="@+id/nav_new_appointment"
+        android:icon="@drawable/ic_place_new_appointment"
+        android:title="Place New" />
 
     <item
         android:id="@+id/nav_search"
@@ -20,9 +20,6 @@
         android:id="@+id/nav_pharmacy"
         android:icon="@android:drawable/ic_menu_add"
         android:title="Pharmacy" />
-    <item
-        android:id="@+id/nav_search1"
-        android:icon="@drawable/ic_history"
-        android:title="Search" />
+
 
 </menu>

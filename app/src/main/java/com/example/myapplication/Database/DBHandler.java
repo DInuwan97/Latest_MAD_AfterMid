@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.Models.Appoinments;
 import com.example.myapplication.Models.TimeSlots;
 import com.example.myapplication.PharmacyAdminAddMedicine;
 import com.example.myapplication.PharmacyMedicineCart;
@@ -36,6 +37,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -1044,6 +1049,104 @@ public class DBHandler extends SQLiteOpenHelper {
             return data;
         }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+    public ArrayList selectAllDocs(){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.Doctors.COL_NAME_DOCTORNAME,
+                EcareManager.Doctors.COL_NAME_SPECIALIZATION };
+
+        Cursor cursor = db.query(EcareManager.Doctors.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                EcareManager.Doctors.COL_NAME_DOCTORNAME + " ASC");
+
+        HashMap<String, String> DocNameSpec = new HashMap<>();
+
+        List<HashMap<String,String>> listItems = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            DocNameSpec.put(cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Doctors.COL_NAME_DOCTORNAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Doctors.COL_NAME_SPECIALIZATION)));
+        }
+
+        Iterator it = DocNameSpec.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap<String, String> resultsMap = new HashMap<>();
+            Map.Entry pair = (Map.Entry) it.next();
+            resultsMap.put("First Line", pair.getKey().toString());
+            resultsMap.put("Second Line", pair.getValue().toString());
+            listItems.add(resultsMap);
+        }
+
+        cursor.close();
+        db.close();
+        return (ArrayList) listItems;
+    }
+    public ArrayList selectSomeDocs(String name){
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {EcareManager.Doctors.COL_NAME_DOCTORNAME,EcareManager.Doctors.COL_NAME_SPECIALIZATION};
+
+        Cursor cursor = db.query(EcareManager.Doctors.TABLE_NAME,
+                projection,
+                EcareManager.Doctors.COL_NAME_DOCTORNAME + " LIKE ?",
+                new String[]{name+"%"},
+                null,
+                null,
+                EcareManager.Doctors.COL_NAME_DOCTORNAME + " ASC");
+
+        HashMap<String, String> DocNameSpec = new HashMap<>();
+
+        List<HashMap<String,String>> listItems = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            DocNameSpec.put(cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Doctors.COL_NAME_DOCTORNAME)),
+                    cursor.getString(cursor.getColumnIndexOrThrow(EcareManager.Doctors.COL_NAME_SPECIALIZATION)));
+        }
+
+        Iterator it = DocNameSpec.entrySet().iterator();
+        while (it.hasNext()) {
+            HashMap<String, String> resultsMap = new HashMap<>();
+            Map.Entry pair = (Map.Entry) it.next();
+            resultsMap.put("First Line", pair.getKey().toString());
+            resultsMap.put("Second Line", pair.getValue().toString());
+            listItems.add(resultsMap);
+
+        }
+        cursor.close();
+        db.close();
+        return (ArrayList) listItems;
+    }
+
+
+    public boolean addAppoinments(Appoinments appoinments){
+
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+
+        values.put(EcareManager.Appoinments.COL_DOCTOR_EMAIL,appoinments.getDoctorEmail());
+        values.put(EcareManager.Appoinments.COL_DOCTOR_EMAIL,appoinments.getPatientEmail());
+        values.put(EcareManager.Appoinments.COL_SLOT_DAY,appoinments.getSlotDay());
+        values.put(EcareManager.Appoinments.COL_SLOT_START_TIME,appoinments.getSlotStartTime());
+        values.put(EcareManager.Appoinments.COL_SLOT_END_TIME,appoinments.getSlotEndTime());
+
+
+        long result = db.insert(EcareManager.TimeSlots.TABLE_NAME,null,values);
+
+        if(result == -1)
+            return false;
+        else
+            return true;
+
+    }
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
 

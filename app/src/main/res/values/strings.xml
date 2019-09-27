@@ -87,5 +87,8 @@
     <string name="PharmacyDeliveryAddressProp">sadasdasdasdsad\nasdsadasdasdana\nsdfwdaasd\nnsdsadawdad</string>
     <string name="About" >About</string>
 
+    <string name="Add_New_Appointment">Add New Appointment</string>
+    <string name="Search_doctor">Search Your Doctor Here</string>
+    <string name="Select_doctor">Select Your Doctor</string>
 
 </resources>

@@ -106,4 +106,15 @@ public final class EcareManager {
 
     }
 
+    protected  static class Appoinments implements BaseColumns{
+
+        public static final String TABLE_NAME = "appoinments";
+        public static final String COL_DOCTOR_EMAIL = "doctoremail";
+        public static final String COL_PATIENT_EMAIL = "patientmail";
+        public static final String COL_SLOT_DAY = "slotday";
+        public static final String COL_SLOT_START_TIME = "slotstarttime";
+        public static final String COL_SLOT_END_TIME = "slotendtime";
+
+    }
+
 }
