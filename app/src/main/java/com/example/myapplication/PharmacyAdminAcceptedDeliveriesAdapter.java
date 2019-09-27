@@ -54,6 +54,7 @@ public class PharmacyAdminAcceptedDeliveriesAdapter extends ArrayAdapter<Deliver
     }
 
 
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

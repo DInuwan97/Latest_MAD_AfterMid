@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.myapplication.Database.AdminDeliveryItemClass;
 import com.example.myapplication.Database.DeliverClass;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,6 +67,7 @@ public class PharmacyDeliveryDetails extends Fragment {
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View v = inflater.inflate(R.layout.fragment_pharmacy_delivery_details, container, false);
 
         UserName = v.findViewById(R.id.txtViewUserName);
@@ -166,8 +168,10 @@ public class PharmacyDeliveryDetails extends Fragment {
                                         if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
                                             dbref.child(postSnapShot.getKey()).removeValue();
+
                                             getFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                                     new PharmacyDeliveryList()).commit();
+
 
                                         }
                                     }
@@ -200,10 +204,15 @@ public class PharmacyDeliveryDetails extends Fragment {
                             Fragment fragment = new PharmacyQRCodeImageView();
                             Bundle args = new Bundle();
                             Log.i("PharmacyDeliveryDetails",item.getKey());
+
+
+
                             args.putString(PharmacyQRCodeImageView.DATA_RECIEVE_KEY,item.getKey());
                             fragment.setArguments(args);
                             getFragmentManager().beginTransaction().
                                     replace(R.id.fragment_container,fragment).commit();
+
+
                         }
                     });
                     builder.setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -233,8 +242,13 @@ public class PharmacyDeliveryDetails extends Fragment {
                                         if(Integer.parseInt(postSnapShot.child("id").getValue().toString())==item.getId()) {
 
                                             dbref.child(postSnapShot.getKey()).child("status").setValue(2);
+
+
                                             getFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                                     new PharmacyDeliveryList()).commit();
+
+
+
                                         }
                                     }
                                 }

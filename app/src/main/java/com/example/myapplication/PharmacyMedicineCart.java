@@ -241,9 +241,9 @@ public class PharmacyMedicineCart extends Fragment{
                                         DBHandler db = new DBHandler(getContext());
 
                                         if(db.clearCart()){
-                                            ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Medicine List");
-                                            getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                                    new PharmacyMedicineList()).commit();
+
+                                            cartListAdap.clear();
+                                            cartListAdap.notifyDataSetChanged();
                                         }else{
                                             Toast.makeText(getContext(),"Error. Clear the Cart Manually",Toast.LENGTH_SHORT).show();
                                             cartListAdap.notifyDataSetChanged();

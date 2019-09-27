@@ -27,6 +27,7 @@ import com.example.myapplication.Database.AdminDeliveryItemClass;
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.DeliverClass;
 import com.example.myapplication.NotificationService.MySingleton;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -197,8 +198,8 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                                         sendNotification(notification);
 
 
-                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                                new PharmacyAdminPendingDelivery()).commit();
+                                        BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_nav_menu);
+                                        bottomNav.setSelectedItemId(R.id.nav_pending_delivery_tasks);
 
 
 
@@ -270,8 +271,8 @@ public class PharmacyAdminPendingDeliveryDetails extends Fragment {
                                         sendNotification(notification);
 
 
-                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                                new PharmacyAdminPendingDelivery()).commit();
+                                        BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_nav_menu);
+                                        bottomNav.setSelectedItemId(R.id.nav_pending_delivery_tasks);
 
                                     }
                                 }

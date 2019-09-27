@@ -320,9 +320,15 @@ public class PharmacyAdminAddMedicine extends Fragment {
                                     clearAll(v);
 
 
+
+
+
                                 }else{
                                     Toast.makeText(getContext(),"Medicine Not Added", Toast.LENGTH_SHORT).show();
                                 }
+                                BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_nav_menu);
+                                bottomNav.setSelectedItemId(R.id.nav_all_medicine);
+
 
 
                             }
@@ -363,6 +369,8 @@ public class PharmacyAdminAddMedicine extends Fragment {
                         editTextName.setBackground(editTextBackground);
 
                         btnAdd.setText("ADD");
+                        BottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottom_nav_menu);
+                        bottomNavigationView.setSelectedItemId(R.id.nav_add_medicine);
                         clearAll(v);
                     }
                 });
@@ -417,6 +425,8 @@ public class PharmacyAdminAddMedicine extends Fragment {
                                 Toast.makeText(getContext(), "Medicine Not Deleted", Toast.LENGTH_SHORT).show();
                             }
                             clearAll(v);
+                            BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_nav_menu);
+                            bottomNav.setSelectedItemId(R.id.nav_all_medicine);
                         }
                     }
                 });

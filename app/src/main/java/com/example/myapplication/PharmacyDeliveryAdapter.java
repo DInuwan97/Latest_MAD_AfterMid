@@ -88,7 +88,7 @@ public class PharmacyDeliveryAdapter extends ArrayAdapter<DeliverClass> {
 
                 fragment.setArguments(args);
 
-                ((PatientBottomNavigationActivity) con).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment
+                ((PatientBottomNavigationActivity)con).getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment
                 ).commit();
 
             }

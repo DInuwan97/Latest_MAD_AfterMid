@@ -67,7 +67,6 @@ public class PharmacyDeliveryList extends Fragment {
                     DeliverClass item;
                     item = postSnapShot.getValue(DeliverClass.class);
                     item.setKey(postSnapShot.getKey());
-                    Log.i("PharmacyDeliveryList",item.getKey());
                     list.add(item);
 
 

@@ -28,6 +28,7 @@ import com.example.myapplication.Database.AdminDeliveryItemClass;
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.DeliverClass;
 import com.example.myapplication.NotificationService.MySingleton;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -198,8 +199,8 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
                                         sendNotification(notification);
 
 
-                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                                new PharmacyAdminAcceptedDeliveries()).commit();
+                                        BottomNavigationView bottomNav = getActivity().findViewById(R.id.bottom_nav_menu);
+                                        bottomNav.setSelectedItemId(R.id.nav_accepted_delivery_tasks);
 
                                     }
                                 }
