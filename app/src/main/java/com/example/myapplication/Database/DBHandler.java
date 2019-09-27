@@ -194,7 +194,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //Tester
 
-        String designation = "Patient";
+        String designation = "PharmacyAdmin";
         String gender = "NULL";
         String address = "NULL";
         String mobile = "NULL";

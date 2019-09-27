@@ -58,7 +58,7 @@ public class TestFindUserFragment extends Fragment {
                 IntentIntegrator integrator = new IntentIntegrator(getActivity()).forSupportFragment(TestFindUserFragment.this);
 
 
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+               // integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
 
                 integrator.setPrompt("Scan");
 
@@ -124,7 +124,7 @@ public class TestFindUserFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode,resultCode,data);
+        IntentResult result = IntentIntegrator.parseActivityResult(resultCode,data);
 
         Log.d(TAG, "onActivityResult: in onacttivityresult");
 

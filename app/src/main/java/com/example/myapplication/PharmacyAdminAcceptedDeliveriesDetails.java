@@ -286,11 +286,12 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
                                         IntentIntegrator intentIntegrator = new IntentIntegrator(getActivity());
-                                        intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                                        //intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                                         intentIntegrator.setPrompt("Please focus the camera on the QR Code");
                                         intentIntegrator.setBeepEnabled(false);
                                         intentIntegrator.setBarcodeImageEnabled(false);
                                         intentIntegrator.setCameraId(0);
+                                        intentIntegrator.setRequestCode(9990);
                                         intentIntegrator.forSupportFragment(PharmacyAdminAcceptedDeliveriesDetails.this).initiateScan();
 
                                     }
@@ -317,29 +318,31 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(data!= null) {
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (result != null) {
-                if(TextUtils.equals(key,result.getContents())) {
-                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery").child(result.getContents());
-                    dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            dbref.child("status").setValue(1);
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                            String dateTime = simpleDateFormat.format(new Date());
+        if(requestCode==9990) {
+            if (data != null) {
+                IntentResult result = IntentIntegrator.parseActivityResult( resultCode, data);
+                if (result != null) {
+                    if (TextUtils.equals(key, result.getContents())) {
+                        final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery").child(result.getContents());
+                        dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                dbref.child("status").setValue(1);
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                String dateTime = simpleDateFormat.format(new Date());
 
-                            dbref.child("DeliveredDateTime").setValue(dateTime);
+                                dbref.child("DeliveredDateTime").setValue(dateTime);
 
-                        }
+                            }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
-                }else{
-                    Toast.makeText(getContext(),"Wrong QR Code. Try Again",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Wrong QR Code. Try Again", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         }

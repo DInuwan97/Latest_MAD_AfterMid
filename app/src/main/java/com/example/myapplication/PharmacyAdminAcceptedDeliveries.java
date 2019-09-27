@@ -77,7 +77,6 @@ public class PharmacyAdminAcceptedDeliveries extends Fragment {
                     va.cancel();
                 }catch (Exception e){
                     e.printStackTrace();
-                    Toast.makeText(getContext(),"Error. Restart the Application.",Toast.LENGTH_SHORT).show();
                     adapter.notifyDataSetChanged();
                 }
 

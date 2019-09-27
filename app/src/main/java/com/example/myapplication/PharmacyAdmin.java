@@ -10,6 +10,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -122,6 +123,15 @@ public class PharmacyAdmin extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            LayoutInflater inflater = getLayoutInflater();
+            View v = inflater.inflate(R.layout.about,null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(PharmacyAdmin.this);
+            builder.setView(v);
+            builder.show();
+
+
+
+
             return true;
         }
 
@@ -161,12 +171,14 @@ public class PharmacyAdmin extends AppCompatActivity
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     IntentIntegrator intentIntegrator = new IntentIntegrator(PharmacyAdmin.this);
-                    intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                     intentIntegrator.setPrompt("Please focus the camera on the QR Code");
                     intentIntegrator.setBeepEnabled(false);
                     intentIntegrator.setBarcodeImageEnabled(false);
+                    intentIntegrator.setRequestCode(9890);
                     intentIntegrator.setCameraId(0);
                     intentIntegrator.initiateScan();
+
+
 
                 }
             });
@@ -182,35 +194,37 @@ public class PharmacyAdmin extends AppCompatActivity
         return true;
     }
 
-    @Override
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(data!= null) {
-            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (result != null) {
-                final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery").child(result.getContents());
-                dbref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if(TextUtils.equals(dataSnapshot.child("acceptedby").getValue().toString(),DBHandler.getLoggedUserName())) {
-                            dbref.child("status").setValue(1);
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
-                            String dateTime = simpleDateFormat.format(new Date());
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==9890){
+            if(data!= null) {
+                IntentResult result = IntentIntegrator.parseActivityResult( resultCode, data);
+                if (result != null) {
+                    final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery").child(result.getContents());
+                    dbref.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (TextUtils.equals(dataSnapshot.child("acceptedby").getValue().toString(), DBHandler.getLoggedUserName())) {
+                                dbref.child("status").setValue(1);
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
+                                String dateTime = simpleDateFormat.format(new Date());
 
-                            dbref.child("DeliveredDateTime").setValue(dateTime);
+                                dbref.child("DeliveredDateTime").setValue(dateTime);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
-            }else{
-                Toast.makeText(this,"Wrong QR Code. Try Again",Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
             }
-
-
         }
+
+
     }
 
 
