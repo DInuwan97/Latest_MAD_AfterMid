@@ -202,7 +202,7 @@
                     android:layout_margin="10dp"
                     android:ems="10"
                     android:hint="@string/PharmacyMedicineHint"
-                    android:inputType="textPersonName" />
+                    android:inputType="text" />
 
                 <TextView
                     android:id="@+id/Price_calculated"

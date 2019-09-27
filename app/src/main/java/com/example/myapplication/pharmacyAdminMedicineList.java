@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,6 +37,8 @@ public class pharmacyAdminMedicineList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
+        ((PharmacyAdmin)getActivity()).getSupportActionBar().setTitle("Pharmacy Admin");
         final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_list, container, false);
 
         final DBHandler dh = new DBHandler(getActivity().getApplicationContext());
@@ -62,6 +65,7 @@ public class pharmacyAdminMedicineList extends Fragment {
                 Bundle args = new Bundle();
                 args.putString(PharmacyAdminAddMedicine.DATA_RECIEVE, pos);
                 medicineDetails.setArguments(args);
+
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container,medicineDetails).commit();
 
 

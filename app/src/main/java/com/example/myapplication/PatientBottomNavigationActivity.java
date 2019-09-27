@@ -1,15 +1,22 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.myapplication.Database.DBHandler;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -17,12 +24,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
+import com.example.myapplication.Database.DBHandler;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 public class PatientBottomNavigationActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,12 +37,25 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
    // EditText txtDoctorName,txtDoctorEmail,txtHospital,txtDoctorMobile,txtSpecilization,txtDoctorNic;
 
+    EditText txtAddress,txtMobile;
+
+    private String address;
+    private String mobile;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_patient_bottom_navigation);
 
         DBHandler myDB = new DBHandler(this);
+
+
+        if(/*myDB.getLoggedUserGender().toString().equals("NULL")  || */ myDB.getLoggedUserAddress().toString().equals("NULL")  || myDB.getLoggedUserMobile().toString().equals("NULL")){
+            loadDialog();
+
+        }
+
+
 
 
         intent = getIntent();
@@ -69,7 +86,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
 
 
-        BottomNavigationView bottomNav = findViewById(R.id.patient_bottom_nav_menu);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_nav_menu);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -95,7 +112,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
         } else {
 
             //remove the comment to make the back button work
-            //super.onBackPressed();
+            super.onBackPressed();
         }
     }
 
@@ -171,4 +188,47 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
                     return true;
                 }
             };
+
+
+    public void loadDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View subView = inflater.inflate(R.layout.dialogbox_update_user_profile, null);
+
+        txtAddress =(EditText)subView.findViewById(R.id.txtAddress);
+        txtMobile = (EditText)subView.findViewById(R.id.txtMobile);
+
+        //S TextView txtDeleteUserDialogBoxConfirmation = (TextView) subView.findViewById(R.id.txtDeleteUser);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // builder.setTitle("Update Your Profile");
+        //builder.setMessage("Successfully Deleted");
+        builder.setView(subView);
+        builder.create();
+
+
+
+        builder.setPositiveButton("Update Profile", new DialogInterface.OnClickListener() {
+
+
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                address = txtAddress.getText().toString();
+                mobile = txtMobile.getText().toString();
+
+                    DBHandler myDB = new DBHandler(getApplicationContext());
+                    myDB.updateUser(address,mobile,LoggedUserEmail.toString());
+                    finish();
+                    startActivity(getIntent());
+
+            }
+        });
+
+        //btnUpdateUser
+        builder.show();
+    }
+
+
+
 }

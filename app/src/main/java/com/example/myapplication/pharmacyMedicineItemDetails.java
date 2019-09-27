@@ -33,6 +33,7 @@ public class pharmacyMedicineItemDetails extends Fragment {
 
         final View v = inflater.inflate(R.layout.fragment_pharmacy_medicine_item_details, container, false);
 
+        ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Medicine Details");
         TextView txtViewName = v.findViewById(R.id.Name_field);
         TextView txtPrice = v.findViewById(R.id.Price_field);
         TextView txtPriceType = v.findViewById(R.id.price_type);
@@ -76,14 +77,15 @@ public class pharmacyMedicineItemDetails extends Fragment {
                     float amount = 0;
                     try {
                         amount = Float.parseFloat(editTextAmount.getText().toString());
+                        if(dh.cartAddItem(item,amount )){
+                            Toast.makeText(getActivity().getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(getActivity().getApplicationContext(),"Not Added to Cart. Try Again",Toast.LENGTH_SHORT).show();
+                        }
                     }catch (NumberFormatException e){
                         Toast.makeText(getActivity().getApplicationContext(),"Enter a Valid Amount",Toast.LENGTH_SHORT).show();
                     }
-                    if(dh.cartAddItem(item,amount )){
-                        Toast.makeText(getActivity().getApplicationContext(),"Added to Cart",Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(getActivity().getApplicationContext(),"Not Added to Cart. Try Again",Toast.LENGTH_SHORT).show();
-                    }
+
                 }else{
                     Toast.makeText(getActivity().getApplicationContext(),"Enter a Valid Amount",Toast.LENGTH_SHORT).show();
                 }

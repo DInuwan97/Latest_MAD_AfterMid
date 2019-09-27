@@ -1,60 +1,150 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.database.DataSetObserver;
+import android.content.DialogInterface;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.List;
+import com.example.myapplication.Database.DBHandler;
 
-public class SystemUsersAdapter extends BaseAdapter {
+import java.util.ArrayList;
+
+public class SystemUsersAdapter extends ArrayAdapter<SystemUsers> {
 
     private Context mContext;
-    private List<SystemUsers> mSystemUserList;
+    private ArrayList<SystemUsers> mSystemUserList;
+    private LayoutInflater layoutInflater;
 
-    public SystemUsersAdapter(Context mContext, List<SystemUsers> mSystemUserList) {
-        this.mContext = mContext;
+
+    public SystemUsersAdapter(Context mContext, ArrayList<SystemUsers> mSystemUserList) {
+        super(mContext, R.layout.item_sysytem_user_list,mSystemUserList);
+        this.layoutInflater = LayoutInflater.from(mContext);
         this.mSystemUserList = mSystemUserList;
     }
 
-
-
-    public int getCount(){
-        return mSystemUserList.size();
-    }
-
-    public Object getItem(int position){
-
-        return mSystemUserList.get(position);
-    }
-
     @Override
-    public long getItemId(int position) {
-        return position;
+    public View getView(final int position, View converttView, ViewGroup parent){
+
+        final ViewHolder viewHolder;
+        final SystemUsers item = getItem(position);
+
+        if (converttView == null) {
+            converttView = layoutInflater.inflate(R.layout.item_sysytem_user_list, parent, false);
+            viewHolder = new ViewHolder(converttView);
+            converttView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder)converttView.getTag();
+        }
+
+        viewHolder.txtName.setText(mSystemUserList.get(position).getUsername());
+        viewHolder.txtEmail.setText(mSystemUserList.get(position).getEmail().toString());
+        viewHolder.txtDesignation.setText(mSystemUserList.get(position).getDesignation().toString());
+
+
+        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                openDialog(item);
+            }
+        });
+
+        viewHolder.btnView.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                loadPatientDetailsDialog(item);
+            }
+        });
+
+        return converttView;
+    }
+
+
+//for dialogbox
+    public void openDialog(final SystemUsers item){
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View subView = inflater.inflate(R.layout.dialogbox_delete_user_confirmation, null);
+
+        TextView txtDeleteUserDialogBoxConfirmation = (TextView) subView.findViewById(R.id.txtDeleteUser);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Do you want to Delete this User?");
+        //builder.setMessage("Successfully Deleted");
+        builder.setView(subView);
+        builder.create();
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DBHandler db = new DBHandler(getContext());
+                if(db.deleteUsers(item.getEmail())){
+                    remove(item);
+                    notifyDataSetChanged();
+                }else{
+                    Log.i("testing","User not Deleted");
+                }
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
+    }
+
+
+    public void loadPatientDetailsDialog(final SystemUsers item) {
+
+
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View subView = inflater.inflate(R.layout.dialogbox_view_patient_profile, null);
+
+      //  txtPatientName.setText(item.getUsername());
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setView(subView);
+        builder.create();
+        builder.show();
+
     }
 
 
 
-    public long getItemID(int position){
-        return position;
-    }
+    private class ViewHolder{
+        TextView txtName;
+        TextView txtEmail;
+        TextView txtDesignation;
+        Button btnDelete,btnView;
 
-    public View getView(int position, View contentView, ViewGroup parent){
-        View v = View.inflate(mContext,R.layout.item_sysytem_user_list,null);
-        TextView txtName = (TextView)v.findViewById(R.id.txtName);
-        TextView txtEmail = (TextView)v.findViewById(R.id.txtEmail);
-        TextView txtDesignation = (TextView)v.findViewById(R.id.txtDesignation);
 
-        txtName.setText(mSystemUserList.get(position).getUsername().toString());
-        txtEmail.setText(/*String.valueOf*/(mSystemUserList.get(position).getEmail().toString()));
-        txtDesignation.setText(mSystemUserList.get(position).getDesignation().toString());
+        TextView txtPatientName,txtPatientEmail,txtPatientGender,txtPatientMobile,txtPatientAddress;
 
-        v.setTag(mSystemUserList.get(position).getId());
+        TextView txtDeleteUserDialogBoxConfirmation;
 
-        return v;
+        public ViewHolder(View v){
+
+            txtName = (TextView)v.findViewById(R.id.txtName);
+            txtEmail = (TextView)v.findViewById(R.id.txtEmail);
+            txtDesignation = (TextView)v.findViewById(R.id.txtDesignation);
+            btnDelete = (Button) v.findViewById(R.id.buttonDelete);
+            btnView = (Button) v.findViewById(R.id.btnUpdateUser);
+
+
+
+
+        }
     }
 
 

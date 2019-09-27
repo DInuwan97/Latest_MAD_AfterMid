@@ -18,6 +18,12 @@ public final class EcareManager {
         public static final String COL_NAME_DESIGNATION = "designation";
         public static final String COL_NAME_PASSWORD = "password";
 
+        public static final String COL_NAME_GENDER = "gender";
+        public static final String COL_NAME_MOBILE = "mobile";
+        public static final String COL_NAME_ADDRESS = "address";
+        public static final String COL_NAME_USERIMAGE = "userimage";
+
+
     }
 
     protected static class Doctors implements  BaseColumns{
@@ -53,6 +59,7 @@ public final class EcareManager {
         public static final String COLUMN_NAME_AMOUNT = "amount";
         public static final String COLUMN_NAME_PRICE_FOR_ONE_ITEM = "priceforone";
         public static final String COLUMN_NAME_PRICE_TYPE = "pricetype";
+        public static final String COLUMN_NAME_USERNAME = "username";
 
 
     }
@@ -65,7 +72,21 @@ public final class EcareManager {
         public static final String COLUMN_NAME_EMAIL = "email";
         public static final String COLUMN_NAME_STATUS = "status";
         public static final String COLUMN_NAME_PHONE_NUMBER = "phonenumber";
+        public static final String COLUMN_NAME_MEDICINE_ITEMS_NAMES = "itemsnames";
+        public static final String COLUMN_NAME_MEDICINE_ITEMS_AMOUNT = "itemscount";
+        public static final String COLUMN_NAME_PRICE_TOTAL = "total";
+        public static final String COLUMN_NAME_DATETIME = "datetime";
 
+
+    }
+
+    protected  static class TimeSlots implements BaseColumns{
+
+        public static final String TABLE_NAME = "timeslots";
+        public static final String COL_DOCTOR_EMAIL = "doctoremail";
+        public static final String COL_SLOT_DAY = "slotday";
+        public static final String COL_SLOT_START_TIME = "slotstarttime";
+        public static final String COL_SLOT_END_TIME = "slotendtime";
 
     }
 
