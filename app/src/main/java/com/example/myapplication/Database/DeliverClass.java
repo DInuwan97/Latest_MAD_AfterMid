@@ -15,6 +15,26 @@ public class DeliverClass {
     private float[] itemsAmountArray ;
     private float totalprice;
     private String dateTime;
+    private String AcceptDateTime;
+    private String DeliveredDateTime;
+    private String acceptedby;
+    private String key;
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getAcceptedby() {
+        return acceptedby;
+    }
+
+    public void setAcceptedby(String acceptedby) {
+        this.acceptedby = acceptedby;
+    }
 
     public String getDateTime() {
         return dateTime;
@@ -115,5 +135,21 @@ public class DeliverClass {
 
     public void setItemsAmountArray(float[] itemsAmountArray) {
         this.itemsAmountArray = itemsAmountArray;
+    }
+
+    public String getAcceptDateTime() {
+        return AcceptDateTime;
+    }
+
+    public void setAcceptDateTime(String acceptDateTime) {
+        AcceptDateTime = acceptDateTime;
+    }
+
+    public String getDeliveredDateTime() {
+        return DeliveredDateTime;
+    }
+
+    public void setDeliveredDateTime(String deliveredDateTime) {
+        DeliveredDateTime = deliveredDateTime;
     }
 }

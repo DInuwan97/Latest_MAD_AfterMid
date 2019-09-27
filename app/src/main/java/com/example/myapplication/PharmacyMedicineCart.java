@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.DeliverClass;
 import com.example.myapplication.Database.MedicineItemClass;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -110,27 +113,6 @@ public class PharmacyMedicineCart extends Fragment{
         btnOrderItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                /*builder.setMessage("Do you want to Buy the Selected Items ?")
-                        .setCancelable(false)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-
-                            }
-                        })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //  Action for 'NO' Button
-                                dialog.cancel();
-
-                            }
-                        });
-                //Creating dialog box
-                AlertDialog alert = builder.create();
-                //Setting the title manually
-                alert.setTitle("Check Out");
-                alert.show();*/
 
                 final AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
 
@@ -241,9 +223,9 @@ public class PharmacyMedicineCart extends Fragment{
                                         DBHandler db = new DBHandler(getContext());
 
                                         if(db.clearCart()){
-                                            ((PatientBottomNavigationActivity)getActivity()).getSupportActionBar().setTitle("Medicine List");
-                                            getFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                                    new PharmacyMedicineList()).commit();
+
+                                            cartListAdap.clear();
+                                            cartListAdap.notifyDataSetChanged();
                                         }else{
                                             Toast.makeText(getContext(),"Error. Clear the Cart Manually",Toast.LENGTH_SHORT).show();
                                             cartListAdap.notifyDataSetChanged();
@@ -283,6 +265,7 @@ public class PharmacyMedicineCart extends Fragment{
 
                 if(!db.checkCartIsEmpty()) {
                     alert.show();
+
                 }else{
                     Toast.makeText(getContext(),"Cart is Empty. Add items First.",Toast.LENGTH_SHORT).show();
                 }

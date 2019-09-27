@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.myapplication.Database.DBHandler;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -64,6 +65,7 @@ public class pharmacyAdminMedicineList extends Fragment {
                 Bundle args = new Bundle();
                 args.putString(PharmacyAdminAddMedicine.DATA_RECIEVE, pos);
                 medicineDetails.setArguments(args);
+
                 getFragmentManager().beginTransaction().replace(R.id.fragment_container,medicineDetails).commit();
 
 

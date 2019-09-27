@@ -38,6 +38,7 @@
 
         </service>
 
+
         <activity
             android:name=".DoctorPortalActivity"
             android:label="Doctor" />
