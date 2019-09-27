@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item
+        android:id="@+id/nav_find_pid"
+        android:icon="@drawable/ic_find_pid"
+        android:title="@string/TestNavBtn1" />
+
+    <item
+        android:id="@+id/nav_test_description"
+        android:icon="@drawable/ic_description"
+        android:title="@string/TestNavBtn2" />
+
+    <item
+        android:id="@+id/nav_test_add"
+        android:icon="@drawable/ic_add_test"
+        android:title="@string/TestNavBtn3" />
+
+    <item
+        android:id="@+id/nav_test_history"
+        android:icon="@drawable/ic_tets_history"
+        android:title="@string/TestNavBtn4" />
+
+
+
+</menu>
