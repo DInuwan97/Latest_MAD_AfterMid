@@ -925,135 +925,125 @@ public class DBHandler extends SQLiteOpenHelper {
 
     }
 
-    public String gettestID(String testName)
-    {
+    public String gettestID(String testName) {
 
         SQLiteDatabase db = this.getReadableDatabase();
 
         String TestID;
 
-        String QUERY_GET_TEST_ID = " SELECT * FROM "+ EcareManager.Tests.TABLE_NAME +" WHERE "+EcareManager.Tests.COLUMN_NAME_TEST_NAME+" = ?";
+        String QUERY_GET_TEST_ID = " SELECT * FROM " + EcareManager.Tests.TABLE_NAME + " WHERE " + EcareManager.Tests.COLUMN_NAME_TEST_NAME + " = ?";
 
-        Cursor cursor = db.rawQuery(QUERY_GET_TEST_ID,new String[]{testName});
+        Cursor cursor = db.rawQuery(QUERY_GET_TEST_ID, new String[]{testName});
 
-        if(cursor.moveToFirst())
-        {
+        if (cursor.moveToFirst()) {
 
             TestID = cursor.getString(cursor.getColumnIndex("_id"));
 
 
-        }
-        else
-        {
+        } else {
 
             TestID = " ";
 
         }
 
         return TestID;
+    }
 
+        public boolean deleteUsers (String userEmail){
 
-    public boolean deleteUsers(String userEmail) {
-
-        if (getUserCount(userEmail)) {
-
-            SQLiteDatabase db = getWritableDatabase();
-
-            db.delete(EcareManager.Users.TABLE_NAME,
-                    EcareManager.Users.COL_NAME_USEREMAIL + " =? ",
-                    new String[]{userEmail});
-
-            db.close();
             if (getUserCount(userEmail)) {
-                return false;
+
+                SQLiteDatabase db = getWritableDatabase();
+
+                db.delete(EcareManager.Users.TABLE_NAME,
+                        EcareManager.Users.COL_NAME_USEREMAIL + " =? ",
+                        new String[]{userEmail});
+
+                db.close();
+                if (getUserCount(userEmail)) {
+                    return false;
+                } else {
+                    return true;
+                }
+
             } else {
                 return true;
             }
 
-        } else {
-            return true;
         }
 
+
+        public long addDeliver (DeliverClass item){
+
+
+            //status 0 =  not deliverd yet
+            //status 1 = delivered
+            //status 2 = stop the delivery
+            //status 3 = accepted
+            //status 4 = rejected
+
+            SQLiteDatabase db = getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(EcareManager.Deliver.COLUMN_NAME_USER_NAME, item.getUserName());
+            values.put(EcareManager.Deliver.COLUMN_NAME_EMAIL, item.getEmail());
+            values.put(EcareManager.Deliver.COLUMN_NAME_ADDRESS, item.getAddress());
+            values.put(EcareManager.Deliver.COLUMN_NAME_MEDICINE_ITEMS_NAMES, item.getItemNames());
+            values.put(EcareManager.Deliver.COLUMN_NAME_MEDICINE_ITEMS_AMOUNT, item.getItemsAmount());
+            values.put(EcareManager.Deliver.COLUMN_NAME_PHONE_NUMBER, item.getPhonenumber());
+            values.put(EcareManager.Deliver.COLUMN_NAME_STATUS, item.getStatus());
+            values.put(EcareManager.Deliver.COLUMN_NAME_PRICE_TOTAL, item.getTotalprice());
+            values.put(EcareManager.Deliver.COLUMN_NAME_DATETIME, item.getDateTime());
+
+
+            long id = db.insert(EcareManager.Deliver.TABLE_NAME, null, values);
+
+            return id;
+        }
+
+
+        public void updateUser (String address, String mobile, String email){
+            ContentValues values = new ContentValues();
+            values.put(EcareManager.Users.COL_NAME_ADDRESS, address);
+            values.put(EcareManager.Users.COL_NAME_MOBILE, mobile);
+
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.update(EcareManager.Users.TABLE_NAME, values, EcareManager.Users.COL_NAME_USEREMAIL + "	= ?", new String[]{String.valueOf(email)});
+        }
+
+
+        public boolean addTimeSlot (TimeSlots timeSlots){
+
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            ContentValues values = new ContentValues();
+
+            values.put(EcareManager.TimeSlots.COL_DOCTOR_EMAIL, timeSlots.getDoctorEmail());
+            values.put(EcareManager.TimeSlots.COL_SLOT_DAY, timeSlots.getSlotDay());
+            values.put(EcareManager.TimeSlots.COL_SLOT_START_TIME, timeSlots.getSlotStartTime());
+            values.put(EcareManager.TimeSlots.COL_SLOT_END_TIME, timeSlots.getSlotEndTime());
+
+
+            long result = db.insert(EcareManager.TimeSlots.TABLE_NAME, null, values);
+
+            if (result == -1) {
+                return false;
+            }
+            else {
+                return true;
+            }
+
+
+        }
+
+
+
+        public Cursor getDoctorSlotListContents () {
+            SQLiteDatabase db = this.getWritableDatabase();
+
+            Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.TimeSlots.TABLE_NAME, null);
+            return data;
+        }
+
+
     }
-
-
-
-    public long addDeliver(DeliverClass item){
-
-
-
-        //status 0 =  not deliverd yet
-        //status 1 = delivered
-        //status 2 = stop the delivery
-        //status 3 = accepted
-        //status 4 = rejected
-
-        SQLiteDatabase db = getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(EcareManager.Deliver.COLUMN_NAME_USER_NAME, item.getUserName());
-        values.put(EcareManager.Deliver.COLUMN_NAME_EMAIL, item.getEmail());
-        values.put(EcareManager.Deliver.COLUMN_NAME_ADDRESS, item.getAddress());
-        values.put(EcareManager.Deliver.COLUMN_NAME_MEDICINE_ITEMS_NAMES, item.getItemNames());
-        values.put(EcareManager.Deliver.COLUMN_NAME_MEDICINE_ITEMS_AMOUNT, item.getItemsAmount());
-        values.put(EcareManager.Deliver.COLUMN_NAME_PHONE_NUMBER, item.getPhonenumber());
-        values.put(EcareManager.Deliver.COLUMN_NAME_STATUS, item.getStatus());
-        values.put(EcareManager.Deliver.COLUMN_NAME_PRICE_TOTAL, item.getTotalprice());
-        values.put(EcareManager.Deliver.COLUMN_NAME_DATETIME, item.getDateTime());
-
-
-        long id = db.insert(EcareManager.Deliver.TABLE_NAME, null, values);
-
-        return id;
-    }
-
-    
-
-
-    public void updateUser(String address,String mobile,String email){
-        ContentValues values = new ContentValues();
-        values.put(EcareManager.Users.COL_NAME_ADDRESS,address);
-        values.put(EcareManager.Users.COL_NAME_MOBILE,mobile);
-
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.update(EcareManager.Users.TABLE_NAME, values, EcareManager.Users.COL_NAME_USEREMAIL + "	= ?", new String[] { String.valueOf(email)});
-    }
-
-
-    public boolean addTimeSlot(TimeSlots timeSlots){
-
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-
-        values.put(EcareManager.TimeSlots.COL_DOCTOR_EMAIL,timeSlots.getDoctorEmail());
-        values.put(EcareManager.TimeSlots.COL_SLOT_DAY,timeSlots.getSlotDay());
-        values.put(EcareManager.TimeSlots.COL_SLOT_START_TIME,timeSlots.getSlotStartTime());
-        values.put(EcareManager.TimeSlots.COL_SLOT_END_TIME,timeSlots.getSlotEndTime());
-
-
-        long result = db.insert(EcareManager.TimeSlots.TABLE_NAME,null,values);
-
-        if(result == -1)
-            return false;
-        else
-            return true;
-
-
-    }
-
-
-
-    public Cursor getDoctorSlotListContents(){
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        Cursor data = db.rawQuery("SELECT * FROM " + EcareManager.TimeSlots.TABLE_NAME ,null);
-        return data;
-    }
-
-
-
-
-
-
-
 
