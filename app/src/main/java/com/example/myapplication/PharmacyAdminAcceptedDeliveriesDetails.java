@@ -29,6 +29,8 @@ import com.example.myapplication.Database.DBHandler;
 import com.example.myapplication.Database.DeliverClass;
 import com.example.myapplication.NotificationService.MySingleton;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.internal.NavigationMenuItemView;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -291,7 +293,6 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
                                         intentIntegrator.setBeepEnabled(false);
                                         intentIntegrator.setBarcodeImageEnabled(false);
                                         intentIntegrator.setCameraId(0);
-                                        intentIntegrator.setRequestCode(9990);
                                         intentIntegrator.forSupportFragment(PharmacyAdminAcceptedDeliveriesDetails.this).initiateScan();
 
                                     }
@@ -316,9 +317,12 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
         return v;
     }
 
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==9990) {
+        Log.i("testing123", requestCode+" d ");
+        super.onActivityResult(requestCode, resultCode, data);
+
             if (data != null) {
                 IntentResult result = IntentIntegrator.parseActivityResult( resultCode, data);
                 if (result != null) {
@@ -344,9 +348,10 @@ public class PharmacyAdminAcceptedDeliveriesDetails extends Fragment {
                         Toast.makeText(getContext(), "Wrong QR Code. Try Again", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
+
         }
     }
+
 
     private void sendNotification(JSONObject notification) {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(FCM_API, notification,
