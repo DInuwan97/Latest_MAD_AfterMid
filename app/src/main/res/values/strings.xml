@@ -43,6 +43,41 @@
 
     <string name="PharmacyAdminDelete">Delete</string>
 
+
+
+    //strings for test component
+
+    <string name="TestQRButton">Scan QR</string>
+    <string name="TestIDButton">Search By ID</string>
+
+    <string name="TestDesPatientName">Patient Name</string>
+    <string name="TestDesPatientID">Patient ID</string>
+    <string name="TestDescription">Prescribed Tests</string>
+    <string name="TestDesNextBtn">Next</string>
+
+    <string name="TestAddTitle">Add Tests</string>
+    <string name="TestAddName">Test Name :</string>
+    <string name="TestAddDes">Description : </string>
+    <string name="TestAddCost">Cost :</string>
+    <string name="TestAddBtn">Add</string>
+    <string name="TestAddPreView">History</string>
+
+    <string name="TestPreviewList">Previous tests of ID : </string>
+
+    <string name="TestUpdateBtn">Update</string>
+    <string name="TestDeleteBtn">Delete</string>
+
+    <string name="TestNavBtn1">Find User</string>
+    <string name="TestNavBtn2">Description</string>
+    <string name="TestNavBtn3">Add Tests</string>
+    <string name="TestNavBtn4">History</string>
+
+    <string name="TestUpdateTitle">Update Test</string>
+    <string name="get_patient_id">Enter Patient ID</string>
+    <string name="get_test_btn">Get Tests</string>
+
+    //add Strings for navigation drawer
+
     <string name="UserEmail">Email</string>
     <string name="UserAddress">Address</string>
     <string name="UserPhone">Phone Number</string>
@@ -50,6 +85,7 @@
     <string name="PharmacyDeliveryReject">REJECT</string>
     <string name="PharmacyDeliveyAccept">ACCEPT</string>
     <string name="PharmacyDeliveryAddressProp">sadasdasdasdsad\nasdsadasdasdana\nsdfwdaasd\nnsdsadawdad</string>
+
 
 
 </resources>

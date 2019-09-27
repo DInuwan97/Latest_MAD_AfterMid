@@ -148,7 +148,8 @@ public class AddNewDoctorFragment extends Fragment {
 
                 if (isInserted == true) {
                     Toast.makeText(getActivity().getApplicationContext(), "Sucessfully Registered!!!", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(getActivity().getApplicationContext(), SignInActivity.class);
+                   Intent intent = new Intent(getActivity().getApplicationContext(), SignInActivity.class);
+
                     startActivity(intent);
                 }else{
                     Toast.makeText(getActivity().getApplicationContext(), "Insertion Failiure!!!", Toast.LENGTH_LONG).show();

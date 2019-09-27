@@ -90,4 +90,20 @@ public final class EcareManager {
 
     }
 
+    //tester columns
+
+    protected static class Tests implements BaseColumns
+    {
+        //base columns id primary key
+        public static final String TABLE_NAME = "tests";
+        public static final String COLUMN_NAME_PATIENT_ID = "patient_id";
+        public static final String COLUMN_NAME_TESTER_ID = "tester_id";
+        public static final String COLUMN_NAME_TEST_DESCRIPTION = "description";
+        public static final String COLUMN_NAME_TEST_NAME = "test_name";
+        public static final String COLUMN_NAME_TEST_PRICE = "test_price";
+        public static final String COLUMN_NAME_TEST_DATE = "test_date";
+
+
+    }
+
 }
