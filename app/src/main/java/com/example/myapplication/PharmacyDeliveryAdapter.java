@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -110,7 +109,7 @@ public class PharmacyDeliveryAdapter extends ArrayAdapter<DeliverClass> {
         public ViewHolder(View view) {
             txtName = view.findViewById(R.id.txtUserName);
             txtAddress = view.findViewById(R.id.txtAddress);
-            txtPhoneNo = view.findViewById(R.id.txtPhoneNo);
+            txtPhoneNo = view.findViewById(R.id.txtAddress);
             txtStatus = view.findViewById(R.id.txtViewStatus);
             txtTotal = view.findViewById(R.id.txtTotalAmount);
             cardView = view.findViewById(R.id.Card);

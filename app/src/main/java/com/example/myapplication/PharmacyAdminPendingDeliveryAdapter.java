@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -250,7 +249,7 @@ public class PharmacyAdminPendingDeliveryAdapter extends ArrayAdapter<DeliverCla
         public ViewHolder(View view){
             txtName = view.findViewById(R.id.txtUserName);
             txtAddress = view.findViewById(R.id.txtAddress);
-            txtPhoneNo = view.findViewById(R.id.txtPhoneNo);
+            txtPhoneNo = view.findViewById(R.id.txtAddress);
             txtDateTime = view.findViewById(R.id.txtViewDateTime);
             txtTotal = view.findViewById(R.id.txtTotalAmount);
             btnReject = view.findViewById(R.id.btnReject);

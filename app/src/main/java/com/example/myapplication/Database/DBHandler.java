@@ -157,15 +157,25 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Tests.COLUMN_NAME_TEST_PRICE + " REAL,"+
                 EcareManager.Tests.COLUMN_NAME_TEST_DATE + " TEXT)";
 
+
+
+        String SQL_CREATE_ENTRIES_PRESCRIPTIONS = "CREATE TABLE "+ EcareManager.Prescription.TABLE_NAME +" ("+
+                EcareManager.Prescription._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                EcareManager.Prescription.COLUMN_NAME_DOCTOR_EMAIL + " TEXT,"+
+                EcareManager.Prescription.COLUMN_NAME_PATIENT_EMAIL + " TEXT,"+
+                EcareManager.Prescription.COLUMN_NAME_MEDICINES + " TEXT,"+
+                EcareManager.Prescription.COLUMN_NAME_TESTS + " TEXT)";
+
+
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
         db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
         db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
         db.execSQL(SQL_CREATE_ENTRIES_CART_PHARMACY);
 
         db.execSQL(SQL_CREATE_ENTRIES_TESTS);
-
         db.execSQL(SQL_CREATE_ENTRIES_DELIVERY);
         db.execSQL(SQL_CREATE_ENTRIES_TIMESLOTS);
+        db.execSQL(SQL_CREATE_ENTRIES_PRESCRIPTIONS);
 
 
     }
@@ -185,6 +195,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + EcareManager.Deliver.TABLE_NAME);
         //db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Doctors.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.TimeSlots.TABLE_NAME);
+
+        db.execSQL("DROP TABLE IF EXISTS "+ EcareManager.Prescription.TABLE_NAME);
         onCreate(db);
     }
 
@@ -199,12 +211,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //Tester
 
-        String designation = "PharmacyAdmin";
+        String designation = "Patient";
         String gender = "NULL";
         String address = "NULL";
         String mobile = "NULL";
-
-
 
         values.put(EcareManager.Users.COL_NAME_USERNAME, userName);
         values.put(EcareManager.Users.COL_NAME_USEREMAIL, userEmail);
@@ -1147,6 +1157,10 @@ public class DBHandler extends SQLiteOpenHelper {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 
     }
 
