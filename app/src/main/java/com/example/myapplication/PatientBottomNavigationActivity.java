@@ -80,7 +80,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
         if(savedInstanceState == null) {
             FragmentManager manager = getSupportFragmentManager();
             FragmentTransaction transaction = manager.beginTransaction();
-            transaction.replace(R.id.fragment_container, new MyAppoinmentsFragment());
+            transaction.replace(R.id.fragment_container, new HomeFragment());
             transaction.commit();
         }
 
@@ -169,7 +169,7 @@ public class PatientBottomNavigationActivity extends AppCompatActivity
 
                     switch (item.getItemId()) {
                         case R.id.nav_home:
-                            selectedFragment = new MyAppoinmentsFragment();
+                            selectedFragment = new HomeFragment();
                             break;
                         case R.id.nav_favorites:
                             selectedFragment = new FavoritesFragment();
