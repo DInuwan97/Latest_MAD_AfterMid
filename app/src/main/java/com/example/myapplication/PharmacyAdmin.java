@@ -201,6 +201,7 @@ public class PharmacyAdmin extends AppCompatActivity
             if(data!= null) {
                 IntentResult result = IntentIntegrator.parseActivityResult( resultCode, data);
                 if (result != null) {
+
                     final DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Delivery").child(result.getContents());
                     dbref.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
