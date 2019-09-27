@@ -106,6 +106,7 @@ public final class EcareManager {
 
     }
 
+
     protected static class Prescription implements BaseColumns
     {
         //base columns id primary key
@@ -117,6 +118,19 @@ public final class EcareManager {
         public static final String COLUMN_NAME_TESTS = "tests";
 
         //public static final String COLUMN_NAME_PRES_DESCRIPTION = "description";
+
+    }
+
+
+
+    protected  static class Appoinments implements BaseColumns{
+
+        public static final String TABLE_NAME = "appoinments";
+        public static final String COL_DOCTOR_EMAIL = "doctoremail";
+        public static final String COL_PATIENT_EMAIL = "patientmail";
+        public static final String COL_SLOT_DAY = "slotday";
+        public static final String COL_SLOT_START_TIME = "slotstarttime";
+        public static final String COL_SLOT_END_TIME = "slotendtime";
 
     }
 
