@@ -299,7 +299,8 @@
                 <ListView
                     android:id="@+id/AdminAcceptedList"
                     android:layout_width="380dp"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="true">
 
                 </ListView>
 
