@@ -48,6 +48,7 @@ public class TestViewPreviousFragment extends Fragment {
 
         Log.d(TAG, "onCreateView: started onCreaet View");
 
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Previous Tests");
 
         showListView();
 

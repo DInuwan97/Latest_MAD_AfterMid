@@ -34,6 +34,7 @@ public class TestHistoryFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_test_history,container,false);
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("History");
 
 
         db = new DBHandler(getActivity().getApplicationContext());

@@ -48,6 +48,8 @@ public class TestUpdateFragment extends Fragment {
         UpdateBtn = (Button)v.findViewById(R.id.updateBtn);
         DeleteBtn = (Button)v.findViewById(R.id.deleteBtn);
 
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Update Test");
+
 
 
         Bundle bundle = this.getArguments();

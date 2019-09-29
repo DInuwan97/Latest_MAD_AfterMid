@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -42,6 +43,8 @@ public class TestFindUserFragment extends Fragment {
         getPID = (EditText)v.findViewById(R.id.getPid);
         scnbtn = (Button)v.findViewById(R.id.scan_qr_btn);
         searchbtn = (Button)v.findViewById(R.id.search_id_btn);
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Find Patient");
+
 
         db = new DBHandler(getActivity().getApplicationContext());
 
@@ -80,16 +83,35 @@ public class TestFindUserFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                String pid = getPID.getText().toString();
 
 
+                String pEmail = getPID.getText().toString();
 
-                if(pid.equals(""))
+
+                if(pEmail.equals(""))
                 {
                     Toast.makeText(getContext(),"Enter Valid ID",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
+                    Cursor data = db.getPatientID(pEmail);
+
+                    String pid;
+
+                    if(data.moveToFirst())
+                    {
+
+                        pid = data.getString(data.getColumnIndex("_id"));
+
+
+
+                    }
+                    else
+                    {
+
+                        pid = "1";
+
+                    }
 
                     db.setPatientID(pid);
 
@@ -102,9 +124,6 @@ public class TestFindUserFragment extends Fragment {
                     ft.commit();
 
 
-                    /*Intent intent = new Intent(getContext(), TestDescriptionFragment.class);
-
-                    startActivity(intent);*/
                 }
 
 
