@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">eCare</string>
+    <string name="app_name">My Application</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -48,7 +48,7 @@
     //strings for test component
 
     <string name="TestQRButton">Scan QR</string>
-    <string name="TestIDButton">Search By Email</string>
+    <string name="TestIDButton">Search By ID</string>
 
     <string name="TestDesPatientName">Patient Name</string>
     <string name="TestDesPatientID">Patient ID</string>
@@ -73,7 +73,7 @@
     <string name="TestNavBtn4">History</string>
 
     <string name="TestUpdateTitle">Update Test</string>
-    <string name="get_patient_id">Enter Patient Email</string>
+    <string name="get_patient_id">Enter Patient ID</string>
     <string name="get_test_btn">Get Tests</string>
 
     //add Strings for navigation drawer

@@ -3,7 +3,6 @@ package com.example.myapplication;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -39,8 +38,6 @@ public class TestFindUserFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         final View v = inflater.inflate(R.layout.fragment_test_find_user,container,false);
-
-        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Find Patient");
 
         getPID = (EditText)v.findViewById(R.id.getPid);
         scnbtn = (Button)v.findViewById(R.id.scan_qr_btn);
@@ -83,34 +80,16 @@ public class TestFindUserFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
+                String pid = getPID.getText().toString();
 
-                String pEmail = getPID.getText().toString();
 
-                if(pEmail.equals(""))
+
+                if(pid.equals(""))
                 {
-                    Toast.makeText(getContext(),"Enter Valid Email",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(),"Enter Valid ID",Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-
-                    Cursor data = db.getPatientID(pEmail);
-
-                    String pid;
-
-                    if(data.moveToFirst())
-                    {
-
-                        pid = data.getString(data.getColumnIndex("_id"));
-
-
-
-                    }
-                    else
-                    {
-
-                        pid = "1";
-
-                    }
 
                     db.setPatientID(pid);
 
@@ -123,21 +102,14 @@ public class TestFindUserFragment extends Fragment {
                     ft.commit();
 
 
-            /*Intent intent = new Intent(getContext(), TestDescriptionFragment.class);
+                    /*Intent intent = new Intent(getContext(), TestDescriptionFragment.class);
 
-            startActivity(intent);*/
+                    startActivity(intent);*/
                 }
-
-
-
-
-
-
 
 
             }
         });
-
 
 
 
