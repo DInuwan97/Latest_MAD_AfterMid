@@ -105,5 +105,19 @@ public final class EcareManager {
 
 
     }
+    protected static class Prescription implements BaseColumns
+    {
+        //base columns id primary key
+
+        public static final String TABLE_NAME = "prescriptions";
+        public static final String COLUMN_NAME_DOCTOR_EMAIL = "doctor_email";
+        public static final String COLUMN_NAME_PATIENT_EMAIL = "patient_email";
+        public static final String COLUMN_NAME_MEDICINES = "medicines";
+        public static final String COLUMN_NAME_TESTS = "tests";
+
+        //public static final String COLUMN_NAME_PRES_DESCRIPTION = "description";
+
+    }
+
 
 }

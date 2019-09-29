@@ -42,6 +42,8 @@ public class TestViewPreviousFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_test_view_previous,container,false);
 
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Previous Tests");
+
         db = new DBHandler(getActivity().getApplicationContext());
 
         listView = (ListView)v.findViewById(R.id.preTestLIstView);

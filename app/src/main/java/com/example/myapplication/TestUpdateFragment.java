@@ -39,6 +39,8 @@ public class TestUpdateFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_test_update,container,false);
 
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Update Test");
+
         db = new DBHandler(getActivity().getApplicationContext());
 
         editName  = (EditText)v.findViewById(R.id.test_update_getName);

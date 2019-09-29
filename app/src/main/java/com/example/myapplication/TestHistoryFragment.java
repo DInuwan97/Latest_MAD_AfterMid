@@ -35,6 +35,8 @@ public class TestHistoryFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_test_history,container,false);
 
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("History");
+
 
         db = new DBHandler(getActivity().getApplicationContext());
 

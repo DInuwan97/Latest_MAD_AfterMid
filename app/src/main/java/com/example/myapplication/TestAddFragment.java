@@ -37,7 +37,7 @@ public class TestAddFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_test_add,container,false);
 
-
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Add Test");
 
         testName = (EditText)v.findViewById(R.id.addTestName);
         testDes = (EditText)v.findViewById(R.id.addTestDes);

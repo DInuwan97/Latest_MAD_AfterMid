@@ -152,6 +152,18 @@ public class DBHandler extends SQLiteOpenHelper {
                 EcareManager.Tests.COLUMN_NAME_TEST_PRICE + " REAL,"+
                 EcareManager.Tests.COLUMN_NAME_TEST_DATE + " TEXT)";
 
+        String SQL_CREATE_ENTRIES_PRESCRIPTIONS = "CREATE TABLE "+ EcareManager.Prescription.TABLE_NAME +" ("+
+                EcareManager.Prescription._ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                EcareManager.Prescription.COLUMN_NAME_DOCTOR_EMAIL + " TEXT,"+
+                EcareManager.Prescription.COLUMN_NAME_PATIENT_EMAIL + " TEXT,"+
+                EcareManager.Prescription.COLUMN_NAME_MEDICINES + " TEXT,"+
+                EcareManager.Prescription.COLUMN_NAME_TESTS + " TEXT)";
+
+
+
+        db.execSQL(SQL_CREATE_ENTRIES_PRESCRIPTIONS);
+
+
         db.execSQL(SQL_CREATE_ENTRIES_USERS);
         db.execSQL(SQL_CREATE_ENTRIES_MEDICINE);
         db.execSQL(SQL_CREATE_ENTRIES_DOCTORS);
@@ -196,7 +208,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String designation = "PharmacyAdmin";
         String gender = "NULL";
-        String address = "NULL";
+        String address ="NULL";
         String mobile = "NULL";
 
 
@@ -924,6 +936,51 @@ public class DBHandler extends SQLiteOpenHelper {
 
 
     }
+
+    public Cursor getPatientEmail(String pid)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String patName ;
+
+        String QUERY_GET_PATIENT_DATA = " SELECT * FROM "+ EcareManager.Users.TABLE_NAME +" WHERE "+EcareManager.Users._ID + " = ? ";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_PATIENT_DATA,new String[]{pid});
+
+        Log.d(TAG, "getPatientName: BeforepatName :");
+
+        return cursor;
+
+
+    }
+
+    public Cursor getPatientID(String pEmail)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+
+        String QUERY_GET_PATIENT_EMAIL = " SELECT * FROM "+ EcareManager.Users.TABLE_NAME +" WHERE "+EcareManager.Users.COL_NAME_USEREMAIL + " = ? ";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_PATIENT_EMAIL,new String[]{pEmail});
+
+        return cursor;
+
+
+    }
+
+    public Cursor getPatientTeseDes(String email)
+    {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String QUERY_GET_PATIENT_TEST_DES = " SELECT * FROM "+ EcareManager.Prescription.TABLE_NAME +" WHERE "+EcareManager.Prescription.COLUMN_NAME_PATIENT_EMAIL + " = ? ";
+
+        Cursor cursor = db.rawQuery(QUERY_GET_PATIENT_TEST_DES,new String[]{email});
+
+        return cursor;
+
+
+    }
+
 
     public String gettestID(String testName) {
 

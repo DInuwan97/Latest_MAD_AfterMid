@@ -28,13 +28,15 @@ public class TestDescriptionFragment extends Fragment {
     DBHandler db;
     TextView pName,pID,testDes;
     Button next;
-    String patName,patId;
+    String patName,patId,patEmail,patDes;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_test_description,container,false);
+
+        ((TestActivity)getActivity()).getSupportActionBar().setTitle("Test Description");
 
         db = new DBHandler(getActivity().getApplicationContext());
 
@@ -56,6 +58,11 @@ public class TestDescriptionFragment extends Fragment {
         //set patient name
 
         setPatientName();
+
+        setPatientEmail();
+
+        setPatientDes();
+
 
 
         //set description
@@ -111,4 +118,56 @@ public class TestDescriptionFragment extends Fragment {
 
 
     }
+
+    public void setPatientEmail()
+    {
+
+
+        Cursor data = db.getPatientEmail(patId);
+
+        if(data.moveToFirst())
+        {
+
+            patEmail = data.getString(data.getColumnIndex("useremail"));
+
+
+
+        }
+        else
+        {
+
+            patEmail = "abc";
+
+        }
+
+
+    }
+
+
+    public void setPatientDes()
+    {
+
+
+        Cursor data = db.getPatientTeseDes(patEmail);
+
+        if(data.moveToFirst())
+        {
+
+            patDes = data.getString(data.getColumnIndex("tests"));
+
+            testDes.setText(patDes);
+
+
+
+        }
+        else
+        {
+
+            testDes.setText("ECG, X-ray and CT scan");
+
+        }
+
+
+    }
+
 }
